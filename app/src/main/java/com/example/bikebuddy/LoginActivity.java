@@ -39,7 +39,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 /*
                 To DO:
-                Check if input email and password is correct
+                Check if input email and password is correct. If correct, proceed to verify permissions.
+                Otherwise, inform user they have entered incorrect information
                  */
 
                 //Check permissions (Location,etc.)
