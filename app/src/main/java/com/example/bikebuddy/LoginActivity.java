@@ -20,7 +20,7 @@ import com.example.bikebuddy.Permissions.Permissions;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
-    boolean permissionsGranted = false;
+    boolean permissionsGranted = false; //boolean that checks if permissions are granted or not (Location...)
     final int permissionsRequestCode = 1;
 
     Button loginButton;
@@ -32,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
         setupUI();
     }
 
+    /*
+    This method connects the UI elements and onClickListeners
+     */
     private void setupUI() {
         loginButton = findViewById(R.id.btn_login);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -39,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 /*
                 To DO:
-                Check if input email and password is correct. If correct, proceed to verify permissions.
+                Check if input email and password is correct (PRIOR to permissions). If correct, proceed to verify permissions.
                 Otherwise, inform user they have entered incorrect information
                  */
 
@@ -54,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    This method verifies if ALL permissions are granted.
+    If permissions have not yet been granted, then it invokes requestPermissions()
+     */
     private void checkPermissions() {
         Log.d(TAG, "checkPermissions() method");
         for (int i = 0; i < Permissions.permissions.length; i++) {
@@ -67,11 +74,17 @@ public class LoginActivity extends AppCompatActivity {
         permissionsGranted = true; //If all permissions are granted, we set this boolean to true
     }
 
+    /*
+    Requests permissions from the user
+     */
     private void requestPermissions() {
         Log.d(TAG, "Requesting Permissions");
         ActivityCompat.requestPermissions(this, Permissions.permissions, permissionsRequestCode);
     }
 
+    /*
+    Determines if the user accepted or denied the permissions.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -86,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                    Log.d(TAG,"Moving to MainActivity");
+                    Log.d(TAG,"Moving to MainActivity"); //If all permissions have been granted, we can move to main activity
                     permissionsGranted = true;
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
