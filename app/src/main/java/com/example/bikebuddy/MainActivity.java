@@ -3,14 +3,20 @@ package com.example.bikebuddy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import me.aflak.bluetooth.Bluetooth;
+import me.aflak.bluetooth.interfaces.DeviceCallback;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String TAG = "MainActivity"; //TAG used for debugging
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -26,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setupUI();
 
         bluetooth = new Bluetooth(this);
+        bluetooth.setReader(DelimiterReader.class); //Set the custom delimiter for the Zephyr HxM sensor, which uses ETX to end the message
+        bluetooth.setDeviceCallback(deviceCallback);
     }
 
     @Override
@@ -37,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        bluetooth.disconnect();
         bluetooth.onStop();
     }
 
@@ -60,4 +67,31 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_bike);
 
     }
+
+    private DeviceCallback deviceCallback = new DeviceCallback() {
+        @Override
+        public void onDeviceConnected(BluetoothDevice device) {
+            Log.d(TAG,"Device connected");
+        }
+
+        @Override
+        public void onDeviceDisconnected(BluetoothDevice device, String message) {
+            Log.d(TAG,"Device disconnected");
+        }
+
+        @Override
+        public void onMessage(byte[] message) {
+            Log.d(TAG,"onMessage, Speed: " + message[52]);
+        }
+
+        @Override
+        public void onError(int errorCode) {
+
+        }
+
+        @Override
+        public void onConnectError(BluetoothDevice device, String message) {
+
+        }
+    };
 }
