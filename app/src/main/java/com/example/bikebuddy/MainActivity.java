@@ -8,16 +8,37 @@ import android.os.Bundle;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
+import me.aflak.bluetooth.Bluetooth;
+
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     TabLayout tabLayout;
     MainPagerAdapter mainPagerAdapter;
+
+    //Bluetooth
+    private Bluetooth bluetooth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupUI();
+
+        bluetooth = new Bluetooth(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bluetooth.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        bluetooth.disconnect();
+        bluetooth.onStop();
     }
 
     private void setupUI()
