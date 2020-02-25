@@ -36,7 +36,8 @@ public class DelimiterReader extends SocketReader {
             int count = reader.read(tmp);
             if(count > 0) {
                 if(tmp[0] == delimiter){
-                    byte[] returnBytes = new byte[byteList.size()];
+                    //byte[] returnBytes = new byte[byteList.size()];
+                    byte[] returnBytes = new byte[60]; //Allocate 60 bytes for incoming message
                     for(int i=0 ; i<byteList.size() ; i++){
                         returnBytes[i] = byteList.get(i);
                     }

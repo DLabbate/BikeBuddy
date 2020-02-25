@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setupUI();
 
         bluetooth = new Bluetooth(this);
+
         bluetooth.setReader(DelimiterReader.class); //Set the custom delimiter for the Zephyr HxM sensor, which uses ETX to end the message
         bluetooth.setDeviceCallback(deviceCallback);
     }
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         bluetooth.onStart();
+        bluetooth.connectToName("HXM034738");
     }
 
     @Override
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private DeviceCallback deviceCallback = new DeviceCallback() {
         @Override
         public void onDeviceConnected(BluetoothDevice device) {
-            Log.d(TAG,"Device connected");
+            Log.d(TAG,"Device connected: " + device.getName());
         }
 
         @Override
@@ -81,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onMessage(byte[] message) {
-            Log.d(TAG,"onMessage, Speed: " + message[52]);
+            long speed = ((0x000000FF & message[52]) | (0x000000FF & message[53]) << 8);
+            Log.d(TAG,"onMessage, Message Size: " + message.length);
+            Log.d(TAG,"onMessage, Message HR: " + message[12]);
+            Log.d(TAG,"onMessage, Message Speed: " + speed);
         }
 
         @Override
