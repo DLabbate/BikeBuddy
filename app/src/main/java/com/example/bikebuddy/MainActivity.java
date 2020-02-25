@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
@@ -24,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
     //Bluetooth
     private Bluetooth bluetooth;
+
+    //Real Time Values
+    public static double HR_RT; //Heart Rate
+    public static double SPEED_RT; //Speed (km/h)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +88,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onMessage(byte[] message) {
-            long speed = ((0x000000FF & message[52]) | (0x000000FF & message[53]) << 8);
+            long x = 256;
+            double speed_ms = (double) ((0x000000FF & message[52]) | (0x000000FF & message[53]) << 8)/x; //Speed in m/s
+            double speed_kmh = speed_ms*3.6; //Speed in km/h
+            long HR = message[12];
+            HR_RT = HR; //Update HR Value
+            SPEED_RT = speed_kmh; //Update Speed Value
             Log.d(TAG,"onMessage, Message Size: " + message.length);
-            Log.d(TAG,"onMessage, Message HR: " + message[12]);
-            Log.d(TAG,"onMessage, Message Speed: " + speed);
+            Log.d(TAG,"onMessage, Message HR: " + HR);
+            Log.d(TAG,"onMessage, Message Speed: " + speed_kmh);
         }
 
         @Override
