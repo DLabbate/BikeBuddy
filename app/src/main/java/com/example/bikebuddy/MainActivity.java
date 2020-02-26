@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bikebuddy.Bluetooth.DelimiterReader;
@@ -16,6 +17,7 @@ import java.text.DecimalFormat;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.interfaces.DeviceCallback;
+import me.aflak.bluetooth.interfaces.DiscoveryCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -95,11 +97,39 @@ public class MainActivity extends AppCompatActivity {
     private DeviceCallback deviceCallback = new DeviceCallback() {
         @Override
         public void onDeviceConnected(BluetoothDevice device) {
+            /*
+            Update the Bluetooth Status (ImageView)
+            This needs to run in main thread!
+             */
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ImageView imageViewBluetoothStatus = findViewById(R.id.image_bluetooth_status);
+                    if (imageViewBluetoothStatus != null)
+                    {
+                        imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_on);
+                    }
+                }
+            });
             Log.d(TAG,"Device connected: " + device.getName());
         }
 
         @Override
         public void onDeviceDisconnected(BluetoothDevice device, String message) {
+             /*
+            Update the Bluetooth Status (ImageView)
+            This needs to run in main thread!
+             */
+             runOnUiThread(new Runnable() {
+                 @Override
+                 public void run() {
+                     ImageView imageViewBluetoothStatus = findViewById(R.id.image_bluetooth_status);
+                     if (imageViewBluetoothStatus != null)
+                     {
+                         imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_off);
+                     }
+                 }
+             });
             Log.d(TAG,"Device disconnected");
         }
 
@@ -146,12 +176,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onError(int errorCode) {
-
+            Log.d(TAG,"onError");
         }
 
         @Override
         public void onConnectError(BluetoothDevice device, String message) {
-
+            Log.d(TAG,"onConnectError");
         }
     };
 }
