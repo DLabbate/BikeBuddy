@@ -12,6 +12,8 @@ import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.DecimalFormat;
+
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.interfaces.DeviceCallback;
 
@@ -116,8 +118,15 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((TextView) findViewById(R.id.text_heart_rate_rt)).setText(Double.toString(HR_RT)); //Update the Heart Rate TextView (Real Time)
-                    ((TextView) findViewById(R.id.text_speed_rt)).setText(Double.toString(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
+                    DecimalFormat dec_2 = new DecimalFormat("#0.00"); //2 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
+                    DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places
+                    TextView heartRateTextView = (findViewById(R.id.text_heart_rate_rt));
+                    TextView speedTextView = findViewById(R.id.text_speed_rt);
+                    if (heartRateTextView != null && heartRateTextView != null) //Check if it is null
+                    {
+                        heartRateTextView.setText(dec_0.format(HR_RT)); //Update the Heart Rate TextView (Real Time)
+                        speedTextView.setText(dec_2.format(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
+                    }
                 }
             });
 
