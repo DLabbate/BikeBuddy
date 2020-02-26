@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Bluetooth
     private Bluetooth bluetooth;
+    public static boolean isDeviceConnected = false;
 
     //Real Time Values
     public static double HR_RT; //Heart Rate
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     private DeviceCallback deviceCallback = new DeviceCallback() {
         @Override
         public void onDeviceConnected(BluetoothDevice device) {
+            isDeviceConnected = true;
             /*
             Update the Bluetooth Status (ImageView)
             This needs to run in main thread!
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onDeviceDisconnected(BluetoothDevice device, String message) {
+            isDeviceConnected = false;
              /*
             Update the Bluetooth Status (ImageView)
             This needs to run in main thread!
