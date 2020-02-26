@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="37dp"
-        android:text="Speed"
+        android:text="Speed (km/h)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,11 +42,11 @@
         android:id="@+id/text_heart_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
         android:layout_marginBottom="40dp"
-        android:text="Heart Rate"
+        android:text="Heart Rate (bpm)"
         app:layout_constraintBottom_toBottomOf="@+id/text_heart_rate_rt"
-        app:layout_constraintStart_toStartOf="@+id/text_heart_rate_rt" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button2"

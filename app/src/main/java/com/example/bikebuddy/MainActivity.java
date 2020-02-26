@@ -160,14 +160,20 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    DecimalFormat dec_2 = new DecimalFormat("#0.00"); //2 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
-                    DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places
+                    //DecimalFormat dec_2 = new DecimalFormat("#0.00"); //2 decimal places
+                    DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
                     TextView heartRateTextView = (findViewById(R.id.text_heart_rate_rt));
                     TextView speedTextView = findViewById(R.id.text_speed_rt);
                     if (heartRateTextView != null && heartRateTextView != null) //Check if it is null
                     {
-                        heartRateTextView.setText(dec_0.format(HR_RT)); //Update the Heart Rate TextView (Real Time)
-                        speedTextView.setText(dec_2.format(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
+                        /*
+                        When a heart beat is not detected, the sensor sends a value of zero
+                         */
+                        if ( !(HR_RT <= 0))
+                        {
+                            heartRateTextView.setText(dec_0.format(HR_RT)); //Update the Heart Rate TextView (Real Time)
+                        }
+                        speedTextView.setText(dec_0.format(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
                     }
                 }
             });
