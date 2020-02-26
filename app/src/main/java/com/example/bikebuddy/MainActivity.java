@@ -105,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onMessage(byte[] message) {
+            /*
+            This method is used to read the message sent by the Zephyr HxM BT sensor
+            Byte 12 --> Heart Rate (unsigned byte)
+            Byte 52-53 --> Instantaneous speed (with the least significant byte sent first)
+            See the following link for more details:
+            https://www.zephyranywhere.com/media/download/hxm1-api-p-bluetooth-hxm-api-guide-20100722-v01.pdf
+             */
             long x = 256;
             double speed_ms = (double) ((0x000000FF & message[52]) | (0x000000FF & message[53]) << 8)/x; //Speed in m/s
             final double speed_kmh = speed_ms*3.6; //Speed in km/h
