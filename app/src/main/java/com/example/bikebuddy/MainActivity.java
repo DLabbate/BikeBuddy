@@ -72,12 +72,17 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager_main);
         tabLayout = findViewById(R.id.tab_layout_main);
 
+        /*
+        Next we should set up the ViewPager and TabLayout
+        The ViewPager contains 3 Fragments: LogFragment, GPSFragment, and FitnessFragment
+        The TabLayout is used to move between these 3 fragments (found at the bottom of the application UI)
+         */
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainPagerAdapter.addFragment(new LogFragment());
         mainPagerAdapter.addFragment(new GPSFragment());
         mainPagerAdapter.addFragment(new FitnessFragment());
         viewPager.setAdapter(mainPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager); //Associates the TabLayout with the ViewPager
         tabLayout.getTabAt(0).setText("Logs");
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_list);
         tabLayout.getTabAt(1).setText("GPS");
