@@ -6,7 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
@@ -46,7 +46,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         bluetooth.onStart();
-        bluetooth.connectToName("HXM034738");
+        if(bluetooth.isEnabled()){
+            // doStuffWhenBluetoothOn() ...
+            bluetooth.connectToName("HXM034738"); //This is the name of the Zephyr HxM BT sensor being used
+            /*
+            To Do
+            Let the user put in the name of their sensor
+             */
+        } else {
+            bluetooth.enable();
+            bluetooth.connectToName("HXM034738");
+        }
     }
 
     @Override
@@ -90,13 +100,27 @@ public class MainActivity extends AppCompatActivity {
         public void onMessage(byte[] message) {
             long x = 256;
             double speed_ms = (double) ((0x000000FF & message[52]) | (0x000000FF & message[53]) << 8)/x; //Speed in m/s
-            double speed_kmh = speed_ms*3.6; //Speed in km/h
-            long HR = message[12];
+            final double speed_kmh = speed_ms*3.6; //Speed in km/h
+            final long HR = message[12];
             HR_RT = HR; //Update HR Value
             SPEED_RT = speed_kmh; //Update Speed Value
             Log.d(TAG,"onMessage, Message Size: " + message.length);
             Log.d(TAG,"onMessage, HR: " + HR);
             Log.d(TAG,"onMessage, Speed: " + speed_kmh);
+
+            /*
+            In order to update the UI, we have to run it in the main thread!
+            See the following link for more detail
+            https://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
+             */
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((TextView) findViewById(R.id.text_heart_rate_rt)).setText(Double.toString(HR_RT)); //Update the Heart Rate TextView (Real Time)
+                    ((TextView) findViewById(R.id.text_speed_rt)).setText(Double.toString(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
+                }
+            });
+
         }
 
         @Override
