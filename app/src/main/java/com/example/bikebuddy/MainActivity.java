@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
             HR_RT = HR; //Update HR Value
             SPEED_RT = speed_kmh; //Update Speed Value
             Log.d(TAG,"onMessage, Message Size: " + message.length);
-            Log.d(TAG,"onMessage, Message HR: " + HR);
-            Log.d(TAG,"onMessage, Message Speed: " + speed_kmh);
+            Log.d(TAG,"onMessage, HR: " + HR);
+            Log.d(TAG,"onMessage, Speed: " + speed_kmh);
         }
 
         @Override
