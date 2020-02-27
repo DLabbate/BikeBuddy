@@ -1,6 +1,7 @@
 package com.example.bikebuddy.Utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
 
+    public static final String TAG = "WorkoutAdapter";
     private Context context;
     private List<String> workoutList;
 
@@ -33,7 +35,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textViewDate.setText("TEST");
+        Log.d(TAG,"onBindViewHolder: " + workoutList.get(position));
+        holder.textViewDate.setText(workoutList.get(position));
     }
 
     @Override
