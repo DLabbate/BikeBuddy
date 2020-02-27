@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,10 +23,16 @@ import me.aflak.bluetooth.interfaces.DiscoveryCallback;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity"; //TAG used for debugging
+    public static final String SENSOR_NAME = "HXM034738"; //Name of the Zephyr HxM BT sensor
+    /*
+    To Do
+    Let the user put in the name of their sensor
+    */
 
     ViewPager viewPager;
     TabLayout tabLayout;
     MainPagerAdapter mainPagerAdapter;
+    ImageView imageViewBluetooth; //This is the image that displays if the device is connected or not
 
     //Bluetooth
     private Bluetooth bluetooth;
@@ -53,14 +60,11 @@ public class MainActivity extends AppCompatActivity {
         bluetooth.onStart();
         if(bluetooth.isEnabled()){
             // doStuffWhenBluetoothOn() ...
-            bluetooth.connectToName("HXM034738"); //This is the name of the Zephyr HxM BT sensor being used
-            /*
-            To Do
-            Let the user put in the name of their sensor
-             */
+            bluetooth.connectToName(SENSOR_NAME); //This is the name of the Zephyr HxM BT sensor being used
+
         } else {
             bluetooth.enable();
-            bluetooth.connectToName("HXM034738");
+            bluetooth.connectToName(SENSOR_NAME);
         }
     }
 
@@ -92,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_navigation);
         tabLayout.getTabAt(2).setText("Fitness");
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_bike);
-
     }
 
     private DeviceCallback deviceCallback = new DeviceCallback() {
@@ -193,4 +196,17 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG,"onConnectError");
         }
     };
+
+    public void connectToSensor()
+    {
+        if(bluetooth.isEnabled()){
+            // doStuffWhenBluetoothOn() ...
+            bluetooth.connectToName(SENSOR_NAME); //This is the name of the Zephyr HxM BT sensor being used
+
+        } else {
+            bluetooth.enable();
+            bluetooth.connectToName(SENSOR_NAME);
+        }
+    }
+
 }
