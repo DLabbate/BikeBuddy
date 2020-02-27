@@ -3,6 +3,7 @@ package com.example.bikebuddy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                         /*
                         When a heart beat is not detected, the sensor sends a value of zero
                          */
-                        if ( !(HR_RT <= 0))
+                        if (!(HR_RT <= 0))
                         {
                             heartRateTextView.setText(dec_0.format(HR_RT)); //Update the Heart Rate TextView (Real Time)
                         }
@@ -197,10 +198,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /*
+    This function is to be called when the Zephyr Sensor has been disconnected, or the user
+    unintentionally disabled Bluetooth.
+     */
     public void connectToSensor()
     {
         if(bluetooth.isEnabled()){
-            // doStuffWhenBluetoothOn() ...
             bluetooth.connectToName(SENSOR_NAME); //This is the name of the Zephyr HxM BT sensor being used
 
         } else {
