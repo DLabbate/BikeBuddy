@@ -20,7 +20,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
 
     public WorkoutAdapter(Context context, List<String> workoutList)
     {
-
+        this.context = context;
+        this.workoutList = workoutList;
     }
 
     @NonNull
