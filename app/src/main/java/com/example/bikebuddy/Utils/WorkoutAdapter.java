@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bikebuddy.R;
@@ -35,9 +36,22 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final int click_position = position; //We make a final int so it can be accessed by the onClickListener (inner class)
         Log.d(TAG,"onBindViewHolder: " + workoutList.get(position));
         holder.textViewDate.setText(workoutList.get(position));
+
+        /*
+        We need to setup an onClickListener to open a detailed view of the workout
+         */
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG,"onClick, position #: " + click_position);
+            }
+        });
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -46,9 +60,11 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView textViewDate; //This is the TextView that displays the date for each workout
+        public CardView cardView; //This is the card background for each view holder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewDate = itemView.findViewById(R.id.text_date);
+            cardView = itemView.findViewById(R.id.card_workout);
         }
     }
 }
