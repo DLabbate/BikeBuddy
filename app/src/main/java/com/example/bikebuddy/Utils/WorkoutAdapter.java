@@ -1,6 +1,7 @@
 package com.example.bikebuddy.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bikebuddy.R;
+import com.example.bikebuddy.WorkoutActivity;
 
 import java.util.List;
 
@@ -47,6 +49,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"onClick, position #: " + click_position);
+                Intent intent = new Intent(context, WorkoutActivity.class);
+                context.startActivity(intent);
             }
         });
     }
