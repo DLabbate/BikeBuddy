@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
-                        android:text="Distance" />
+                        android:text="Distance:" />
 
                 </LinearLayout>
 
@@ -128,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
-                        android:text="Average Speed (km/h)" />
+                        android:text="Average Speed (km/h):" />
                 </LinearLayout>
 
 

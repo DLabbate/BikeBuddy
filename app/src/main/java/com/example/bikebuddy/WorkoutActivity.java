@@ -47,6 +47,7 @@ public class WorkoutActivity extends AppCompatActivity {
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
         chart_HR.setData(lineData);
+        chart_HR.getXAxis().setDrawLabels(false);
         chart_HR.invalidate();
     }
 
