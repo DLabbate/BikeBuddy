@@ -147,9 +147,11 @@
 
                     <TextView
                         android:id="@+id/HR"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Heart Rate" />
+                        android:text="Heart Rate"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="bold"/>
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/line_chart_HR"

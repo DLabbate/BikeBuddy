@@ -35,6 +35,23 @@ public class WorkoutActivity extends AppCompatActivity {
         Log.d(TAG,"onCreate");
 
         setupUI();
+        loadData();
+    }
+
+    /*
+    This method is used for setting up the UI elements
+    (associating the references with the appropriate views in the xml layout files)
+     */
+    private void setupUI()
+    {
+        chart_HR = findViewById(R.id.line_chart_HR);
+    }
+
+    /*
+    This method will be used for populating the data of the graphs
+     */
+    private void loadData()
+    {
         data_HR = new ArrayList<Entry>();
 
         for (int i = 0; i < 5; i++) {
@@ -42,17 +59,12 @@ public class WorkoutActivity extends AppCompatActivity {
         }
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
-        LineDataSet lineDataSet1 = new LineDataSet(data_HR,"line data set 1");
+        LineDataSet lineDataSet1 = new LineDataSet(data_HR,"HR Data Set");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
         chart_HR.setData(lineData);
         chart_HR.getXAxis().setDrawLabels(false);
         chart_HR.invalidate();
-    }
-
-    private void setupUI()
-    {
-        chart_HR = findViewById(R.id.line_chart_HR);
     }
 }
