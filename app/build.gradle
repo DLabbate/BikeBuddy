@@ -30,4 +30,7 @@ dependencies {
 
     //Bluetooth Libarary https://github.com/OmarAflak/Bluetooth-Library
     implementation 'me.aflak.libraries:bluetooth:1.3.9'
+
+    //Graph Library
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
