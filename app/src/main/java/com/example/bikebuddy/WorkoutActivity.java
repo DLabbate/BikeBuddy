@@ -52,7 +52,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     /*
-    This method will be used for populating the data of the graphs
+    This method will be used for populating the data of the HR graph
      */
     private void loadDataHR()
     {
@@ -74,6 +74,9 @@ public class WorkoutActivity extends AppCompatActivity {
         chart_HR.invalidate();
     }
 
+    /*
+    This method will be used for populating the data of the speed graph
+     */
     private void loadDataSpeed()
     {
         data_speed = new ArrayList<Entry>();
