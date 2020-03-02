@@ -33,10 +33,11 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_android"
+                        android:src="@drawable/ic_date"
                         android:tint="#000000"/>
 
                     <TextView
+                        android:id="@+id/text_date_detailed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -55,10 +56,11 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_android"
+                        android:src="@drawable/ic_timer"
                         android:tint="#000000"/>
 
                     <TextView
+                        android:id="@+id/text_duration_detailed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -77,10 +79,11 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_android"
+                        android:src="@drawable/ic_flag"
                         android:tint="#000000"/>
 
                     <TextView
+                        android:id="@+id/text_distance_detailed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -99,10 +102,11 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_android"
+                        android:src="@drawable/ic_heart"
                         android:tint="#000000"/>
 
                     <TextView
+                        android:id="@+id/text_heart_rate_detailed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -120,15 +124,42 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_android"
+                        android:src="@drawable/ic_bike"
                         android:tint="#000000"/>
 
                     <TextView
+                        android:id="@+id/text_speed_detailed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:text="Average Speed (km/h):" />
+
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_margin="20dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_fire"
+                        android:tint="#000000"/>
+
+                    <TextView
+                        android:id="@+id/text_calories_detailed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:text="Calories:" />
+
                 </LinearLayout>
 
 
@@ -143,7 +174,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
                     <TextView
                         android:id="@+id/HR"
@@ -157,9 +189,7 @@
                         android:id="@+id/line_chart_HR"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"/>
+                        />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
