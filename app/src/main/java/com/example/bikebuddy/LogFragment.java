@@ -37,12 +37,6 @@ public class LogFragment extends Fragment {
         testStrings.add("Test1");
         testStrings.add("Test2");
         testStrings.add("Test3");
-        testStrings.add("Test1");
-        testStrings.add("Test2");
-        testStrings.add("Test3");
-        testStrings.add("Test1");
-        testStrings.add("Test2");
-        testStrings.add("Test3");
         Log.d(TAG,"testStrings size: " + testStrings.size());
         workoutAdapter = new WorkoutAdapter(getActivity(),testStrings);
         linearLayoutManager = new LinearLayoutManager(getActivity());
