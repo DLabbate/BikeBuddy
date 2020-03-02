@@ -24,7 +24,9 @@ public class WorkoutActivity extends AppCompatActivity {
      */
 
     LineChart chart_HR;
+    LineChart chart_Speed;
     ArrayList<Entry> data_HR;
+    ArrayList<Entry> data_speed;
 
     public static final String TAG = "WorkoutActivity";
 
@@ -35,7 +37,8 @@ public class WorkoutActivity extends AppCompatActivity {
         Log.d(TAG,"onCreate");
 
         setupUI();
-        loadData();
+        loadDataHR();
+        loadDataSpeed();
     }
 
     /*
@@ -45,17 +48,19 @@ public class WorkoutActivity extends AppCompatActivity {
     private void setupUI()
     {
         chart_HR = findViewById(R.id.line_chart_HR);
+        chart_Speed = findViewById(R.id.line_chart_speed);
     }
 
     /*
     This method will be used for populating the data of the graphs
      */
-    private void loadData()
+    private void loadDataHR()
     {
         data_HR = new ArrayList<Entry>();
 
+        //These values are only for testing purposes.
         for (int i = 0; i < 5; i++) {
-            data_HR.add(new Entry(i, i + 1));
+            data_HR.add(new Entry(i, i*i));
         }
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
@@ -64,7 +69,28 @@ public class WorkoutActivity extends AppCompatActivity {
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
         chart_HR.setData(lineData);
-        chart_HR.getXAxis().setDrawLabels(false);
+        chart_HR.getXAxis().setDrawLabels(false); //X-axis not visible for now
+        chart_HR.getDescription().setEnabled(false); //Description not visible for now
         chart_HR.invalidate();
+    }
+
+    private void loadDataSpeed()
+    {
+        data_speed = new ArrayList<Entry>();
+
+        //These values are only for testing purposes.
+        for (int i = 0; i < 5; i++) {
+            data_speed.add(new Entry(i, i + 1));
+        }
+
+        //https://www.youtube.com/watch?v=yrbgN2UvKGQ
+        LineDataSet lineDataSet1 = new LineDataSet(data_speed,"Speed Data Set");
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(lineDataSet1);
+        LineData lineData = new LineData(dataSets);
+        chart_Speed.setData(lineData);
+        chart_Speed.getXAxis().setDrawLabels(false); //X-axis not visible for now
+        chart_Speed.getDescription().setEnabled(false); //Description not visible for now
+        chart_Speed.invalidate();
     }
 }
