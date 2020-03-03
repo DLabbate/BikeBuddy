@@ -51,13 +51,47 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-        gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        //gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49,-124), 20));
+
+
+        googleMap.setMyLocationEnabled(true);
 
 
     }
 
+
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation() method");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

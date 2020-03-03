@@ -10,6 +10,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,10 @@ import com.example.bikebuddy.Permissions.Permissions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int ERROR_DIALOG_REQUEST = 9001;
     boolean permissionsGranted = false; //boolean that checks if permissions are granted or not (Location...)
     final int permissionsRequestCode = 1;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     Button loginButton;
 
@@ -35,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setupUI();
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     /*
@@ -138,6 +147,31 @@ public class LoginActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    private void getLastKnownLocation(){
+        Log.d(TAG, "getLastKnownLocation() method");
+
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if(task.isSuccessful()){
+                    Location location = task.getResult();
+                    //GeoPoint geoPoint =
+
+                }
+            }
+        });
+    }
+
+    public boolean isMapsEnabled(){
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            return false;
+        }
+        return true;
+    }
+
+
 
 }
 
