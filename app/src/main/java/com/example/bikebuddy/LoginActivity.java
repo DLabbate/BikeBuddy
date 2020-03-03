@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+    //Determines if user has access to google maps api
     public boolean isServicesAvailable(){
         Log.d(TAG, "isServicesAvailable() method ");
 
