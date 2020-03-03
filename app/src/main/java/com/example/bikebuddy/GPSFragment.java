@@ -27,6 +27,9 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback {
     MapView gMapView;
     private GoogleMap gMap = null;
 
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,30 +41,23 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback {
         gMapView.onCreate(savedInstanceState);
         gMapView.onResume();
 
-
         gMapView.getMapAsync(this);
-
-        //MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        //mapFragment.getMapAsync(this);
-
-        //gMapView.OnResume();
 
         return view;
 
     }
-    /*
-    public void onMapReady(GoogleMap map){
-        //Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "onMapReady Callback method");
-        gMap = map;
-        //gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49,-124), 20));
-    }
 
-     */
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
+        gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49,-124), 20));
+
+
+    }
+
+    private void getDeviceLocation(){
+        Log.d(TAG, "getDeviceLocation() method");
     }
 }
