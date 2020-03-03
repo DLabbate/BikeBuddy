@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,10 +17,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.bikebuddy.Permissions.Permissions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApi;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
+    private static final int ERROR_DIALOG_REQUEST = 9001;
     boolean permissionsGranted = false; //boolean that checks if permissions are granted or not (Location...)
     final int permissionsRequestCode = 1;
 
@@ -48,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Check permissions (Location,etc.)
                 checkPermissions();
-                if (permissionsGranted == true) {
+                if (permissionsGranted == true && isServicesAvailable()) {
                     Log.d(TAG,"Moving to MainActivity");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -107,6 +112,33 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+    public boolean isServicesAvailable(){
+        Log.d(TAG, "isServicesAvailable() method ");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(LoginActivity.this);
+
+        if(available == ConnectionResult.SUCCESS){
+            Log.d(TAG, "isServicesAvailable() method: google play services is working");
+            return true;
+        }
+
+        //checks if error is resolvable
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+
+            Log.d(TAG, "isServicesAvailable() method: error can be resolved");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(LoginActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+
+        }
+        else{
+            Toast.makeText(LoginActivity.this,"Can't Access Maps", Toast.LENGTH_LONG).show();
+        }
+        return false;
+    }
+
 }
 
 
