@@ -48,6 +48,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Chronometer
+        android:id="@+id/_chronometer"
+        android:layout_width="80dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="40dp"
+        android:duplicateParentState="false"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/button_record_workout"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/button_record_workout"
         android:layout_width="wrap_content"

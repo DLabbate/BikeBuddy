@@ -5,7 +5,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +24,6 @@ import me.aflak.bluetooth.interfaces.DeviceCallback;
 import me.aflak.bluetooth.interfaces.DiscoveryCallback;
 
 public class MainActivity extends AppCompatActivity {
-
     public static final String TAG = "MainActivity"; //TAG used for debugging
     public static final String SENSOR_NAME = "HXM034738"; //Name of the Zephyr HxM BT sensor
     /*
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         bluetooth.onStart();
         if(bluetooth.isEnabled()){
             // doStuffWhenBluetoothOn() ...
@@ -65,14 +67,21 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             bluetooth.enable();
-            bluetooth.connectToName(SENSOR_NAME);
-        }
+            bluetooth.connectToName(SENSOR_NAME);}
+
+
     }
 
+
+
     @Override
+
+
+
     protected void onStop() {
         super.onStop();
         bluetooth.onStop();
+        SaveTimerState(false);
     }
 
     private void setupUI()
@@ -212,5 +221,35 @@ public class MainActivity extends AppCompatActivity {
             bluetooth.connectToName(SENSOR_NAME);
         }
     }
+
+    // this function saves the timer into sharedprefrences
+    public void SaveTimerTime(long time){
+        SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
+        SharedPreferences.Editor editor = timer.edit();
+        editor.putLong("timerRunning", time);
+        editor.apply();
+    }
+
+    // this function saves the status of the timer (running or not) into sharedprefrences
+    public void SaveTimerState( boolean running){
+        SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
+        SharedPreferences.Editor editor = timer.edit();
+        editor.putBoolean("state", running);
+        editor.apply();
+    }
+
+    // this function retrieves the timer from sharedprefrences
+    public long BaseOfTimer(){
+        SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
+        return timer.getLong("timerRunning",SystemClock.elapsedRealtime());
+    }
+
+    // this function retrieves the status of the timer from sharedprefrences
+    public boolean StateOfTimer(){
+        SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
+        return timer.getBoolean("state",false);
+    }
+
+
 
 }
