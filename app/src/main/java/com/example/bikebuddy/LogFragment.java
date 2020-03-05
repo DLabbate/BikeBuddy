@@ -26,6 +26,8 @@ public class LogFragment extends Fragment {
     RecyclerView.LayoutManager linearLayoutManager;
     List<String> testStrings;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
