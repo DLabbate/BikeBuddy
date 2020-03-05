@@ -7,6 +7,7 @@ public class Permissions {
     public static final String[] permissions =
             {
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.BLUETOOTH
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN
             };
 }
