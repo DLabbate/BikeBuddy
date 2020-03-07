@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +16,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 
@@ -44,11 +40,11 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     LocationRequest mLocationRequest;
 
     LatLng lastKnownLatLng;
-    double curTime= 0;
+
     double oldLat = 0.0;
     double oldLon = 0.0;
-    double workout_distance = 0.0;
-    long EARTH_RADIUS = 6356 *1000;
+    public static double WORKOUT_DISTANCE = 0.0;
+
 
     long DURATION_SAMPLING_TIME = 10000; //Sample the distance every 10 seconds
     long lastTimeMillis = System.currentTimeMillis();
@@ -75,8 +71,8 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
                     .build();
         }
 
-        Log.d(TAG,"oncreate distance: " + workout_distance);
-        workout_distance = 0.0;
+        Log.d(TAG,"oncreate distance: " + WORKOUT_DISTANCE);
+        WORKOUT_DISTANCE = 0.0;
 
         return view;
 
@@ -161,7 +157,7 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
         updateValues(location);
         //incrementWorkoutDistance(location);
         Log.d(TAG,"Latitude: " + lastKnownLatLng.latitude + " Longitude" + lastKnownLatLng.longitude);
-        Log.d(TAG,"Workout Distance: " + workout_distance);
+        Log.d(TAG,"Workout Distance: " + WORKOUT_DISTANCE);
 
     }
 
@@ -180,38 +176,45 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /*
-    We want to get the speed and distance of a workout.
+    This method updates the values (speed and distance in real time)
+    Note that the GPS sampling is done every 10 seconds and only updated if it is greater than 1 metre to minimize inaccuracies
     This can be done using Latitude and Longitude coordinates
+    For more information, see:
     //https://stackoverflow.com/questions/20398898/how-to-get-speed-in-android-app-using-location-or-accelerometer-or-some-other-wa
      */
-    private void updateValues(Location location){
-
+    private void updateValues(Location location)
+    {
         double newLat = location.getLatitude();
         double newLon = location.getLongitude();
+
+        //Check if the location has a speed
         if(location.hasSpeed()) {
             float speed = location.getSpeed();
-            Toast.makeText(getActivity(), "SPEED : " + String.valueOf(speed) + "m/s", Toast.LENGTH_SHORT).show();
-
-            double distance = calculationBydistance(newLat, newLon, oldLat, oldLon);
-            Log.d(TAG, "DELTA DISTANCE: " + distance);
+            Log.d(TAG,Float.toString(speed));
 
 
+            /*
+                We update distance every sample of time to avoid inaccuracies in the GPS
+                Check if more than 10 seconds has elapsed
+            */
             if ((System.currentTimeMillis() - lastTimeMillis) > DURATION_SAMPLING_TIME)
             {
-                Toast.makeText(getActivity(),"DISTANCE: " + workout_distance,Toast.LENGTH_SHORT).show();
+                /*
+                The following few lines calculates distance between old location and new location
+                using latitude and longitudes
+                 */
                 float[] distanceResults = new float[1];
                 Location.distanceBetween(oldLat, oldLon,
                         newLat, newLon, distanceResults);
 
-                Log.d(TAG, "DISTANCE BETWEEN: " + distanceResults[0]);
-                /*
-                We update distance every sample of time to avoid inaccuracies in the GPS
-                 */
+                Log.d(TAG, "Distance between old location and new location: " + distanceResults[0]);
+
+
                 if (oldLon != 0 && oldLat != 0)
                 {
-                    if (distanceResults[0] > 1.0)
+                    if (distanceResults[0] > 1.0) //Only update if distance is greater than a metre
                     {
-                        workout_distance += distanceResults[0];
+                        WORKOUT_DISTANCE += distanceResults[0]; //Increment distance
                     }
                 }
                 oldLat = newLat;
@@ -219,58 +222,6 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
                 lastTimeMillis = System.currentTimeMillis();
             }
         }
-
-        /*
-        else
-            {
-            double distance = calculationBydistance(newLat,newLon,oldLat,oldLon);
-            Log.d(TAG,"DELTA DISTANCE: " + distance);
-
-
-                float[] distanceResults = new float[1];
-                Location.distanceBetween(oldLat, oldLon,
-                        newLat, newLon, distanceResults);
-
-                Log.d(TAG,"DISTANCE BETWEEN: " + distanceResults[0]);
-
-            if (oldLon != 0 && oldLat != 0)
-                workout_distance += distanceResults[0];
-            double timeDifferent = newTime - curTime;
-            double speed = distance/timeDifferent;
-            curTime = newTime;
-            oldLat = newLat;
-            oldLon = newLon;
-            Toast.makeText(getActivity(),"SPEED 2 : "+String.valueOf(speed)+"m/s",Toast.LENGTH_SHORT).show();
-
-
-        }
-
-         */
     }
-
-
-    public double calculationBydistance(double lat1, double lon1, double lat2, double lon2){
-        double radius = EARTH_RADIUS;
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLon = Math.toRadians(lon2-lon1);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon/2) * Math.sin(dLon/2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return radius * c;
-    }
-
-    private void incrementWorkoutDistance(Location location)
-    {
-        double lat2 = location.getLatitude();
-        double lon2 = location.getLongitude();
-
-        double delta = calculationBydistance(oldLat,oldLon,lat2,lon2);
-        oldLat = lat2; //Update old values
-        oldLon = lon2;
-        workout_distance += delta;
-    }
-
-
 
 }
