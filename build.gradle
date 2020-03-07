@@ -22,6 +22,9 @@ allprojects {
             url "https://maven.google.com"
         }
         
+
+        //Needed for Graphing Library
+        maven { url 'https://jitpack.io' }
     }
 }
 
