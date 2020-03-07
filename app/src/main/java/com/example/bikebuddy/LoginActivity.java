@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int ERROR_DIALOG_REQUEST = 9001;
     boolean permissionsGranted = false; //boolean that checks if permissions are granted or not (Location...)
     final int permissionsRequestCode = 1;
+    public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
     private FusedLocationProviderClient mFusedLocationClient;
 
     Button loginButton;
@@ -45,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
+
+
 
     /*
     This method connects the UI elements and onClickListeners
@@ -62,7 +67,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Check permissions (Location,etc.)
                 checkPermissions();
-                if (permissionsGranted == true && isServicesAvailable()) {
+
+                if (permissionsGranted == true && isServicesAvailable() && isMapsEnabled()) {
                     Log.d(TAG,"Moving to MainActivity");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -123,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    //Determines if user has access to google maps api
+    //Determines if user has access to google maps services
     public boolean isServicesAvailable(){
         Log.d(TAG, "isServicesAvailable() method ");
 
@@ -163,14 +169,44 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    //Checks if user device has GPS enabled
     public boolean isMapsEnabled(){
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            buildAlertMessageNoGps();
             return false;
         }
         return true;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "OnActivityResult() method");
+
+        switch(requestCode){
+            case PERMISSIONS_REQUEST_ENABLE_GPS:{
+                //if ()
+            }
+        }
+    }
 
 
 }
