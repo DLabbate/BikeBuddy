@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.text.DecimalFormat;
 
 
 public class GPSFragment extends Fragment implements OnMapReadyCallback,
@@ -45,10 +48,9 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     double oldLon = 0.0;
     public static double WORKOUT_DISTANCE = 0.0;
     public static double SPEED_RT; //Speed (km/h)
-
-
     long DURATION_SAMPLING_TIME = 10000; //Sample the distance every 10 seconds
     long lastTimeMillis = System.currentTimeMillis();
+
 
     @Nullable
     @Override
@@ -159,6 +161,12 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
         //incrementWorkoutDistance(location);
         Log.d(TAG,"Latitude: " + lastKnownLatLng.latitude + " Longitude" + lastKnownLatLng.longitude);
         Log.d(TAG,"Workout Distance: " + WORKOUT_DISTANCE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                voidUpdateTextViews();
+            }
+        });
 
     }
 
@@ -191,7 +199,7 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
         //Check if the location has a speed
         if(location.hasSpeed()) {
             float speed = location.getSpeed();
-            SPEED_RT = speed;
+            SPEED_RT = speed * 3.6; //Convert to km/h
             Log.d(TAG,Float.toString(speed));
 
 
@@ -223,6 +231,16 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
                 oldLon = newLon;
                 lastTimeMillis = System.currentTimeMillis();
             }
+        }
+    }
+
+    private void voidUpdateTextViews()
+    {
+        TextView speedTextView = getActivity().findViewById(R.id.text_speed_rt);
+        DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
+        if (speedTextView != null)
+        {
+            speedTextView.setText(dec_0.format(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
         }
     }
 
