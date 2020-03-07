@@ -176,11 +176,27 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
         double newTime= System.currentTimeMillis();
         double newLat = location.getLatitude();
         double newLon = location.getLongitude();
-        //if(location.hasSpeed()){
-        //    float speed = location.getSpeed();
-        //    Toast.makeText(getActivity(),"SPEED : "+String.valueOf(speed)+"m/s",Toast.LENGTH_SHORT).show();
-        //}
-        //else
+        if(location.hasSpeed()){
+            float speed = location.getSpeed();
+            Toast.makeText(getActivity(),"SPEED : "+String.valueOf(speed)+"m/s",Toast.LENGTH_SHORT).show();
+
+            double distance = calculationBydistance(newLat,newLon,oldLat,oldLon);
+            Log.d(TAG,"DELTA DISTANCE: " + distance);
+
+
+            float[] distanceResults = new float[1];
+            Location.distanceBetween(oldLat, oldLon,
+                    newLat, newLon, distanceResults);
+
+            Log.d(TAG,"DISTANCE BETWEEN: " + distanceResults[0]);
+
+            if (oldLon != 0 && oldLat != 0)
+                workout_distance += distanceResults[0];
+            double timeDifferent = newTime - curTime;
+            oldLat = newLat;
+            oldLon = newLon;
+        }
+        else
             {
             double distance = calculationBydistance(newLat,newLon,oldLat,oldLon);
             Log.d(TAG,"DELTA DISTANCE: " + distance);
