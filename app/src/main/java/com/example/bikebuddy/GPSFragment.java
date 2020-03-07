@@ -44,6 +44,7 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     double oldLat = 0.0;
     double oldLon = 0.0;
     public static double WORKOUT_DISTANCE = 0.0;
+    public static double SPEED_RT; //Speed (km/h)
 
 
     long DURATION_SAMPLING_TIME = 10000; //Sample the distance every 10 seconds
@@ -190,6 +191,7 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
         //Check if the location has a speed
         if(location.hasSpeed()) {
             float speed = location.getSpeed();
+            SPEED_RT = speed;
             Log.d(TAG,Float.toString(speed));
 
 
