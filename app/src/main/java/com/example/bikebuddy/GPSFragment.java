@@ -50,6 +50,9 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     double workout_distance = 0.0;
     long EARTH_RADIUS = 6356 *1000;
 
+    long DURATION_SAMPLING_TIME = 10000; //Sample the distance every 10 seconds
+    long lastTimeMillis = System.currentTimeMillis();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -100,12 +103,14 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onStart() {
         super.onStart();
+        Log.d(TAG,"onStart");
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG,"onResume");
         if (mGoogleApiClient.isConnected()) {
             createLocationRequest();
         }
@@ -114,12 +119,14 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onStop() {
         super.onStop();
+        Log.d(TAG,"onStop");
         mGoogleApiClient.disconnect();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Log.d(TAG,"onPause");
         stopLocationUpdates();
     }
 
@@ -151,7 +158,7 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onLocationChanged(Location location) {
         lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        getspeed(location);
+        updateValues(location);
         //incrementWorkoutDistance(location);
         Log.d(TAG,"Latitude: " + lastKnownLatLng.latitude + " Longitude" + lastKnownLatLng.longitude);
         Log.d(TAG,"Workout Distance: " + workout_distance);
@@ -172,30 +179,48 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
                 mGoogleApiClient, this);
     }
 
-    private void getspeed(Location location){
-        double newTime= System.currentTimeMillis();
+    /*
+    We want to get the speed and distance of a workout.
+    This can be done using Latitude and Longitude coordinates
+    //https://stackoverflow.com/questions/20398898/how-to-get-speed-in-android-app-using-location-or-accelerometer-or-some-other-wa
+     */
+    private void updateValues(Location location){
+
         double newLat = location.getLatitude();
         double newLon = location.getLongitude();
-        if(location.hasSpeed()){
+        if(location.hasSpeed()) {
             float speed = location.getSpeed();
-            Toast.makeText(getActivity(),"SPEED : "+String.valueOf(speed)+"m/s",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "SPEED : " + String.valueOf(speed) + "m/s", Toast.LENGTH_SHORT).show();
 
-            double distance = calculationBydistance(newLat,newLon,oldLat,oldLon);
-            Log.d(TAG,"DELTA DISTANCE: " + distance);
+            double distance = calculationBydistance(newLat, newLon, oldLat, oldLon);
+            Log.d(TAG, "DELTA DISTANCE: " + distance);
 
 
-            float[] distanceResults = new float[1];
-            Location.distanceBetween(oldLat, oldLon,
-                    newLat, newLon, distanceResults);
+            if ((System.currentTimeMillis() - lastTimeMillis) > DURATION_SAMPLING_TIME)
+            {
+                Toast.makeText(getActivity(),"DISTANCE: " + workout_distance,Toast.LENGTH_SHORT).show();
+                float[] distanceResults = new float[1];
+                Location.distanceBetween(oldLat, oldLon,
+                        newLat, newLon, distanceResults);
 
-            Log.d(TAG,"DISTANCE BETWEEN: " + distanceResults[0]);
-
-            if (oldLon != 0 && oldLat != 0)
-                workout_distance += distanceResults[0];
-            double timeDifferent = newTime - curTime;
-            oldLat = newLat;
-            oldLon = newLon;
+                Log.d(TAG, "DISTANCE BETWEEN: " + distanceResults[0]);
+                /*
+                We update distance every sample of time to avoid inaccuracies in the GPS
+                 */
+                if (oldLon != 0 && oldLat != 0)
+                {
+                    if (distanceResults[0] > 1.0)
+                    {
+                        workout_distance += distanceResults[0];
+                    }
+                }
+                oldLat = newLat;
+                oldLon = newLon;
+                lastTimeMillis = System.currentTimeMillis();
+            }
         }
+
+        /*
         else
             {
             double distance = calculationBydistance(newLat,newLon,oldLat,oldLon);
@@ -216,10 +241,14 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
             oldLat = newLat;
             oldLon = newLon;
             Toast.makeText(getActivity(),"SPEED 2 : "+String.valueOf(speed)+"m/s",Toast.LENGTH_SHORT).show();
+
+
         }
+
+         */
     }
 
-    //https://stackoverflow.com/questions/20398898/how-to-get-speed-in-android-app-using-location-or-accelerometer-or-some-other-wa
+
     public double calculationBydistance(double lat1, double lon1, double lat2, double lon2){
         double radius = EARTH_RADIUS;
         double dLat = Math.toRadians(lat2-lat1);
