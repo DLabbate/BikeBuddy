@@ -164,7 +164,9 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                voidUpdateTextViews();
+                updateTextViewSpeed();
+                updateTextViewDistance();
+
             }
         });
 
@@ -234,13 +236,23 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void voidUpdateTextViews()
+    private void updateTextViewSpeed()
     {
         TextView speedTextView = getActivity().findViewById(R.id.text_speed_rt);
         DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
         if (speedTextView != null)
         {
             speedTextView.setText(dec_0.format(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
+        }
+    }
+
+    private void updateTextViewDistance()
+    {
+        TextView distanceTextView = getActivity().findViewById(R.id.text_distance_rt);
+        DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
+        if (distanceTextView != null)
+        {
+            distanceTextView.setText(dec_0.format(WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
         }
     }
 
