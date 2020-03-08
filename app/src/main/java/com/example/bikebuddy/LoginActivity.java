@@ -154,20 +154,6 @@ public class LoginActivity extends AppCompatActivity {
         return false;
     }
 
-    private void getLastKnownLocation(){
-        Log.d(TAG, "getLastKnownLocation() method");
-
-        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if(task.isSuccessful()){
-                    Location location = task.getResult();
-                    //GeoPoint geoPoint =
-
-                }
-            }
-        });
-    }
 
 
     private void buildAlertMessageNoGps() {
@@ -195,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,6 +193,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+     */
 
 
 }
