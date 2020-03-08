@@ -78,6 +78,8 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
         googleMap.setOnMyLocationButtonClickListener(this);
         googleMap.setOnMyLocationClickListener(this);
 
+        getDeviceLocation();
+
     }
 
     @Override
@@ -103,18 +105,30 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation() method");
-        fusedLocationClient.getLastLocation()
-                .addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()){
-                            mLastKnownLocation = task.getResult();
-                            if (mLastKnownLocation != null){
-                                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+        try {
+            fusedLocationClient.getLastLocation()
+                    .addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            if (task.isSuccessful()) {
+                                //Sets map's position to location of device
+                                mLastKnownLocation = task.getResult();
+                                if (mLastKnownLocation != null) {
+                                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                }
+                                else{
+                                    Log.d(TAG, "Current location is null");
+                                    Log.e(TAG, "Exception: ", task.getException());
+                                    //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom());
+
+                                }
+
                             }
                         }
-                    }
-                });
+                    });
+        } catch (SecurityException e){
+            Log.e("Exception: ", e.getMessage());
+            }
     }
 
     @Override
