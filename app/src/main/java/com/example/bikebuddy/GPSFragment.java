@@ -5,6 +5,7 @@ import android.hardware.camera2.CameraAccessException;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +43,14 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private final float DEFAULT_ZOOM = 15;
 
+    //Location Request Services
+    LocationRequest locationRequest;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+
+    private LocationCallback locationCallback;
+
 
 
     @Nullable
@@ -50,10 +62,17 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
         //mGeoDataClient = Places.getGeoDataClient(this,null);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
+        locationCallback = new LocationCallback(){
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                //onNewLo
+            }
+        };
+
+        createLocationRequest();
 
         gMapView = (MapView) view.findViewById(R.id.mapView2);
-
-
 
         gMapView.onCreate(savedInstanceState);
         gMapView.onResume();
@@ -86,6 +105,9 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onLocationChanged(Location location) {
         LatLng myCoordinates = new LatLng(location.getLatitude(),location.getLongitude());
         gMap.moveCamera(CameraUpdateFactory.newLatLng(myCoordinates));
+        Toast.makeText(getActivity(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
+        //getDeviceLocation();
+
     }
 
     @Override
@@ -150,6 +172,20 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onResume() {
         super.onResume();
+        startLocationUpdates();
+
+    }
+
+    private void startLocationUpdates(){
+        //fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper());
+    }
+
+
+    private void createLocationRequest() {
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
