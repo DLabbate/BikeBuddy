@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import me.aflak.bluetooth.Bluetooth;
-
 
 
 public class FitnessFragment extends Fragment {
@@ -24,6 +22,10 @@ public class FitnessFragment extends Fragment {
     Button RecordWorkout;
     boolean running;
     long WorkoutDuration;
+
+    TextView speedTextView;
+    TextView distanceTextView;
+    TextView distanceTitleTextView;
 
     public static final String TAG = "FitnessFragment";
 
@@ -34,7 +36,9 @@ public class FitnessFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fitness,container,false);
         RecordWorkout=view.findViewById(R.id.button_record_workout);
         chronometer= view.findViewById(R.id._chronometer);
-
+        speedTextView = view.findViewById(R.id.text_speed_rt);
+        distanceTextView = view.findViewById(R.id.text_distance_rt);
+        distanceTitleTextView = view.findViewById(R.id.text_distance);
 
 
         imageViewBluetoothStatus = view.findViewById(R.id.image_bluetooth_status);
@@ -63,7 +67,10 @@ public class FitnessFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!running){ // when it is not running
+                    resetWorkoutDistance(); //Reset the workout distance before we display it
                     chronometer.setVisibility(View.VISIBLE);
+                    distanceTextView.setVisibility(View.VISIBLE);
+                    distanceTitleTextView.setVisibility(View.VISIBLE);
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                     RecordWorkout.setText("Stop Recording");
@@ -74,7 +81,10 @@ public class FitnessFragment extends Fragment {
                     RecordWorkout.setText("record workout");
                     running=false;
                     chronometer.setVisibility(View.INVISIBLE);
+                    distanceTextView.setVisibility(View.INVISIBLE);
+                    distanceTitleTextView.setVisibility(View.INVISIBLE);
                     WorkoutDuration=chronometer.getBase();
+                    resetWorkoutDistance(); //Reset the workout distance
                 }
 
             }
@@ -107,5 +117,10 @@ public class FitnessFragment extends Fragment {
             RecordWorkout.setText("Stop Recording");
         chronometer.start();
         }
+    }
+
+    private void resetWorkoutDistance()
+    {
+        GPSFragment.WORKOUT_DISTANCE = 0;
     }
 }
