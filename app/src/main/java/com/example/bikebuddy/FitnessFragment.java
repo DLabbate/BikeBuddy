@@ -75,7 +75,6 @@ public class FitnessFragment extends Fragment {
                     chronometer.start();
                     RecordWorkout.setText("Stop Recording");
                     running=true;
-                    Toast.makeText(getActivity(),"Workout Recorded",Toast.LENGTH_SHORT).show();
                 }
                 else{ // when running
                     chronometer.stop();
@@ -86,6 +85,7 @@ public class FitnessFragment extends Fragment {
                     distanceTitleTextView.setVisibility(View.INVISIBLE);
                     WorkoutDuration=chronometer.getBase();
                     resetWorkoutDistance(); //Reset the workout distance
+                    Toast.makeText(getActivity(),"Workout Recorded",Toast.LENGTH_SHORT).show();
                 }
 
             }
