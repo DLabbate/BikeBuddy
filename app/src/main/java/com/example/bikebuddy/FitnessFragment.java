@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.text.DecimalFormat;
+
 
 public class FitnessFragment extends Fragment {
     Chronometer chronometer;
@@ -124,5 +126,11 @@ public class FitnessFragment extends Fragment {
     private void resetWorkoutDistance()
     {
         GPSFragment.WORKOUT_DISTANCE = 0;
+        TextView distanceTextView = getActivity().findViewById(R.id.text_distance_rt);
+        DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
+        if (distanceTextView != null)
+        {
+            distanceTextView.setText(dec_0.format(GPSFragment.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
+        }
     }
 }
