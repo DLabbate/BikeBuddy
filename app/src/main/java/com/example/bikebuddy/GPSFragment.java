@@ -37,20 +37,21 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback,
     MapView gMapView;
     private GoogleMap gMap = null;
 
-
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
 
     LatLng lastKnownLatLng;
 
+    //The following fields are used for computing speed and distance
+    //*****************************************************************************
     double oldLat = 0.0;
     double oldLon = 0.0;
     public static double WORKOUT_DISTANCE = 0.0;
     public static double SPEED_RT; //Speed (km/h)
     long DURATION_SAMPLING_TIME = 10000; //Sample the distance every 10 seconds
     long lastTimeMillis = System.currentTimeMillis();
-
+    //*****************************************************************************
 
     @Nullable
     @Override
