@@ -1,6 +1,7 @@
 package com.example.bikebuddy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.camera2.CameraAccessException;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -66,7 +68,12 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                //onNewLo
+                if (locationResult == null){
+                    return;
+                }
+                for (Location location: locationResult.getLocations()){
+                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM));
+                }
             }
         };
 
@@ -173,15 +180,34 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onResume() {
         super.onResume();
         startLocationUpdates();
-
     }
 
     private void startLocationUpdates(){
-        //fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper());
+        fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper());
+    }
+
+    private void onNewLocation(Location location) {
+        Log.i(TAG, "New location: " + location);
+
+        mLastKnownLocation = location;
+
+        /*
+        // Notify anyone listening for broadcasts about the new location.
+        Intent intent = new Intent(ACTION_BROADCAST);
+        intent.putExtra(EXTRA_LOCATION, location);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+        // Update notification content if running as a foreground service.
+        if (serviceIsRunningInForeground(this)) {
+            mNotificationManager.notify(NOTIFICATION_ID, getNotification());
+        }
+
+         */
     }
 
 
     private void createLocationRequest() {
+        Log.d(TAG,"createLocationRequest method");
         locationRequest = new LocationRequest();
         locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
