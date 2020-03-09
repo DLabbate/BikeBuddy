@@ -232,13 +232,17 @@ public class MainActivity extends AppCompatActivity {
     // this function retrieves the timer from sharedprefrences
     public long BaseOfTimer(){
         SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
-        return timer.getLong("timerRunning",SystemClock.elapsedRealtime());
+        long baseOfTimer = timer.getLong("timerRunning",SystemClock.elapsedRealtime());
+        Log.d(TAG,"Base of Timer: " + baseOfTimer);
+        return baseOfTimer;
     }
 
     // this function retrieves the status of the timer from sharedprefrences
     public boolean StateOfTimer(){
         SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
-        return timer.getBoolean("state",false);
+        boolean stateOfTimer = timer.getBoolean("state",false);
+        Log.d(TAG,"State of Timer: " + stateOfTimer);
+        return stateOfTimer;
     }
 
 
