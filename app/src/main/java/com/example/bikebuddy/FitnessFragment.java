@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
 public class FitnessFragment extends Fragment {
     Chronometer chronometer;
     Button RecordWorkout;
-    boolean running;
+    public static boolean running;
     long WorkoutDuration;
 
     TextView speedTextView;
