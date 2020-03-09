@@ -61,7 +61,6 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
         View view = inflater.inflate(R.layout.fragment_gps,container,false);
         Log.d(TAG, ": ONcreateview");
 
-        //mGeoDataClient = Places.getGeoDataClient(this,null);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         locationCallback = new LocationCallback(){
@@ -87,18 +86,16 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
         gMapView.getMapAsync(this);
 
 
-
         return view;
 
     }
 
-
+    /**
+     *Callback interface for when map is ready to be used
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-        //gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49,-124), 20));
-
 
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMyLocationButtonClickListener(this);
@@ -113,7 +110,6 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
         LatLng myCoordinates = new LatLng(location.getLatitude(),location.getLongitude());
         gMap.moveCamera(CameraUpdateFactory.newLatLng(myCoordinates));
         Toast.makeText(getActivity(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
-        //getDeviceLocation();
 
     }
 
@@ -132,6 +128,9 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
+    /**
+     *Retrieves the device's location
+     */
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation() method");
         try {
@@ -148,8 +147,6 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                 else{
                                     Log.d(TAG, "Current location is null");
                                     Log.e(TAG, "Exception: ", task.getException());
-                                    //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom());
-
                                 }
 
                             }
@@ -186,26 +183,9 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback, GoogleM
         fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper());
     }
 
-    private void onNewLocation(Location location) {
-        Log.i(TAG, "New location: " + location);
-
-        mLastKnownLocation = location;
-
-        /*
-        // Notify anyone listening for broadcasts about the new location.
-        Intent intent = new Intent(ACTION_BROADCAST);
-        intent.putExtra(EXTRA_LOCATION, location);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-
-        // Update notification content if running as a foreground service.
-        if (serviceIsRunningInForeground(this)) {
-            mNotificationManager.notify(NOTIFICATION_ID, getNotification());
-        }
-
-         */
-    }
-
-
+    /**
+    *Sets location request parameters
+    */
     private void createLocationRequest() {
         Log.d(TAG,"createLocationRequest method");
         locationRequest = new LocationRequest();
