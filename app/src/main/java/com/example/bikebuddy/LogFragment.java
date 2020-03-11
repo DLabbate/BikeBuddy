@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bikebuddy.Utils.Workout;
 import com.example.bikebuddy.Utils.WorkoutAdapter;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +26,13 @@ public class LogFragment extends Fragment {
     RecyclerView workoutRecyclerView;
     RecyclerView.Adapter workoutAdapter;
     RecyclerView.LayoutManager linearLayoutManager;
-    List<String> testStrings;
+
+    // These are test variables (mock data)
+    List<Workout> testStrings;
+    List <Double> doublelist= Collections.emptyList();
+    List <Long> longList=Collections.emptyList();
+    double doublevalue = 10;
+    long longvalue=10;
 
 
 
@@ -35,10 +43,10 @@ public class LogFragment extends Fragment {
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
 
-        testStrings = new LinkedList<String>();
-        testStrings.add("Test1");
-        testStrings.add("Test2");
-        testStrings.add("Test3");
+        testStrings = new LinkedList<Workout>();
+        testStrings.add(new Workout(longList,doublelist,doublelist,doublevalue,longvalue,doublevalue,doublevalue,doublevalue));
+      //  testStrings.add("Test2");
+      //  testStrings.add("Test3");
         Log.d(TAG,"testStrings size: " + testStrings.size());
         workoutAdapter = new WorkoutAdapter(getActivity(),testStrings);
         linearLayoutManager = new LinearLayoutManager(getActivity());

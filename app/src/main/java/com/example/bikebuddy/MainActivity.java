@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Real Time Values
     public static double HR_RT; //Heart Rate
-    public static double SPEED_RT; //Speed (km/h)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,19 +153,13 @@ public class MainActivity extends AppCompatActivity {
             /*
             This method is used to read the message sent by the Zephyr HxM BT sensor
             Byte 12 --> Heart Rate (unsigned byte)
-            Byte 52-53 --> Instantaneous speed (with the least significant byte sent first)
             See the following link for more details:
             https://www.zephyranywhere.com/media/download/hxm1-api-p-bluetooth-hxm-api-guide-20100722-v01.pdf
              */
-            long x = 256;
-            double speed_ms = (double) ((0x000000FF & message[52]) | (0x000000FF & message[53]) << 8)/x; //Speed in m/s
-            final double speed_kmh = speed_ms*3.6; //Speed in km/h
             final long HR = message[12];
             HR_RT = HR; //Update HR Value
-            SPEED_RT = speed_kmh; //Update Speed Value
             Log.d(TAG,"onMessage, Message Size: " + message.length);
             Log.d(TAG,"onMessage, HR: " + HR);
-            Log.d(TAG,"onMessage, Speed: " + speed_kmh);
 
             /*
             In order to update the UI, we have to run it in the main thread!
@@ -179,8 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     //DecimalFormat dec_2 = new DecimalFormat("#0.00"); //2 decimal places
                     DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
                     TextView heartRateTextView = (findViewById(R.id.text_heart_rate_rt));
-                    TextView speedTextView = findViewById(R.id.text_speed_rt);
-                    if (heartRateTextView != null && heartRateTextView != null) //Check if it is null
+                    if (heartRateTextView != null) //Check if it is null
                     {
                         /*
                         When a heart beat is not detected, the sensor sends a value of zero
@@ -189,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
                         {
                             heartRateTextView.setText(dec_0.format(HR_RT)); //Update the Heart Rate TextView (Real Time)
                         }
-                        speedTextView.setText(dec_0.format(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
                     }
                 }
             });
@@ -241,13 +232,17 @@ public class MainActivity extends AppCompatActivity {
     // this function retrieves the timer from sharedprefrences
     public long BaseOfTimer(){
         SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
-        return timer.getLong("timerRunning",SystemClock.elapsedRealtime());
+        long baseOfTimer = timer.getLong("timerRunning",SystemClock.elapsedRealtime());
+        Log.d(TAG,"Base of Timer: " + baseOfTimer);
+        return baseOfTimer;
     }
 
     // this function retrieves the status of the timer from sharedprefrences
     public boolean StateOfTimer(){
         SharedPreferences timer = getSharedPreferences("stopwatch", MODE_PRIVATE);
-        return timer.getBoolean("state",false);
+        boolean stateOfTimer = timer.getBoolean("state",false);
+        Log.d(TAG,"State of Timer: " + stateOfTimer);
+        return stateOfTimer;
     }
 
 
