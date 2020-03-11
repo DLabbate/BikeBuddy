@@ -17,6 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -25,7 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected EditText WeightEditText;
     protected Button SaveButton;
 
-
+    protected SharedPreferenceHelper sharedPreferenceHelper;
 
 
     @Override
@@ -55,6 +58,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         GenderSpinner.setAdapter(adapter);
 
+
+
+        sharedPreferenceHelper = new SharedPreferenceHelper(ProfileActivity.this);
+
         NameEditText = findViewById(R.id.NameEditText);
         AgeEditText = findViewById(R.id.AgeEditText);
         WeightEditText = findViewById(R.id.WeightEditText);
@@ -64,9 +71,36 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String name = NameEditText.getText().toString();
-                String age = AgeEditText.getText().toString();
-                String weight = WeightEditText.getText().toString();
+                /*saving the edit text values with sharedpreferencehelper. Use the if statement to
+                convert into Int for the shared preference*/
+
+
+                String age_temp = AgeEditText.getText().toString();
+                String weight_temp = WeightEditText.getText().toString();
+                int age = 0;
+                if(!"".equals(age_temp)){
+                    age = Integer.parseInt(age_temp);
+                }
+                else{
+                    Toast.makeText(ProfileActivity.this, "No Age Entered",
+                            Toast.LENGTH_SHORT).show();
+                }
+                int weight = 0;
+                if(!"".equals(weight_temp)){
+                    weight = Integer.parseInt(weight_temp);
+                }
+                else{
+                    Toast.makeText(ProfileActivity.this, "No Weight Entered",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                sharedPreferenceHelper.saveProfileName(NameEditText.getText().toString());
+                sharedPreferenceHelper.saveProfileAge(age);
+                sharedPreferenceHelper.saveProfileWeight((weight));
+
+
+                Toast.makeText(ProfileActivity.this, "Profile Saved",
+                        Toast.LENGTH_SHORT).show();
 
 
             }
@@ -82,15 +116,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
  */
-    }
 
 
-        public void onItemSelected(AdapterView<?> parent, View view, int position,long id){
-            Log.v("item", (String) parent.getItemAtPosition(position));
         }
+    public void onItemSelected(AdapterView<?> parent, View view, int position,long id){
+        /*Saving the gender from the spinner*/
+        Log.v("item", (String) parent.getItemAtPosition(position));
 
-        public void onNothingSelected(AdapterView<?> parent){
-                //TODO Auto-generated method stub
-            }
+    }
 
 }

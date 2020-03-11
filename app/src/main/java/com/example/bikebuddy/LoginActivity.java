@@ -45,6 +45,14 @@ public class LoginActivity extends AppCompatActivity {
                 Check if input email and password is correct (PRIOR to permissions). If correct, proceed to verify permissions.
                 Otherwise, inform user they have entered incorrect information
                  */
+                /*
+                if permission granted
+                    if profile already set up
+                        move to main activity
+                    else
+                        move to profile activity
+
+                 */
 
                 //Check permissions (Location,etc.)
                 checkPermissions();
