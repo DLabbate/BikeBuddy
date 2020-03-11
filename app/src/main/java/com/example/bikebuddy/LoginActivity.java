@@ -45,6 +45,14 @@ public class LoginActivity extends AppCompatActivity {
                 Check if input email and password is correct (PRIOR to permissions). If correct, proceed to verify permissions.
                 Otherwise, inform user they have entered incorrect information
                  */
+                /*
+
+                    if(name == null || age == 0 || weight == 0)
+                        Intent intentp = new Intent(LoginActivity.this, ProfileActivity.java);
+
+
+
+                 */
 
                 //Check permissions (Location,etc.)
                 checkPermissions();
