@@ -234,14 +234,14 @@ public class GPSFragment extends Fragment implements
     public void onStop() {
         super.onStop();
         Log.d(TAG,"onStop");
-        mGoogleApiClient.disconnect();
+        //mGoogleApiClient.disconnect();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log.d(TAG,"onPause");
-        stopLocationUpdates();
+        //stopLocationUpdates();
     }
 
     @Override

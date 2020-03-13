@@ -79,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onStop() {
         super.onStop();
-        bluetooth.onStop();
+        //bluetooth.onStop();
         SaveTimerState(false);
+        Log.d(TAG,"onStop()");
     }
 
     private void setupUI()
@@ -243,6 +244,11 @@ public class MainActivity extends AppCompatActivity {
         boolean stateOfTimer = timer.getBoolean("state",false);
         Log.d(TAG,"State of Timer: " + stateOfTimer);
         return stateOfTimer;
+    }
+
+    private void connectToZephyr()
+    {
+        bluetooth.connectToName(SENSOR_NAME);
     }
 
 
