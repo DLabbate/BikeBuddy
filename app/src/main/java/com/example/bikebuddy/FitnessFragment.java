@@ -20,27 +20,26 @@ import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
 
 
 public class FitnessFragment extends Fragment {
-    Chronometer chronometer;
-    Button RecordWorkout;
+    private Chronometer chronometer;
+    private Button RecordWorkout;
     public static boolean running;
     long WorkoutDuration;
 
-    TextView speedTextView;
-    TextView distanceTextView;
-    TextView distanceTitleTextView;
+    private TextView speedTextView;
+    private TextView distanceTextView;
+    private TextView distanceTitleTextView;
 
     //Added by brady to test DB
     //TODO: remove once recording manager is setup
-    Workout workout;
-    DbHelper dbHelper;
+    private Workout workout;
+    private DbHelper dbHelper;
 
     public static final String TAG = "FitnessFragment";
 
-    ImageView imageViewBluetoothStatus; //This is the ImageView that displays whether a device is connected or not
+    private ImageView imageViewBluetoothStatus; //This is the ImageView that displays whether a device is connected or not
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,10 +103,8 @@ public class FitnessFragment extends Fragment {
                     workout.setAverageSpeed(26);
                     workout.setCaloriesBurned(1950);
                     workout.setTotalDistance(Double.valueOf(String.valueOf(distanceTextView.getText())));
-                    workout.setTotalDuration(SystemClock.currentThreadTimeMillis() - chronometer.getBase());
-                    Log.d(TAG,"workout class values set");
+                    workout.setTotalDuration((long)123456789);
                     dbHelper.insertWorkout(workout);
-                    Log.d(TAG,"insert workout");
 
                     RecordWorkout.setText("record workout");
                     running=false;

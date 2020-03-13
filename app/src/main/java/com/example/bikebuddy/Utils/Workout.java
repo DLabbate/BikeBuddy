@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Workout {
 
+    private int ID;
     private Date date;
     private List <Long> time;
     private List <Double> listHR;
@@ -13,12 +14,13 @@ public class Workout {
     private double totalDistance;
     private long totalDuration;
     private double caloriesBurned;
+    private double caloriesRate;
     private double averageHR;
     private double averageSpeed;
 
 
     // Empty Constructor
-    public Workout(){};
+    public Workout(){}
 
     // Constructor With date set explicitly
     public Workout(Date date, List<Long> time, List<Double> listHR, List<Double> listSpeed, double totalDistance, long totalDuration, double caloriesBurned, double averageHR, double averageSpeed) {
@@ -46,6 +48,8 @@ public class Workout {
         this.averageSpeed = averageSpeed;
     }
 
+
+    //Setters and Getters
     public Date getDate() {
         return date;
     }
@@ -118,6 +122,24 @@ public class Workout {
         this.averageSpeed = averageSpeed;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public double getCaloriesRate() {
+        return caloriesRate;
+    }
+
+    public void setCaloriesRate(double caloriesRate) {
+        this.caloriesRate = caloriesRate;
+    }
+
+
+    //Averaging Calculations
     public double calculateAverageHR(){
         if (this.listHR.size()!=0) {// to make sure that we don't divide by zero
             double sum = 0;
