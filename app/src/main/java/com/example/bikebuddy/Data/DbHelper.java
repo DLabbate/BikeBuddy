@@ -3,6 +3,7 @@ package com.example.bikebuddy.Data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -67,9 +68,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public long insertWorkout(Workout workout){
-
         SQLiteDatabase db = this.getWritableDatabase();
-
         long id = -1;
 
         /*
@@ -83,9 +82,10 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(DbContract.WorkoutEntry.COLUMN_SPEED_AVG,workout.getAverageSpeed());
 
         /*
-            These columns need to have their values set. Set to 0 to keep the DB valid until
-            input is sorted.
+            These columns need to have their values set and handled by some sort of packager.
+            Currently set to 0 to keep the DB testable until input is sorted.
          */
+        //TODO: handle packaging of lists, date objects, and bike objects
         contentValues.put(DbContract.WorkoutEntry.COLUMN_DATE,0);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE,0);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT,0);
@@ -94,9 +94,8 @@ public class DbHelper extends SQLiteOpenHelper {
         try{
             id = db.insertOrThrow(DbContract.WorkoutEntry.TABLE_NAME, null, contentValues);
 
-            /*
+            /* TODO: fix exception handler
         }
-
         catch (SQLException error){
             Toast.makeText(context, "course insert failed: " + error.getMessage(), Toast.LENGTH_SHORT);
             */
@@ -105,5 +104,32 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return id;
+    }
+
+    public Workout retrieveWorkout(long workoutID){
+        Log.d(TAG,"retrieve workout");
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        //SQL command to return matching workout
+        String selectQuery = "SELECT  * FROM " + DbContract.WorkoutEntry.TABLE_NAME +
+                " WHERE " + DbContract.WorkoutEntry._ID + " = " + workoutID;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //Checks if the list is empty
+        //TODO: add behaviours for empty workout table
+        if (cursor!=null){
+            cursor.moveToFirst();
+        }
+
+        //Populates a workout object from DB and returns it.
+        Workout workout = new Workout();
+        workout.setAverageHR(cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_AVG)));
+        workout.setAverageSpeed(cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_AVG)));
+        workout.setCaloriesBurned(cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT)));
+        workout.setTotalDistance(cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DISTANCE)));
+        workout.setTotalDuration(cursor.getLong(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DURATION)));
+
+        return workout;
     }
 }

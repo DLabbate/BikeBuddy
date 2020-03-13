@@ -16,6 +16,10 @@ public class Workout {
     private double averageHR;
     private double averageSpeed;
 
+
+    // Empty Constructor
+    public Workout(){};
+
     // Constructor With date set explicitly
     public Workout(Date date, List<Long> time, List<Double> listHR, List<Double> listSpeed, double totalDistance, long totalDuration, double caloriesBurned, double averageHR, double averageSpeed) {
         this.date = date;

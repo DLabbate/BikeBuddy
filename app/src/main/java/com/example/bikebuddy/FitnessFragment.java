@@ -16,7 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Utils.Workout;
+
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 
 public class FitnessFragment extends Fragment {
@@ -28,6 +32,11 @@ public class FitnessFragment extends Fragment {
     TextView speedTextView;
     TextView distanceTextView;
     TextView distanceTitleTextView;
+
+    //Added by brady to test DB
+    //TODO: remove once recording manager is setup
+    Workout workout;
+    DbHelper dbHelper;
 
     public static final String TAG = "FitnessFragment";
 
@@ -69,17 +78,37 @@ public class FitnessFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!running){ // when it is not running
+                    Log.d(TAG,"workout started");
                     resetWorkoutDistance(); //Reset the workout distance before we display it
                     chronometer.setVisibility(View.VISIBLE);
                     distanceTextView.setVisibility(View.VISIBLE);
                     distanceTitleTextView.setVisibility(View.VISIBLE);
+
+                    //Added to test DB
+                    //TODO: remove once recording manager is set up
+                    workout = new Workout();
+                    dbHelper = new DbHelper(getContext());
+
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                     RecordWorkout.setText("Stop Recording");
                     running=true;
                 }
                 else{ // when running
+                    Log.d(TAG,"workout stopped");
                     chronometer.stop();
+
+                    //Added to test DB
+                    //TODO: Remove once recording manager is set up
+                    workout.setAverageHR(120);
+                    workout.setAverageSpeed(26);
+                    workout.setCaloriesBurned(1950);
+                    workout.setTotalDistance(Double.valueOf(String.valueOf(distanceTextView.getText())));
+                    workout.setTotalDuration(SystemClock.currentThreadTimeMillis() - chronometer.getBase());
+                    Log.d(TAG,"workout class values set");
+                    dbHelper.insertWorkout(workout);
+                    Log.d(TAG,"insert workout");
+
                     RecordWorkout.setText("record workout");
                     running=false;
                     chronometer.setVisibility(View.INVISIBLE);
