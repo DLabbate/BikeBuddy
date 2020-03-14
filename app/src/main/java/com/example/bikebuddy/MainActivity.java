@@ -1,11 +1,18 @@
 package com.example.bikebuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
+import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -17,6 +24,7 @@ import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
+import java.nio.charset.CharsetEncoder;
 import java.text.DecimalFormat;
 
 import me.aflak.bluetooth.Bluetooth;
@@ -24,24 +32,42 @@ import me.aflak.bluetooth.interfaces.DeviceCallback;
 import me.aflak.bluetooth.interfaces.DiscoveryCallback;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Constants
+    //************************************************************************************************
     public static final String TAG = "MainActivity"; //TAG used for debugging
     public static final String SENSOR_NAME = "HXM034738"; //Name of the Zephyr HxM BT sensor
+    //************************************************************************************************
+
     /*
     To Do
     Let the user put in the name of their sensor
     */
 
+    //Views
+    //************************************************************************************************
     ViewPager viewPager;
     TabLayout tabLayout;
     MainPagerAdapter mainPagerAdapter;
     ImageView imageViewBluetooth; //This is the image that displays if the device is connected or not
+    //************************************************************************************************
 
     //Bluetooth
+    //************************************************************************************************
     private Bluetooth bluetooth;
     public static boolean isDeviceConnected = false;
+    //************************************************************************************************
 
     //Real Time Values
+    //************************************************************************************************
     public static double HR_RT; //Heart Rate
+    //************************************************************************************************
+
+    //Notifications
+    //************************************************************************************************
+    public static final String CHANNEL_ID = "workout_notifications";
+    public static final int NOTIFICATION_ID = 1;
+    //************************************************************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
         bluetooth.setReader(DelimiterReader.class); //Set the custom delimiter for the Zephyr HxM sensor, which uses ETX to end the message
         bluetooth.setDeviceCallback(deviceCallback);
+
+        createNotificationChannel();
     }
 
     @Override
@@ -82,6 +110,15 @@ public class MainActivity extends AppCompatActivity {
         //bluetooth.onStop();
         SaveTimerState(false);
         Log.d(TAG,"onStop()");
+
+        /*
+        Inform the user that location updates will become less frequent if running
+        from the background. Create a notification.
+         */
+        if (!this.isDestroyed())
+        {
+            createNotification();
+        }
     }
 
     private void setupUI()
@@ -249,6 +286,36 @@ public class MainActivity extends AppCompatActivity {
     private void connectToZephyr()
     {
         bluetooth.connectToName(SENSOR_NAME);
+    }
+
+    public void createNotification()
+    {
+        Log.d(TAG,"createNotification()");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_bike)
+                .setContentTitle(getString(R.string.notification_title))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(getString(R.string.notification_text)))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(NOTIFICATION_ID,builder.build());
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_name_key);
+            String description = (getString(R.string.notification_description_key));
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 
