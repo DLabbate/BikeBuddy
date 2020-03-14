@@ -61,4 +61,9 @@ public class RecordingService extends Service {
         super.onDestroy();
         Log.d(TAG,"onDestroy");
     }
+
+    private void fillWorkoutValues()
+    {
+        //if ()
+    }
 }

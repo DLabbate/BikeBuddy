@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
 
 
 public class FitnessFragment extends Fragment {
-    Chronometer chronometer;
+    public static Chronometer chronometer;
     Button RecordWorkout;
     public static boolean running;
     long WorkoutDuration;
@@ -134,6 +134,11 @@ public class FitnessFragment extends Fragment {
         }
     }
 
+    /*
+    This methods displays an alert dialog prior to beginning a workout.
+    It informs the user to secure their phone and make sure the sensor connection is stable.
+    The user has the ability to proceed or cancel.
+     */
     private void showAlertDialog()
     {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -164,12 +169,18 @@ public class FitnessFragment extends Fragment {
         alertDialog.show();
     }
 
+    /*
+    This method creates a recording service.
+     */
     public void createRecordingService()
     {
         Log.d(TAG,"createRecordingService()");
         getActivity().startService(new Intent(getActivity(), RecordingService.class));
     }
 
+    /*
+    This method STOPS the recording service.
+     */
     public void stopRecordingService()
     {
         Log.d(TAG,"createRecordingService()");
