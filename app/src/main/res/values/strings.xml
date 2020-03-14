@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">BikeBuddy</string>
     <string name="google_maps_API_key">AIzaSyDQ35gJ3JiiLhHA-mRvcBsgbfDpSo4Weq0</string>
-    <string name="notification_description_key">Inform the user that location updates will become less frequent if running from the background</string>
+    <string name="notification_description_key">Inform the user that services are running</string>
     <string name="notification_name_key">Background Notification</string>
     <string name="notification_text">BikeBuddy is running in the background. Location updates will now be recorded less frequently.</string>
-    <string name="notification_title">BikeBuddy - Running in Background</string>
+    <string name="notification_title">Services Running</string>
     <string name="text_record_workout">You may now proceed to record a workout. Please ensure that your sensor is properly attached
-    and your phone is secure. Note that if you log out of the application while recording the workout, location, speed, and distance will update much
-    less frequently. Caloric estimation will be less accurate as a result. </string>
+    and your phone is secure. Note that if you log out of the application while recording the workout, location, speed, and distance will continue to update. </string>
 </resources>
