@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
             bluetooth.enable();
             bluetooth.connectToName(SENSOR_NAME);}
 
-
+        //Start Location Services
+        createLocationService();
     }
 
 
@@ -114,14 +115,6 @@ public class MainActivity extends AppCompatActivity {
         //SaveTimerState(false);
         Log.d(TAG,"onStop()");
 
-        /*
-        Inform the user that location updates will become less frequent if running
-        from the background. Create a notification.
-         */
-        if (!this.isDestroyed())
-        {
-            createBackgroundService();
-        }
     }
 
     @Override
@@ -299,24 +292,14 @@ public class MainActivity extends AppCompatActivity {
         bluetooth.connectToName(SENSOR_NAME);
     }
 
-    public void createBackgroundService()
+    /*
+    This method creates a foreground location service
+    so that workouts can be recorded while in background
+     */
+    public void createLocationService()
     {
-        Log.d(TAG,"createBackgroundService()");
-        /*
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_bike)
-                .setContentTitle(getString(R.string.notification_title))
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(getString(R.string.notification_text)))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(NOTIFICATION_ID,builder.build());
-
-         */
-
+        Log.d(TAG,"createLocationService()");
         startService(new Intent(this, LocationService.class));
-
     }
 
     private void createNotificationChannel() {
