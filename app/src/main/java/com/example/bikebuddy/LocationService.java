@@ -187,6 +187,14 @@ public class LocationService extends Service implements
         //****************************************************************************************************************
     }
 
+
+    /*
+    This method updates the values (speed and distance in real time)
+    Note that the GPS sampling is done every 10 seconds and only updated if it is greater than 1 metre to minimize inaccuracies
+    This can be done using Latitude and Longitude coordinates
+    For more information, see:
+    //https://stackoverflow.com/questions/20398898/how-to-get-speed-in-android-app-using-location-or-accelerometer-or-some-other-wa
+     */
     private void updateValues(Location location)
     {
         double newLat = location.getLatitude();
