@@ -115,18 +115,20 @@ public class FitnessFragment extends Fragment {
         if (running) {
             chronometer.setVisibility(View.VISIBLE);
             RecordWorkout.setText("Stop Recording");
+            distanceTitleTextView.setVisibility(View.VISIBLE);
+            distanceTextView.setVisibility(View.VISIBLE);
         chronometer.start();
         }
     }
 
     private void resetWorkoutDistance()
     {
-        GPSFragment.WORKOUT_DISTANCE = 0;
+        LocationService.WORKOUT_DISTANCE = 0;
         TextView distanceTextView = getActivity().findViewById(R.id.text_distance_rt);
         DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
         if (distanceTextView != null)
         {
-            distanceTextView.setText(dec_0.format(GPSFragment.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
+            distanceTextView.setText(dec_0.format(LocationService.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
         }
     }
 

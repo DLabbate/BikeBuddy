@@ -204,7 +204,7 @@ public class LocationService extends Service implements
         if(location.hasSpeed()) {
             float speed = location.getSpeed();
             SPEED_RT = speed * 3.6; //Convert to km/h
-            Log.d(TAG,Float.toString(speed));
+            Log.d(TAG,"Speed: " + Float.toString(speed));
 
 
             /*
