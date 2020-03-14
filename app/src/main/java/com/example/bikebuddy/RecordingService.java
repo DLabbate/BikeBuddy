@@ -3,20 +3,23 @@ package com.example.bikebuddy;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class RecordingService extends Service {
 
     private Date date;
-    private List<Long> time;
-    private List <Double> listHR;
-    private List <Double> listSpeed;
+    private ArrayList<Long> time;
+    private ArrayList <Double> listHR;
+    private ArrayList <Double> listSpeed;
     private double totalDistance;
     private long totalDuration;
     private double caloriesBurned;
@@ -24,6 +27,17 @@ public class RecordingService extends Service {
     private double averageSpeed;
 
     public static final String TAG = "RecordingService";
+
+
+    Handler handler = new Handler();
+    private Runnable periodicUpdate = new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(periodicUpdate, 10000);
+                Log.d(TAG,"Adding new data: ");
+        }
+    };
+
 
     public RecordingService() {
     }
@@ -42,6 +56,10 @@ public class RecordingService extends Service {
                 .setSmallIcon(R.drawable.ic_bike)
                 .setContentTitle(getString(R.string.notification_title_recording))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
+
+        //fillWorkoutValues();
+        handler.post(periodicUpdate);
+
         startForeground(2,notification);
 
 
@@ -64,6 +82,13 @@ public class RecordingService extends Service {
 
     private void fillWorkoutValues()
     {
-        //if ()
+        Log.d(TAG,"chronometer: " + FitnessFragment.chronometer.getBase());
+        //Sample every 10 seconds
+        if ( (int)(FitnessFragment.chronometer.getBase() % 10) == 0)
+        {
+            Log.d(TAG,"Adding new data:");
+        }
     }
+
+
 }
