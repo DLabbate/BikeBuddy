@@ -68,8 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
     //Notifications
     //************************************************************************************************
-    public static final String CHANNEL_ID = "workout_notifications";
-    public static final int NOTIFICATION_ID = 1;
+    public static final String CHANNEL_ID_LOCATION = "workout_notifications";
+    public static final int NOTIFICATION_ID_LOCATION = 1;
+
+    public static final String CHANNEL_ID_RECORDING = "recording_notifications";
+    public static final int NOTIFICATION_ID_RECORDING = 2;
     //************************************************************************************************
 
     @Override
@@ -83,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         bluetooth.setReader(DelimiterReader.class); //Set the custom delimiter for the Zephyr HxM sensor, which uses ETX to end the message
         bluetooth.setDeviceCallback(deviceCallback);
 
-        createNotificationChannel();
+        createNotificationChannelLocation();
+        createNotificationChannelRecording();
     }
 
     @Override
@@ -302,14 +306,30 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(this, LocationService.class));
     }
 
-    private void createNotificationChannel() {
+    private void createNotificationChannelLocation() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.notification_name_key);
-            String description = (getString(R.string.notification_description_key));
+            CharSequence name = getString(R.string.notification_name_location);
+            String description = (getString(R.string.notification_description_location));
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_LOCATION, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void createNotificationChannelRecording() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_name_recording);
+            String description = (getString(R.string.notification_description_recording));
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_RECORDING, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this

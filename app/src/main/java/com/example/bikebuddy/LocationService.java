@@ -86,9 +86,9 @@ public class LocationService extends Service implements
             //createLocationRequest();
         }
 
-        Notification notification = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID_LOCATION)
                 .setSmallIcon(R.drawable.ic_bike)
-                .setContentTitle(getString(R.string.notification_title))
+                .setContentTitle(getString(R.string.notification_title_location))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
 
         startForeground(1,notification);
@@ -261,15 +261,15 @@ public class LocationService extends Service implements
     public void createNotification()
     {
         Log.d(TAG,"createNotification()");
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.CHANNEL_ID_LOCATION)
                 .setSmallIcon(R.drawable.ic_bike)
-                .setContentTitle(getString(R.string.notification_title))
+                .setContentTitle(getString(R.string.notification_title_location))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(getString(R.string.notification_text)))
+                        .bigText(getString(R.string.notification_text_location)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID,builder.build());
+        notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID_LOCATION,builder.build());
     }
 
 }
