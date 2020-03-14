@@ -97,9 +97,9 @@ public class FitnessFragment extends Fragment {
     public void onStop() {
         super.onStop();
         // Saving the information of the timer when leaving the fragment
+        Log.d(TAG,"onStop()");
         ((MainActivity)getActivity()).SaveTimerState(running);
         ((MainActivity)getActivity()).SaveTimerTime(chronometer.getBase());
-        Log.d(TAG,"onStop()");
     }
 
     @Override

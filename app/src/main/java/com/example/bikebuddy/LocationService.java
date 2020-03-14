@@ -88,11 +88,12 @@ public class LocationService extends Service implements
         Notification notification = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_bike)
                 .setContentTitle(getString(R.string.notification_title))
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Speed:" + SPEED_RT + "\nHR: " + MainActivity.HR_RT + "\nDistance: " + WORKOUT_DISTANCE + " Clock: "))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
 
         startForeground(1,notification);
+
+        //.setStyle(new NotificationCompat.BigTextStyle()
+        //                        .bigText("Speed:" + SPEED_RT + "\nHR: " + MainActivity.HR_RT + "\nDistance: " + WORKOUT_DISTANCE + " Clock: "))
 
         return START_STICKY;
     }
@@ -143,7 +144,6 @@ public class LocationService extends Service implements
         });
          */
         //**********************************************************************************************
-
     }
 
     @Override

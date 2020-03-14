@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         //bluetooth.onStop();
-        SaveTimerState(false);
+        //SaveTimerState(false);
         Log.d(TAG,"onStop()");
 
         /*
@@ -262,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = timer.edit();
         editor.putLong("timerRunning", time);
         editor.apply();
+        Log.d(TAG,"SaveTimerTime: " + time);
     }
 
     // this function saves the status of the timer (running or not) into sharedprefrences
@@ -270,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = timer.edit();
         editor.putBoolean("state", running);
         editor.apply();
+        Log.d(TAG,"SaveTimerState: " + running);
     }
 
     // this function retrieves the timer from sharedprefrences
