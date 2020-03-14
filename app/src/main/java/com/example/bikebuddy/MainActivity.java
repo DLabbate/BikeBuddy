@@ -6,10 +6,12 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
 import android.os.Build;
@@ -120,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
             createNotification();
         }
     }
+
+
 
     private void setupUI()
     {

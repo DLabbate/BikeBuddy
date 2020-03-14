@@ -1,5 +1,7 @@
 package com.example.bikebuddy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -69,14 +71,8 @@ public class FitnessFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!running){ // when it is not running
-                    resetWorkoutDistance(); //Reset the workout distance before we display it
-                    chronometer.setVisibility(View.VISIBLE);
-                    distanceTextView.setVisibility(View.VISIBLE);
-                    distanceTitleTextView.setVisibility(View.VISIBLE);
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-                    chronometer.start();
-                    RecordWorkout.setText("Stop Recording");
-                    running=true;
+                    showAlertDialog();
+
                 }
                 else{ // when running
                     chronometer.stop();
@@ -132,5 +128,34 @@ public class FitnessFragment extends Fragment {
         {
             distanceTextView.setText(dec_0.format(GPSFragment.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
         }
+    }
+
+    private void showAlertDialog()
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(getString(R.string.text_record_workout));
+        builder.setCancelable(true);
+        builder.setNegativeButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                resetWorkoutDistance(); //Reset the workout distance before we display it
+                chronometer.setVisibility(View.VISIBLE);
+                distanceTextView.setVisibility(View.VISIBLE);
+                distanceTitleTextView.setVisibility(View.VISIBLE);
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                RecordWorkout.setText("Stop Recording");
+                running=true;
+            }
+        });
+        builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

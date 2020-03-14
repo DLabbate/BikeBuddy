@@ -5,4 +5,7 @@
     <string name="notification_name_key">Background Notification</string>
     <string name="notification_text">BikeBuddy is running in the background. Location updates will now be recorded less frequently.</string>
     <string name="notification_title">BikeBuddy - Workout Warning</string>
+    <string name="text_record_workout">You may now proceed to record a workout. Please ensure that your sensor is properly attached
+    and your phone is secure. Note that if you log out of the application while recording the workout, location, speed, and distance will update much
+    less frequently. Caloric estimation will be less accurate as a result. </string>
 </resources>
