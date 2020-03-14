@@ -23,7 +23,8 @@
         <service
             android:name=".LocationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"
+            android:stopWithTask="true"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

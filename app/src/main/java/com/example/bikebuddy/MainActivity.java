@@ -120,11 +120,15 @@ public class MainActivity extends AppCompatActivity {
          */
         if (!this.isDestroyed())
         {
-            createNotification();
+            createBackgroundService();
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"onDestroy()");
+    }
 
     private void setupUI()
     {
@@ -295,9 +299,9 @@ public class MainActivity extends AppCompatActivity {
         bluetooth.connectToName(SENSOR_NAME);
     }
 
-    public void createNotification()
+    public void createBackgroundService()
     {
-        Log.d(TAG,"createNotification()");
+        Log.d(TAG,"createBackgroundService()");
         /*
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_bike)
@@ -310,7 +314,6 @@ public class MainActivity extends AppCompatActivity {
         notificationManagerCompat.notify(NOTIFICATION_ID,builder.build());
 
          */
-
 
         startService(new Intent(this, LocationService.class));
 

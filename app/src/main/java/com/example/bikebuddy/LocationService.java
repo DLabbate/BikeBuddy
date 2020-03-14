@@ -28,7 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.DecimalFormat;
 
 public class LocationService extends Service implements
-        GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener,
+        GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -98,6 +99,7 @@ public class LocationService extends Service implements
         return START_STICKY;
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -107,6 +109,19 @@ public class LocationService extends Service implements
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    /*
+    Stop the service when the app is removed from recent tasks
+    https://stackoverflow.com/questions/53334235/how-to-properly-stop-a-foreground-service/53334788#53334788
+     */
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.d(TAG,"onTaskRemoved called");
+        super.onTaskRemoved(rootIntent);
+        //do something you want
+        //stop service
+        this.stopSelf();
     }
 
     @Override
