@@ -2,6 +2,7 @@ package com.example.bikebuddy;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -84,6 +85,7 @@ public class FitnessFragment extends Fragment {
                     WorkoutDuration=chronometer.getBase();
                     resetWorkoutDistance(); //Reset the workout distance
                     Toast.makeText(getActivity(),"Workout Recorded",Toast.LENGTH_SHORT).show();
+                    stopRecordingService();
                 }
 
             }
@@ -149,6 +151,7 @@ public class FitnessFragment extends Fragment {
                 chronometer.start();
                 RecordWorkout.setText("Stop Recording");
                 running=true;
+                createRecordingService();
             }
         });
         builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
@@ -159,5 +162,17 @@ public class FitnessFragment extends Fragment {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void createRecordingService()
+    {
+        Log.d(TAG,"createRecordingService()");
+        getActivity().startService(new Intent(getActivity(), RecordingService.class));
+    }
+
+    public void stopRecordingService()
+    {
+        Log.d(TAG,"createRecordingService()");
+        getActivity().stopService(new Intent(getActivity(), RecordingService.class));
     }
 }
