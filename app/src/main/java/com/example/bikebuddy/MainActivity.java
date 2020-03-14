@@ -12,6 +12,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
 import android.os.Build;
@@ -295,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
     public void createNotification()
     {
         Log.d(TAG,"createNotification()");
+        /*
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_bike)
                 .setContentTitle(getString(R.string.notification_title))
@@ -304,6 +306,12 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(NOTIFICATION_ID,builder.build());
+
+         */
+
+
+        startService(new Intent(this, LocationService.class));
+
     }
 
     private void createNotificationChannel() {
