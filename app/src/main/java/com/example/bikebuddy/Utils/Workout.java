@@ -170,7 +170,7 @@ public class Workout {
 
         workoutData += " Date: " + date;
 
-        workoutData += " \nTimes (seconds): ";
+        workoutData += " \n Times (seconds): ";
         for (int i = 0; i < time.size(); i++)
             workoutData += time.get(i).toString() + " ";
         workoutData += "\n";
