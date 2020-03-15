@@ -204,7 +204,10 @@ public class MainActivity extends AppCompatActivity {
             https://www.zephyranywhere.com/media/download/hxm1-api-p-bluetooth-hxm-api-guide-20100722-v01.pdf
              */
             final long HR = message[12];
-            HR_RT = HR; //Update HR Value
+            if (HR >= 30)
+            {
+                HR_RT = HR; //Update HR Value
+            }
             Log.d(TAG,"onMessage, Message Size: " + message.length);
             Log.d(TAG,"onMessage, HR: " + HR);
 
