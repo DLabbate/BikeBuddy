@@ -96,9 +96,12 @@ public class MainActivity extends AppCompatActivity {
 
         bluetooth.onStart();
         if(bluetooth.isEnabled()){
-            // doStuffWhenBluetoothOn() ...
-            bluetooth.connectToName(SENSOR_NAME); //This is the name of the Zephyr HxM BT sensor being used
-
+            if(!bluetooth.isConnected())
+            {
+                //Try connecting to the sensor if it is not already connected
+                // doStuffWhenBluetoothOn() ...
+                bluetooth.connectToName(SENSOR_NAME); //This is the name of the Zephyr HxM BT sensor being used
+            }
         } else {
             bluetooth.enable();
             bluetooth.connectToName(SENSOR_NAME);}
