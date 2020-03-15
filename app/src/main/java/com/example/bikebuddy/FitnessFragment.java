@@ -20,6 +20,10 @@ import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
 
 
 public class FitnessFragment extends Fragment {
@@ -97,13 +101,21 @@ public class FitnessFragment extends Fragment {
                     Log.d(TAG,"workout stopped");
                     chronometer.stop();
 
-                    //Added to test DB
-                    //TODO: Remove once recording manager is set up
+                    /*
+                        Added to test DB
+                        hardcoded workout data with date that is real-time.
+                     */
+                    //TODO: Remove once recording manager is functional
+                    workout.setDate(Calendar.getInstance().getTime());
                     workout.setAverageHR(120);
                     workout.setAverageSpeed(26);
                     workout.setCaloriesBurned(1950);
+                    workout.setCaloriesRate(5000);
                     workout.setTotalDistance(Double.valueOf(String.valueOf(distanceTextView.getText())));
                     workout.setTotalDuration((long)123456789);
+                    workout.setTime(generateTestTime());
+                    workout.setListHR(generateTestDouble());
+                    workout.setListSpeed(generateTestDouble());
                     dbHelper.insertWorkout(workout);
 
                     RecordWorkout.setText("record workout");
@@ -159,4 +171,26 @@ public class FitnessFragment extends Fragment {
             distanceTextView.setText(dec_0.format(GPSFragment.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
         }
     }
+
+    /*
+    The following methods are for testing only
+     */
+    //TODO: remove testing methods once tests complete
+    private List<Long> generateTestTime(){
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        List<Long> timeList = new ArrayList<>();
+        for( int i =0; i<10; i++){
+            timeList.add(System.currentTimeMillis() - chronometer.getBase());
+        }
+        return timeList;
+    }
+    private List<Double> generateTestDouble(){
+        List<Double> listOfDoubles = new ArrayList<Double>();
+        Random random = new Random();
+        for (int i = 0; i< 10; i++){
+            listOfDoubles.add(random.nextDouble());
+        }
+        return listOfDoubles;
+    }
+
 }

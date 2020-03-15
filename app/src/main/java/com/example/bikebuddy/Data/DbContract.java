@@ -12,6 +12,9 @@ public class DbContract {
         public static final String COLUMN_DATE = "workoutDate";
         public static final String COLUMN_DURATION = "workoutDuration";
         public static final String COLUMN_DISTANCE = "workoutDistance";
+        public static final String COLUMN_TIME_LIST = "workoutTimeList";
+        public static final String COLUMN_HR_LIST = "workoutHRlist";
+        public static final String COLUMN_SPEED_LIST = "workoutSpeedList";
         public static final String COLUMN_HR_AVG = "workoutAvgHR";
         public static final String COLUMN_SPEED_AVG = "workoutAvgSpeed";
         public static final String COLUMN_CALORIES_TOT = "workoutCaloriesTotal";
