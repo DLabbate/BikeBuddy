@@ -106,12 +106,13 @@ public class RecordingService extends Service {
 
     private void fillWorkoutValues()
     {
-        Log.d(TAG,"Adding data values:" +
+        Log.d(TAG,"Adding data values (" +
                   " Date: " + new Date()
                 + " Elapsed Time (s): " + (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000
                 + " HR: " + MainActivity.HR_RT
                 + " Speed: " + LocationService.SPEED_RT
-                + " Distance " + LocationService.WORKOUT_DISTANCE);
+                + " Distance " + LocationService.WORKOUT_DISTANCE
+                + " )");
 
         //Now we want to fill all the workout data
         //*****************************************************************************************************************************

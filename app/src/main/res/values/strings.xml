@@ -13,5 +13,6 @@
     <string name="notification_title_recording">Recording Workout</string>
 
     <string name="text_record_workout">You may now proceed to record a workout. Please ensure that your sensor is properly attached
-    and your phone is secure. Note that if you log out of the application while recording the workout, location, speed, and distance will continue to update. </string>
+    and your phone is secure. In order to ensure a good connection, it might be necessary to sprinkle a small amount of water on
+    the fabric sensors before wearing.</string>
 </resources>

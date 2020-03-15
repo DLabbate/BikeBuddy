@@ -170,7 +170,7 @@ public class Workout {
 
         workoutData += " Date: " + date;
 
-        workoutData += " Times (seconds): ";
+        workoutData += " \nTimes (seconds): ";
         for (int i = 0; i < time.size(); i++)
             workoutData += time.get(i).toString() + " ";
         workoutData += "\n";
@@ -185,11 +185,11 @@ public class Workout {
             workoutData += listSpeed.get(i).toString() + " ";
         workoutData += "\n";
 
-        workoutData += " Total Distance:" + totalDistance + "\n";
-        workoutData += " Total Duration:" + totalDuration + "\n";
-        workoutData += " Calories Burned:" + caloriesBurned + "\n";
-        workoutData += " Average HR:" + averageHR + "\n";
-        workoutData += " Average Speed:" + averageSpeed + "\n";
+        workoutData += " Total Distance: " + totalDistance + "\n";
+        workoutData += " Total Duration: " + totalDuration + "\n";
+        workoutData += " Calories Burned: " + caloriesBurned + "\n";
+        workoutData += " Average HR: " + averageHR + "\n";
+        workoutData += " Average Speed: " + averageSpeed + "\n";
 
         workoutData += "********************************************************************\n";
 
