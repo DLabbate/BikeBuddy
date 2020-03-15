@@ -34,6 +34,8 @@ public class RecordingService extends Service {
     private double averageSpeed;
     //******************************************************************************************************
 
+    private Workout workout;
+
 
 
     /*
@@ -51,6 +53,16 @@ public class RecordingService extends Service {
 
 
     public RecordingService() {
+        Log.d(TAG,"RecordingService Constructor");
+        this.date = new Date();
+        this.time = new ArrayList<>();
+        this.listHR = new ArrayList<>();
+        this.listSpeed = new ArrayList<>();
+        this.totalDistance = 0;
+        this.totalDuration = 0;
+        this.caloriesBurned = 0;
+        this.averageHR = 0;
+        this.averageSpeed = 0;
     }
 
     @Override
@@ -89,6 +101,7 @@ public class RecordingService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG,"onDestroy");
+        createNewWorkout();
     }
 
     private void fillWorkoutValues()
@@ -102,16 +115,19 @@ public class RecordingService extends Service {
 
         //Now we want to fill all the workout data
         //*****************************************************************************************************************************
-        date = new Date();                                                                              //Current date
         time.add((SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000);         //Time in seconds
         listHR.add(MainActivity.HR_RT);                                                                 //Heart Rate list
         listSpeed.add(LocationService.SPEED_RT);                                                        //Speed list
         totalDistance = LocationService.WORKOUT_DISTANCE;                                               //Total Distance
         totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
-        caloriesBurned = 0;                                                                             //*TO DO*
-        averageHR = 0;
-        averageHR = 0;
         //*****************************************************************************************************************************
+    }
+
+    private void createNewWorkout()
+    {
+        Log.d(TAG,"createNewWorkout");
+        workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration);
+        workout.print(TAG);
     }
 
 

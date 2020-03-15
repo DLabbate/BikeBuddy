@@ -1,5 +1,12 @@
 package com.example.bikebuddy.Utils;
 
+import android.os.SystemClock;
+import android.util.Log;
+
+import com.example.bikebuddy.FitnessFragment;
+import com.example.bikebuddy.LocationService;
+import com.example.bikebuddy.MainActivity;
+
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -40,6 +47,20 @@ public class Workout {
         this.caloriesBurned = caloriesBurned;
         this.averageHR = averageHR;
         this.averageSpeed = averageSpeed;
+    }
+
+    // Constructor without average values and calories burned
+    // Date is not included either
+    public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, double totalDistance, long totalDuration) {
+        this.date=  Calendar.getInstance().getTime();
+        this.time = time;
+        this.listHR = listHR;
+        this.listSpeed = listSpeed;
+        this.totalDistance = totalDistance;
+        this.totalDuration = totalDuration;
+        this.caloriesBurned = 0; //TO DO
+        this.averageHR = calculateAverageHR();
+        this.averageSpeed = calculateAverageSpeed();
     }
 
     public Date getDate() {
@@ -136,5 +157,42 @@ public class Workout {
             return (sum / this.listSpeed.size());
         }
         return -1; // when the method returns -1, that means the list is empty
+    }
+
+    /*
+    Prints all the data of a workout in a log
+    Used for debugging
+     */
+    public void print(String TAG)
+    {
+        String workoutData = " \nWORKOUT DATA: ";
+        workoutData += "\n********************************************************************\n";
+
+        workoutData += " Date: " + date;
+
+        workoutData += " Times (seconds): ";
+        for (int i = 0; i < time.size(); i++)
+            workoutData += time.get(i).toString() + " ";
+        workoutData += "\n";
+
+        workoutData += " HR List: ";
+        for (int i = 0; i < listHR.size(); i++)
+            workoutData += listHR.get(i).toString() + " ";
+        workoutData += "\n";
+
+        workoutData += " Speed List: ";
+        for (int i = 0; i < listSpeed.size(); i++)
+            workoutData += listSpeed.get(i).toString() + " ";
+        workoutData += "\n";
+
+        workoutData += " Total Distance:" + totalDistance + "\n";
+        workoutData += " Total Duration:" + totalDuration + "\n";
+        workoutData += " Calories Burned:" + caloriesBurned + "\n";
+        workoutData += " Average HR:" + averageHR + "\n";
+        workoutData += " Average Speed:" + averageSpeed + "\n";
+
+        workoutData += "********************************************************************\n";
+
+        Log.d(TAG,workoutData);
     }
 }
