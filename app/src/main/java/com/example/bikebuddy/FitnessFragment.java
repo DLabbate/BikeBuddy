@@ -23,10 +23,15 @@ import java.text.DecimalFormat;
 
 
 public class FitnessFragment extends Fragment {
+
+    //Public static variables to be accessed in this fragment AND recording service
+    //***************************************************************************************
     public static Chronometer chronometer;
-    Button RecordWorkout;
     public static boolean running;
-    long WorkoutDuration;
+    public static long WorkoutDuration;
+    //***************************************************************************************
+
+    private Button RecordWorkout;
 
     TextView speedTextView;
     TextView distanceTextView;
@@ -72,7 +77,7 @@ public class FitnessFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!running){ // when it is not running
-                    showAlertDialog();
+                    startRecording();
 
                 }
                 else{ // when running
@@ -139,8 +144,9 @@ public class FitnessFragment extends Fragment {
     It informs the user to secure their phone and make sure the sensor connection is stable.
     The user has the ability to proceed or cancel.
      */
-    private void showAlertDialog()
+    private void startRecording()
     {
+        //First we create a dialog to be displayed to the user
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getString(R.string.text_record_workout));
         builder.setCancelable(true);
@@ -148,6 +154,8 @@ public class FitnessFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                //If user selects continue, then we begin a workout
+                //******************************************************************************
                 resetWorkoutDistance(); //Reset the workout distance before we display it
                 chronometer.setVisibility(View.VISIBLE);
                 distanceTextView.setVisibility(View.VISIBLE);
@@ -157,8 +165,11 @@ public class FitnessFragment extends Fragment {
                 RecordWorkout.setText("Stop Recording");
                 running=true;
                 createRecordingService();
+                //******************************************************************************
             }
         });
+        //If the user selects close, then we disregard
+        //**************************************************************************************
         builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -167,6 +178,7 @@ public class FitnessFragment extends Fragment {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+        //**************************************************************************************
     }
 
     /*

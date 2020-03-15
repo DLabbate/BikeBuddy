@@ -16,6 +16,11 @@ import java.util.List;
 
 public class RecordingService extends Service {
 
+    public static final String TAG = "RecordingService";
+
+
+    //Values to be added for Workout
+    //******************************************************************************************************
     private Date date;
     private ArrayList<Long> time;
     private ArrayList <Double> listHR;
@@ -25,16 +30,20 @@ public class RecordingService extends Service {
     private double caloriesBurned;
     private double averageHR;
     private double averageSpeed;
+    //******************************************************************************************************
 
-    public static final String TAG = "RecordingService";
 
 
+    /*
+    This handler creates a new thread every 10 seconds.
+    Each thread fills the workout values
+     */
     Handler handler = new Handler();
     private Runnable periodicUpdate = new Runnable() {
         @Override
         public void run() {
             handler.postDelayed(periodicUpdate, 10000);
-                Log.d(TAG,"Adding new data: ");
+                fillWorkoutValues();
         }
     };
 
@@ -82,12 +91,14 @@ public class RecordingService extends Service {
 
     private void fillWorkoutValues()
     {
-        Log.d(TAG,"chronometer: " + FitnessFragment.chronometer.getBase());
-        //Sample every 10 seconds
-        if ( (int)(FitnessFragment.chronometer.getBase() % 10) == 0)
-        {
-            Log.d(TAG,"Adding new data:");
-        }
+        Log.d(TAG,"Adding data values:" +
+                " chronometer: " + FitnessFragment.WorkoutDuration
+                + " HR: " + MainActivity.HR_RT
+                + " Speed: " + LocationService.SPEED_RT
+                + " Distance " + LocationService.WORKOUT_DISTANCE);
+
+
+
     }
 
 
