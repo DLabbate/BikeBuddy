@@ -10,6 +10,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.bikebuddy.Utils.Workout;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,13 +94,24 @@ public class RecordingService extends Service {
     private void fillWorkoutValues()
     {
         Log.d(TAG,"Adding data values:" +
-                " chronometer: " + FitnessFragment.WorkoutDuration
+                  " Date: " + new Date()
+                + " Elapsed Time (s): " + (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000
                 + " HR: " + MainActivity.HR_RT
                 + " Speed: " + LocationService.SPEED_RT
                 + " Distance " + LocationService.WORKOUT_DISTANCE);
 
-
-
+        //Now we want to fill all the workout data
+        //*****************************************************************************************************************************
+        date = new Date();                                                                              //Current date
+        time.add((SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000);         //Time in seconds
+        listHR.add(MainActivity.HR_RT);                                                                 //Heart Rate list
+        listSpeed.add(LocationService.SPEED_RT);                                                        //Speed list
+        totalDistance = LocationService.WORKOUT_DISTANCE;                                               //Total Distance
+        totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
+        caloriesBurned = 0;                                                                             //*TO DO*
+        averageHR = 0;
+        averageHR = 0;
+        //*****************************************************************************************************************************
     }
 
 
