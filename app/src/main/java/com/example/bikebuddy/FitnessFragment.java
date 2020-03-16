@@ -19,7 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Utils.Workout;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
 
 
 public class FitnessFragment extends Fragment {
@@ -37,9 +44,14 @@ public class FitnessFragment extends Fragment {
     TextView distanceTextView;
     TextView distanceTitleTextView;
 
+    //Added by brady to test DB
+    //TODO: remove once recording manager is setup
+    private Workout workout;
+    private DbHelper dbHelper;
+
     public static final String TAG = "FitnessFragment";
 
-    ImageView imageViewBluetoothStatus; //This is the ImageView that displays whether a device is connected or not
+    private ImageView imageViewBluetoothStatus; //This is the ImageView that displays whether a device is connected or not
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,6 +93,7 @@ public class FitnessFragment extends Fragment {
 
                 }
                 else{ // when running
+                    Log.d(TAG,"workout stopped");
                     chronometer.stop();
                     RecordWorkout.setText("record workout");
                     running=false;

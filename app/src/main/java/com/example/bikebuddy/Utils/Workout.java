@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Workout {
 
+    private int ID;
     private Date date;
     private List <Long> time;
     private List <Double> listHR;
@@ -20,8 +21,13 @@ public class Workout {
     private double totalDistance;
     private long totalDuration;
     private double caloriesBurned;
+    private double caloriesRate;
     private double averageHR;
     private double averageSpeed;
+
+
+    // Empty Constructor
+    public Workout(){}
 
     // Constructor With date set explicitly
     public Workout(Date date, List<Long> time, List<Double> listHR, List<Double> listSpeed, double totalDistance, long totalDuration, double caloriesBurned, double averageHR, double averageSpeed) {
@@ -63,78 +69,79 @@ public class Workout {
         this.averageSpeed = calculateAverageSpeed();
     }
 
+
+    //Setters and Getters
     public Date getDate() {
         return date;
     }
-
     public void setDate(Date date) {
         this.date = date;
     }
-
     public List<Long> getTime() {
         return time;
     }
-
     public void setTime(List<Long> time) {
         this.time = time;
     }
-
     public List<Double> getListHR() {
         return listHR;
     }
-
     public void setListHR(List<Double> listHR) {
         this.listHR = listHR;
     }
-
     public List<Double> getListSpeed() {
         return listSpeed;
     }
-
     public void setListSpeed(List<Double> listSpeed) {
         this.listSpeed = listSpeed;
     }
-
     public double getTotalDistance() {
         return totalDistance;
     }
-
     public void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;
     }
-
     public long getTotalDuration() {
         return totalDuration;
     }
-
     public void setTotalDuration(long totalDuration) {
         this.totalDuration = totalDuration;
     }
-
     public double getCaloriesBurned() {
         return caloriesBurned;
     }
-
     public void setCaloriesBurned(double caloriesBurned) {
         this.caloriesBurned = caloriesBurned;
     }
-
     public double getAverageHR() {
         return averageHR;
     }
-
     public void setAverageHR(double averageHR) {
         this.averageHR = averageHR;
     }
-
     public double getAverageSpeed() {
         return averageSpeed;
     }
-
     public void setAverageSpeed(double averageSpeed) {
         this.averageSpeed = averageSpeed;
     }
+    public int getID() {
+        return ID;
+    }
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
+    public double getCaloriesRate() {
+        return caloriesRate;
+    }
+
+    public void setCaloriesRate(double caloriesRate) {
+        this.caloriesRate = caloriesRate;
+    }
+
+
+    //Averaging Calculations
     public double calculateAverageHR(){
         if (this.listHR.size()!=0) {// to make sure that we don't divide by zero
             double sum = 0;
@@ -146,7 +153,6 @@ public class Workout {
         }
         return -1; // when the method returns -1, that means the list is empty
     }
-
     public double calculateAverageSpeed(){
         if (this.listSpeed.size()!=0) { // to make sure that we don't divide by zero
             double sum = 0;

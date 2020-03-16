@@ -19,11 +19,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.bikebuddy.Bluetooth.DelimiterReader;
+import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
@@ -32,7 +35,6 @@ import java.text.DecimalFormat;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.interfaces.DeviceCallback;
-import me.aflak.bluetooth.interfaces.DiscoveryCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        Log.d(TAG,"onStart");
         bluetooth.onStart();
         if(bluetooth.isEnabled()){
             if(!bluetooth.isConnected())
@@ -132,8 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupUI()
     {
+        Log.d(TAG,"setupUI");
         viewPager = findViewById(R.id.view_pager_main);
         tabLayout = findViewById(R.id.tab_layout_main);
+        dbHelper = new DbHelper(this);
 
         /*
         Next we should set up the ViewPager and TabLayout

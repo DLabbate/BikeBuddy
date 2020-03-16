@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">BikeBuddy</string>
     <string name="google_maps_API_key">AIzaSyDQ35gJ3JiiLhHA-mRvcBsgbfDpSo4Weq0</string>
+    <string name="date_format">dd/MM/yyyy HH:mm:ss</string>
 
     <string name="notification_description_location">Inform the user that services are running</string>
     <string name="notification_name_location">Background Notification</string>
