@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     //Real Time Values
     public static double HR_RT; //Heart Rate
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
