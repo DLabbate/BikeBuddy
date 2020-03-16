@@ -1,20 +1,13 @@
 package com.example.bikebuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothDevice;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -22,15 +15,12 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Services.LocationService;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
-import java.nio.charset.CharsetEncoder;
 import java.text.DecimalFormat;
 
 import me.aflak.bluetooth.Bluetooth;

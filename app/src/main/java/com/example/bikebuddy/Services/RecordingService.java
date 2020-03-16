@@ -1,4 +1,4 @@
-package com.example.bikebuddy;
+package com.example.bikebuddy.Services;
 
 import android.app.Notification;
 import android.app.Service;
@@ -11,11 +11,14 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.FitnessFragment;
+import com.example.bikebuddy.MainActivity;
+import com.example.bikebuddy.R;
+import com.example.bikebuddy.Services.LocationService;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class RecordingService extends Service {
 

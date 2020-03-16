@@ -1,11 +1,6 @@
 package com.example.bikebuddy.Utils;
 
-import android.os.SystemClock;
 import android.util.Log;
-
-import com.example.bikebuddy.FitnessFragment;
-import com.example.bikebuddy.LocationService;
-import com.example.bikebuddy.MainActivity;
 
 import java.util.Date;
 import java.util.Calendar;

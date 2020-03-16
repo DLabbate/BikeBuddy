@@ -21,11 +21,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <service
-            android:name=".RecordingService"
+            android:name=".Services.RecordingService"
             android:enabled="true"
             android:exported="true"></service>
         <service
-            android:name=".LocationService"
+            android:name=".Services.LocationService"
             android:enabled="true"
             android:exported="true"
             android:stopWithTask="true" />

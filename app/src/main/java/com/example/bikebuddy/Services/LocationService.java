@@ -1,4 +1,4 @@
-package com.example.bikebuddy;
+package com.example.bikebuddy.Services;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.bikebuddy.MainActivity;
+import com.example.bikebuddy.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;

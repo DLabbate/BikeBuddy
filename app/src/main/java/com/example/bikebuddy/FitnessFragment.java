@@ -20,13 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Services.LocationService;
+import com.example.bikebuddy.Services.RecordingService;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
 
 
 public class FitnessFragment extends Fragment {

@@ -1,8 +1,5 @@
 package com.example.bikebuddy;
 
-import android.content.Context;
-import android.content.Intent;
-import android.hardware.camera2.CameraAccessException;
 import android.location.Location;
 
 /*
@@ -19,13 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.bikebuddy.Services.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
