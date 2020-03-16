@@ -2,6 +2,7 @@ package com.example.bikebuddy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.camera2.CameraAccessException;
 import android.location.Location;
 
@@ -39,8 +40,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.GeoApiContext;
 
 import java.text.DecimalFormat;
 
@@ -88,6 +92,9 @@ public class GPSFragment extends Fragment implements
     long lastTimeMillis = System.currentTimeMillis();
     //*****************************************************************************
 
+    //Google Directions Api
+    private GeoApiContext mGeoApiContext = null;
+
 
 
     @Nullable
@@ -120,6 +127,12 @@ public class GPSFragment extends Fragment implements
 
         gMapView.getMapAsync(this);
 
+        if (mGeoApiContext == null){
+            mGeoApiContext = new GeoApiContext.Builder()
+                    .apiKey(getString(R.string.google_maps_API_key))
+                    .build();
+        }
+
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -131,6 +144,8 @@ public class GPSFragment extends Fragment implements
 
         Log.d(TAG,"oncreate distance: " + WORKOUT_DISTANCE);
         WORKOUT_DISTANCE = 0.0;
+
+
 
         return view;
 
@@ -149,7 +164,14 @@ public class GPSFragment extends Fragment implements
 
         getDeviceLocation();
 
+        Polyline polyline = gMap.addPolyline(new PolylineOptions()
+            .add(new LatLng(51.5,-0.1), new LatLng(40.7,-74.0))
+            .width(5)
+            .color(Color.alpha(23)));
+
     }
+
+
 
     /*
     @Override
