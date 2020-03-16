@@ -21,6 +21,8 @@ allprojects {
         maven{
             url "https://maven.google.com"
         }
+
+        mavenCentral()
         
 
         //Needed for Graphing Library
