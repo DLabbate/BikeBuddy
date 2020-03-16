@@ -263,6 +263,10 @@ public class DbHelper extends SQLiteOpenHelper {
                     workout.setCaloriesRate(calRate);
                     workout.setCaloriesBurned(calTotal);
                     workoutList.add(workout);
+
+                    //Print workout data for debugging
+                    Log.d(TAG,"\n-------------------RETRIEVING ALL WORKOUT DATA FROM DB--------------------\n");
+
                 } while (cursor.moveToNext()); //movetoNext returns true if next is nonNull
                 return workoutList;
             }
