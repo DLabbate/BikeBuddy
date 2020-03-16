@@ -10,6 +10,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import java.util.List;
 public class RecordingService extends Service {
 
     public static final String TAG = "RecordingService";
-
 
     //Values to be added for Workout
     //******************************************************************************************************
@@ -32,10 +32,15 @@ public class RecordingService extends Service {
     private double caloriesBurned;
     private double averageHR;
     private double averageSpeed;
-    //******************************************************************************************************
 
     private Workout workout;
+    //******************************************************************************************************
 
+
+    //DB
+    //******************************************************************************************************
+    DbHelper dbHelper;
+    //******************************************************************************************************
 
 
     /*
@@ -63,6 +68,9 @@ public class RecordingService extends Service {
         this.caloriesBurned = 0;
         this.averageHR = 0;
         this.averageSpeed = 0;
+
+        //Initialize DbHelper
+        dbHelper = new DbHelper(this);
     }
 
     @Override
@@ -104,6 +112,9 @@ public class RecordingService extends Service {
         createNewWorkout();
     }
 
+    /*
+    This method keeps an ongoing list of values WHILE A WORKOUT IS BEING RECORDED
+     */
     private void fillWorkoutValues()
     {
         Log.d(TAG,"Adding data values (" +
@@ -124,11 +135,18 @@ public class RecordingService extends Service {
         //*****************************************************************************************************************************
     }
 
+    /*
+    This method creates a new workout and then logs the values
+    Check the logcat for debugging
+     */
     private void createNewWorkout()
     {
         Log.d(TAG,"createNewWorkout");
         workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration);
         workout.print(TAG);
+
+        //Add the workout to the DB;
+        dbHelper.insertWorkout(workout);
     }
 
 
