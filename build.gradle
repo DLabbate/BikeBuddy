@@ -18,6 +18,10 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven{
+            url "https://maven.google.com"
+        }
+        
 
         //Needed for Graphing Library
         maven { url 'https://jitpack.io' }
