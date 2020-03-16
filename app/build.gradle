@@ -39,6 +39,9 @@ dependencies {
     //Graph Library
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    //GSON Library https://github.com/google/gson/blob/master/UserGuide.md#using-gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
     //Google play services
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'

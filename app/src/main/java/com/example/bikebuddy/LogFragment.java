@@ -12,23 +12,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.example.bikebuddy.Utils.WorkoutAdapter;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class LogFragment extends Fragment {
 
     private static final String TAG = "LogFragment";
+    private DbHelper dbHelper;
     //RecyclerView
     RecyclerView workoutRecyclerView;
     RecyclerView.Adapter workoutAdapter;
     RecyclerView.LayoutManager linearLayoutManager;
 
     // These are test variables (mock data)
-    List<Workout> testStrings;
+    //TODO remove test objects when recording is functional
+    private List<Workout> testStrings;
     List <Double> doublelist= Collections.emptyList();
     List <Long> longList=Collections.emptyList();
     double doublevalue = 10;
@@ -43,8 +45,10 @@ public class LogFragment extends Fragment {
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
 
-        testStrings = new LinkedList<Workout>();
-        testStrings.add(new Workout(longList,doublelist,doublelist,doublevalue,longvalue,doublevalue,doublevalue,doublevalue));
+        dbHelper = new DbHelper(this.getActivity());
+        testStrings = dbHelper.getWorkouts();
+      //  testStrings = new LinkedList<Workout>();
+      //  testStrings.add(new Workout(longList,doublelist,doublelist,doublevalue,longvalue,doublevalue,doublevalue,doublevalue));
       //  testStrings.add("Test2");
       //  testStrings.add("Test3");
         Log.d(TAG,"testStrings size: " + testStrings.size());
