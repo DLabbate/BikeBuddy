@@ -77,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
     public static final int NOTIFICATION_ID_RECORDING = 2;
     //************************************************************************************************
 
+
+    //Database
+    //************************************************************************************************
+    DbHelper dbHelper;
+    //************************************************************************************************
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -171,8 +171,8 @@ public class Workout {
      */
     public void print(String TAG)
     {
-        String workoutData = " \nWORKOUT DATA: ";
-        workoutData += "\n********************************************************************\n";
+        String workoutData = " \nWORKOUT DATA: \n";
+        workoutData += "********************************************************************\n";
 
         workoutData += " Date: " + date;
 
