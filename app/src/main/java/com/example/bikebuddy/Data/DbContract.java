@@ -30,6 +30,8 @@ public class DbContract {
         //BIKES TABLE COLUMNS
         public static final String COLUMN_BRAND = "bikeBrand";
         public static final String COLUMN_MODEL = "bikeModel";
+        public static final String COLUMN_WHEELDIAMETER = "bikeWheelDiameter";
+        public static final String COLUMN_CUMULATIVEDISTANCE = "bikeDistance";
     }
 
 }
