@@ -63,6 +63,7 @@ public class GPSFragment extends Fragment implements
         LocationListener {
 
     public static final String TAG = "GPSfragment";
+    private Context mContext;
 
 
     MapView gMapView;
@@ -150,6 +151,7 @@ public class GPSFragment extends Fragment implements
         Log.d(TAG,"oncreate distance: " + WORKOUT_DISTANCE);
         WORKOUT_DISTANCE = 0.0;
 
+        //mLastKnownLocation =
 
 
         return view;
@@ -166,14 +168,18 @@ public class GPSFragment extends Fragment implements
         gMap.setMyLocationEnabled(true);
         //gMap.setOnMyLocationButtonClickListener(this);
         //gMap.setOnMyLocationClickListener(this);
+
+        gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                calculateDirections(marker);
+                System.out.println("*****************ON MARKER CLICK");
+                return false;
+            }
+        });
         gMap.getUiSettings().setMapToolbarEnabled(false);
 
         getDeviceLocation();
-
-        Polyline polyline = gMap.addPolyline(new PolylineOptions()
-            .add(new LatLng(51.5,-0.1), new LatLng(40.7,-74.0))
-            .width(5)
-            .color(Color.alpha(23)));
 
 
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -186,16 +192,14 @@ public class GPSFragment extends Fragment implements
 
                 gMap.addMarker(markerOptions);
 
-                //calculateDirections();
-                //System.out.println(ma);
+                Marker marker = gMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title(latLng.latitude + " : " + latLng.longitude));
+
             }
         });
 
     }
-
-
-
-
 
 
 
@@ -323,7 +327,7 @@ public class GPSFragment extends Fragment implements
         //**********************************************************************************************
         lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
         gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
-        Toast.makeText(getActivity(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         //**********************************************************************************************
 
         //Update speed and distance
@@ -453,8 +457,13 @@ public class GPSFragment extends Fragment implements
         directions.alternatives(true);
         directions.origin(
                 new com.google.maps.model.LatLng(
+
                         //mLastKnownLocation.getGeo_point().getLatitude(),
                         //mLastKnownLocation.getGeo_point().getLongitude()
+                        //if (lastKnownLatLng.latitude != null && lastKnownLatLng.longitude != null) {
+                            mLastKnownLocation.getLatitude(),
+                            mLastKnownLocation.getLongitude()
+
                 )
         );
         Log.d(TAG, "calculateDirections: destination: " + destination.toString());
