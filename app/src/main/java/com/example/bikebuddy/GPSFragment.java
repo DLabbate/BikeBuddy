@@ -445,6 +445,9 @@ public class GPSFragment extends Fragment implements
         }
     }
 
+    /**
+     *Retrieves route data from google maps from user location to destination (based on marker)
+     */
     private void calculateDirections(Marker marker){
         Log.d(TAG, "calculateDirections: calculating directions.");
 
