@@ -495,6 +495,8 @@ public class GPSFragment extends Fragment implements
     }
 
     private void addPolylinesToMap(final DirectionsResult result){
+
+        //******Posts to main thread
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -502,6 +504,7 @@ public class GPSFragment extends Fragment implements
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
+                    
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
