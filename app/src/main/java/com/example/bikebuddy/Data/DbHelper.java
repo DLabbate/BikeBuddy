@@ -107,7 +107,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //Log.d(TAG,"JSONspeed = " + serializeSpeed);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_TIME_LIST,serializeTime);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_HR_LIST,serializeHR);
-        contentValues.put(DbContract.WorkoutEntry.COLUMN_SPEED_LIST,serializeHR);
+        contentValues.put(DbContract.WorkoutEntry.COLUMN_SPEED_LIST,serializeSpeed);
 
         //random bike value assigned to all workouts (tentative)
         //TODO: handle packaging bike objects
@@ -207,7 +207,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         Log.d(TAG,"getWorkouts");
-
+        Log.d(TAG,"-------------------RETRIEVING ALL WORKOUT DATA FROM DB--------------------");
         try {
             cursor = db.query(DbContract.WorkoutEntry.TABLE_NAME, null, null, null, null, null, null);
 
@@ -249,7 +249,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     double avgSpeed = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_AVG));
                     int bikeUsed = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_BIKE_USED));
 
-                    Log.d(TAG,"Workout Inserted: ID = " + id + " Date = " + date);
+                    //Log.d(TAG,"Workout Inserted: ID = " + id + " Date = " + date);
                     //adding all workout parameters to workout object to be returned.
                     workout.setID(id);
                     workout.setDate(date);
@@ -263,6 +263,10 @@ public class DbHelper extends SQLiteOpenHelper {
                     workout.setCaloriesRate(calRate);
                     workout.setCaloriesBurned(calTotal);
                     workoutList.add(workout);
+
+                    //Print workout data for debugging
+                    workout.print(TAG);
+
                 } while (cursor.moveToNext()); //movetoNext returns true if next is nonNull
                 return workoutList;
             }

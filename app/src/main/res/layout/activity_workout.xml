@@ -44,6 +44,14 @@
                         android:layout_marginStart="5dp"
                         android:text="Date:" />
 
+                    <TextView
+                        android:id="@+id/text_date_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"/>
+
                 </LinearLayout>
 
 
@@ -66,6 +74,14 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:text="Duration:" />
+
+                    <TextView
+                        android:id="@+id/text_duration_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"/>
 
                 </LinearLayout>
 
@@ -90,6 +106,14 @@
                         android:layout_marginStart="5dp"
                         android:text="Distance:" />
 
+                    <TextView
+                        android:id="@+id/text_distance_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"/>
+
                 </LinearLayout>
 
 
@@ -112,6 +136,15 @@
                         android:layout_marginStart="5dp"
                         android:text="Average HR (bpm):"
                         android:layout_gravity="center_vertical"/>
+
+                    <TextView
+                        android:id="@+id/text_heart_rate_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"/>
+
                 </LinearLayout>
 
 
@@ -135,7 +168,13 @@
                         android:layout_marginStart="5dp"
                         android:text="Average Speed (km/h):" />
 
-
+                    <TextView
+                        android:id="@+id/text_speed_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"/>
 
                 </LinearLayout>
 
@@ -159,6 +198,14 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:text="Calories:" />
+
+                    <TextView
+                        android:id="@+id/text_calories_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"/>
 
                 </LinearLayout>
 
