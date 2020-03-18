@@ -9,10 +9,10 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:gravity="center"
+        android:gravity="center|top"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
             android:id="@+id/NameEditText"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_margin="20dp"
             android:hint="Name"
             android:inputType="textPersonName" />
 
@@ -31,7 +31,7 @@
             android:id="@+id/WeightEditText"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_margin="20dp"
             android:hint="Weight (kg)"
             android:inputType="number"
             android:maxLength="3" />
@@ -40,7 +40,7 @@
             android:id="@+id/AgeEditText"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_margin="20dp"
             android:hint="Age"
             android:inputType="number"
             android:maxLength="2" />
@@ -49,13 +49,13 @@
             android:id="@+id/Gender_Spinner"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp" />
+            android:layout_margin="20dp" />
 
         <Button
             android:id="@+id/SaveButton1"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_margin="20dp"
             android:text="Save"
             tools:text="Save" />
     </LinearLayout>
