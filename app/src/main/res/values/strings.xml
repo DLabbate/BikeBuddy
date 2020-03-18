@@ -4,5 +4,6 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string name = "title_activity_profile">activity profile</string>
     <string name="google_maps_API_key">AIzaSyDQ35gJ3JiiLhHA-mRvcBsgbfDpSo4Weq0</string>
 </resources>

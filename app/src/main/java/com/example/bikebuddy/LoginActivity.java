@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                 Otherwise, inform user they have entered incorrect information
                  */
 
-
+/*
                     if(sharedpreferencehelper.getProfileName() == null ||
                             sharedpreferencehelper.getProfileAge() == -1 ||
                             sharedpreferencehelper.getProfileWeight() == -1) {
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
+*/
 
                 //Check permissions (Location,etc.)
                 checkPermissions();
