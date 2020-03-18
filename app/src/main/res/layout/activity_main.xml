@@ -7,6 +7,8 @@
     tools:context=".MainActivity"
     android:keepScreenOn="true">>
 
+    <include layout="@layout/toolbar_main"/>
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout_main"
         android:layout_width="match_parent"
@@ -33,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dashboard"
-            android:icon="@drawable/ic_bike"/>
+            android:icon="@drawable/ic_heart"/>
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
