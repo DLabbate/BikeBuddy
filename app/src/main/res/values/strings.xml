@@ -6,4 +6,5 @@
     </string-array>
     <string name = "title_activity_profile">activity profile</string>
     <string name="google_maps_API_key">AIzaSyDQ35gJ3JiiLhHA-mRvcBsgbfDpSo4Weq0</string>
+    <string name="date_format">dd/MM/yyyy HH:mm:ss</string>
 </resources>
