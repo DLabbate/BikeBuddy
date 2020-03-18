@@ -31,7 +31,7 @@ public class RecordingService extends Service {
     private ArrayList <Double> listSpeed;
     private double totalDistance;
     private long totalDuration;
-    private double caloriesBurned;
+    private double caloriesRate;
     private double averageHR;
     private double averageSpeed;
 
@@ -80,7 +80,7 @@ public class RecordingService extends Service {
         this.listSpeed = new ArrayList<>();
         this.totalDistance = 0;
         this.totalDuration = 0;
-        this.caloriesBurned = 0;
+        this.caloriesRate = 0;
         this.averageHR = 0;
         this.averageSpeed = 0;
 
@@ -125,7 +125,6 @@ public class RecordingService extends Service {
         super.onDestroy();
         Log.d(TAG,"onDestroy");
         createNewWorkout();
-        
         //Stop the periodic update
         handler.removeCallbacks(periodicUpdate);
     }
@@ -157,7 +156,7 @@ public class RecordingService extends Service {
         listHR.add(MainActivity.HR_RT);                                                                 //Heart Rate list
         listSpeed.add(LocationService.SPEED_RT);                                                        //Speed list
         totalDistance = LocationService.WORKOUT_DISTANCE;                                               //Total Distance
-        totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
+        //totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
         //*****************************************************************************************************************************
     }
 
@@ -168,7 +167,8 @@ public class RecordingService extends Service {
     private void createNewWorkout()
     {
         Log.d(TAG,"createNewWorkout");
-        workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration);
+        totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
+        workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, caloriesRate);
         workout.print(TAG);
 
         //Add the workout to the DB;
