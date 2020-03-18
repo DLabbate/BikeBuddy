@@ -74,10 +74,22 @@ public class ProfileActivity extends AppCompatActivity {
                 /*saving the edit text values with sharedpreferencehelper. Use the if statement to
                 convert into Int for the shared preference*/
 
-
+                String name_temp = NameEditText.getText().toString();
                 String age_temp = AgeEditText.getText().toString();
                 String weight_temp = WeightEditText.getText().toString();
                 int age = 0;
+                int weight = 0;
+                String name="";
+
+                /*
+                if(!"".equals(name_temp)){
+                    name = name_temp;
+                }
+                else{
+                    Toast.makeText(ProfileActivity.this, "No Name Entered",
+                            Toast.LENGTH_SHORT).show();
+                }
+
                 if(!"".equals(age_temp)){
                     age = Integer.parseInt(age_temp);
                 }
@@ -93,16 +105,28 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(ProfileActivity.this, "No Weight Entered",
                             Toast.LENGTH_SHORT).show();
                 }
+                 */
 
-                sharedPreferenceHelper.saveProfileName(NameEditText.getText().toString());
-                sharedPreferenceHelper.saveProfileAge(age);
-                sharedPreferenceHelper.saveProfileWeight((weight));
+                if (name_temp.equals("") || name_temp == null
+                        || age_temp.equals("") || age_temp == null
+                        || weight_temp.equals("") || weight_temp == null)
+                {
+                    Toast.makeText(ProfileActivity.this, "Please Fill all Fields",
+                            Toast.LENGTH_SHORT).show();
+                }
 
+                else
+                {
+                    name = name_temp;
+                    age = Integer.parseInt(age_temp);
+                    weight = Integer.parseInt(weight_temp);
 
-                Toast.makeText(ProfileActivity.this, "Profile Saved",
-                        Toast.LENGTH_SHORT).show();
-
-
+                    sharedPreferenceHelper.saveProfileName(name);
+                    sharedPreferenceHelper.saveProfileAge(age);
+                    sharedPreferenceHelper.saveProfileWeight((weight));
+                    Toast.makeText(ProfileActivity.this, "Profile Saved",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 /*
