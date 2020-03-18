@@ -1,6 +1,7 @@
 package com.example.bikebuddy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -126,6 +127,9 @@ public class ProfileActivity extends AppCompatActivity {
                     sharedPreferenceHelper.saveProfileWeight((weight));
                     Toast.makeText(ProfileActivity.this, "Profile Saved",
                             Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(ProfileActivity.this,MainActivity.class);
+                    startActivity(intent);
                 }
             }
         });
