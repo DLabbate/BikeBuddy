@@ -32,7 +32,7 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
-            android:hint="Weight(kg)"
+            android:hint="Weight (kg)"
             android:inputType="number"
             android:maxLength="3" />
 
