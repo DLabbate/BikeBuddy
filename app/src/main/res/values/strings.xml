@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">BikeBuddy</string>
+    <string-array name = "gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
     <string name="google_maps_API_key">AIzaSyDQ35gJ3JiiLhHA-mRvcBsgbfDpSo4Weq0</string>
 </resources>

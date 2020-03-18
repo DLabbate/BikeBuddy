@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
 
     Button loginButton;
+    protected SharedPreferenceHelper sharedpreferencehelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +65,19 @@ public class LoginActivity extends AppCompatActivity {
                 Check if input email and password is correct (PRIOR to permissions). If correct, proceed to verify permissions.
                 Otherwise, inform user they have entered incorrect information
                  */
-                /*
-
-                    if(name == null || age == 0 || weight == 0)
-                        Intent intentp = new Intent(LoginActivity.this, ProfileActivity.java);
 
 
+                    if(sharedpreferencehelper.getProfileName() == null ||
+                            sharedpreferencehelper.getProfileAge() == -1 ||
+                            sharedpreferencehelper.getProfileWeight() == -1) {
+                        Intent intentp = new Intent(LoginActivity.this,
+                                ProfileActivity.class);
+                        startActivity(intentp);
+                    }
 
-                 */
+
+
+
 
                 //Check permissions (Location,etc.)
                 checkPermissions();
