@@ -70,16 +70,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (permissionsGranted == true && isServicesAvailable() && isMapsEnabled()) {
                     Log.d(TAG,"Moving to MainActivity");
-                }
-
-                if(sharedpreferencehelper.getProfileName() == null ||
-                        sharedpreferencehelper.getProfileAge() == -1 ||
-                        sharedpreferencehelper.getProfileWeight() == -1) {
-                    Intent intentp = new Intent(LoginActivity.this,
-                            ProfileActivity.class);
-                    startActivity(intentp);
-                }
-                else{
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }

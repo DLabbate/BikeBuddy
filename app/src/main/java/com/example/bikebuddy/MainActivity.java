@@ -1,6 +1,7 @@
 package com.example.bikebuddy;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     //Real Time Values
     public static double HR_RT; //Heart Rate
 
+    //Shared Preferences
+    SharedPreferenceHelper sharedpreferencehelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         bluetooth.setReader(DelimiterReader.class); //Set the custom delimiter for the Zephyr HxM sensor, which uses ETX to end the message
         bluetooth.setDeviceCallback(deviceCallback);
+
+        sharedpreferencehelper = new SharedPreferenceHelper(this);
     }
 
     @Override
@@ -67,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             bluetooth.enable();
             bluetooth.connectToName(SENSOR_NAME);}
 
-
+        checkProfile();
     }
 
 
@@ -244,6 +250,18 @@ public class MainActivity extends AppCompatActivity {
         boolean stateOfTimer = timer.getBoolean("state",false);
         Log.d(TAG,"State of Timer: " + stateOfTimer);
         return stateOfTimer;
+    }
+
+    private void checkProfile()
+    {
+        if(sharedpreferencehelper.getProfileName() == null ||
+                sharedpreferencehelper.getProfileAge() == -1 ||
+                sharedpreferencehelper.getProfileWeight() == -1)
+        {
+            Intent intentp = new Intent(MainActivity.this,
+                    ProfileActivity.class);
+            startActivity(intentp);
+        }
     }
 
 
