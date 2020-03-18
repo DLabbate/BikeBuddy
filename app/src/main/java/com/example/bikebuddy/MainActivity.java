@@ -1,19 +1,23 @@
 package com.example.bikebuddy;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Services.LocationService;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
@@ -23,28 +27,54 @@ import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.interfaces.DeviceCallback;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Constants
+    //************************************************************************************************
     public static final String TAG = "MainActivity"; //TAG used for debugging
     public static final String SENSOR_NAME = "HXM034738"; //Name of the Zephyr HxM BT sensor
+    //************************************************************************************************
+
     /*
     To Do
     Let the user put in the name of their sensor
     */
 
+    //Views
+    //************************************************************************************************
     ViewPager viewPager;
     TabLayout tabLayout;
     MainPagerAdapter mainPagerAdapter;
     ImageView imageViewBluetooth; //This is the image that displays if the device is connected or not
-    public DbHelper dbHelper;
+    //************************************************************************************************
 
     //Bluetooth
+    //************************************************************************************************
     private Bluetooth bluetooth;
     public static boolean isDeviceConnected = false;
+    //************************************************************************************************
 
     //Real Time Values
+    //************************************************************************************************
     public static double HR_RT; //Heart Rate
+    //************************************************************************************************
 
     //Shared Preferences
     SharedPreferenceHelper sharedpreferencehelper;
+
+    //Notifications
+    //************************************************************************************************
+    public static final String CHANNEL_ID_LOCATION = "workout_notifications";
+    public static final int NOTIFICATION_ID_LOCATION = 1;
+
+    public static final String CHANNEL_ID_RECORDING = "recording_notifications";
+    public static final int NOTIFICATION_ID_RECORDING = 2;
+    //************************************************************************************************
+
+
+    //Database
+    //************************************************************************************************
+    DbHelper dbHelper;
+    //************************************************************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         bluetooth.setDeviceCallback(deviceCallback);
 
         sharedpreferencehelper = new SharedPreferenceHelper(this);
+
+        createNotificationChannelLocation();
+        createNotificationChannelRecording();
     }
 
     @Override
@@ -66,14 +99,19 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"onStart");
         bluetooth.onStart();
         if(bluetooth.isEnabled()){
-            // doStuffWhenBluetoothOn() ...
-            bluetooth.connectToName(SENSOR_NAME); //This is the name of the Zephyr HxM BT sensor being used
-
+            if(!bluetooth.isConnected())
+            {
+                //Try connecting to the sensor if it is not already connected
+                // doStuffWhenBluetoothOn() ...
+                bluetooth.connectToName(SENSOR_NAME); //This is the name of the Zephyr HxM BT sensor being used
+            }
         } else {
             bluetooth.enable();
             bluetooth.connectToName(SENSOR_NAME);}
 
         checkProfile();
+        //Start Location Services
+        createLocationService();
     }
 
 
@@ -84,8 +122,16 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onStop() {
         super.onStop();
-        bluetooth.onStop();
-        SaveTimerState(false);
+        //bluetooth.onStop();
+        //SaveTimerState(false);
+        Log.d(TAG,"onStop()");
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"onDestroy()");
     }
 
     private void setupUI()
@@ -164,7 +210,10 @@ public class MainActivity extends AppCompatActivity {
             https://www.zephyranywhere.com/media/download/hxm1-api-p-bluetooth-hxm-api-guide-20100722-v01.pdf
              */
             final long HR = message[12];
-            HR_RT = HR; //Update HR Value
+            if (HR >= 30)
+            {
+                HR_RT = HR; //Update HR Value
+            }
             Log.d(TAG,"onMessage, Message Size: " + message.length);
             Log.d(TAG,"onMessage, HR: " + HR);
 
@@ -226,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = timer.edit();
         editor.putLong("timerRunning", time);
         editor.apply();
+        Log.d(TAG,"SaveTimerTime: " + time);
     }
 
     // this function saves the status of the timer (running or not) into sharedprefrences
@@ -234,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = timer.edit();
         editor.putBoolean("state", running);
         editor.apply();
+        Log.d(TAG,"SaveTimerState: " + running);
     }
 
     // this function retrieves the timer from sharedprefrences
@@ -261,6 +312,52 @@ public class MainActivity extends AppCompatActivity {
             Intent intentp = new Intent(MainActivity.this,
                     ProfileActivity.class);
             startActivity(intentp);
+        }
+    }
+    private void connectToZephyr()
+    {
+        bluetooth.connectToName(SENSOR_NAME);
+    }
+
+    /*
+    This method creates a foreground location service
+    so that workouts can be recorded while in background
+     */
+    public void createLocationService()
+    {
+        Log.d(TAG,"createLocationService()");
+        startService(new Intent(this, LocationService.class));
+    }
+
+    private void createNotificationChannelLocation() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_name_location);
+            String description = (getString(R.string.notification_description_location));
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_LOCATION, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void createNotificationChannelRecording() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_name_recording);
+            String description = (getString(R.string.notification_description_recording));
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_RECORDING, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 

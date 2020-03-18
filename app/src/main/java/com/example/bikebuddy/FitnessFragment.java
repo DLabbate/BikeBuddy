@@ -1,5 +1,8 @@
 package com.example.bikebuddy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -17,24 +20,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Services.LocationService;
+import com.example.bikebuddy.Services.RecordingService;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
 
 
 public class FitnessFragment extends Fragment {
-    private Chronometer chronometer;
-    private Button RecordWorkout;
-    public static boolean running;
-    long WorkoutDuration;
 
-    private TextView speedTextView;
-    private TextView distanceTextView;
-    private TextView distanceTitleTextView;
+    //Public static variables to be accessed in this fragment AND recording service
+    //***************************************************************************************
+    public static Chronometer chronometer;
+    public static boolean running;
+    public static long WorkoutDuration;
+    //***************************************************************************************
+
+    private Button RecordWorkout;
+
+    TextView speedTextView;
+    TextView distanceTextView;
+    TextView distanceTitleTextView;
 
     //Added by brady to test DB
     //TODO: remove once recording manager is setup
@@ -81,51 +87,21 @@ public class FitnessFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!running){ // when it is not running
-                    Log.d(TAG,"workout started");
-                    resetWorkoutDistance(); //Reset the workout distance before we display it
-                    chronometer.setVisibility(View.VISIBLE);
-                    distanceTextView.setVisibility(View.VISIBLE);
-                    distanceTitleTextView.setVisibility(View.VISIBLE);
+                    startRecording();
 
-                    //Added to test DB
-                    //TODO: remove once recording manager is set up
-                    workout = new Workout();
-                    dbHelper = new DbHelper(getContext());
-
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-                    chronometer.start();
-                    RecordWorkout.setText("Stop Recording");
-                    running=true;
                 }
                 else{ // when running
                     Log.d(TAG,"workout stopped");
                     chronometer.stop();
-
-                    /*
-                        Added to test DB
-                        hardcoded workout data with date that is real-time.
-                     */
-                    //TODO: Remove once recording manager is functional
-                    workout.setDate(Calendar.getInstance().getTime());
-                    workout.setAverageHR(120);
-                    workout.setAverageSpeed(26);
-                    workout.setCaloriesBurned(1950);
-                    workout.setCaloriesRate(5000);
-                    workout.setTotalDistance(Double.valueOf(String.valueOf(distanceTextView.getText())));
-                    workout.setTotalDuration((long)123456789);
-                    workout.setTime(generateTestTime());
-                    workout.setListHR(generateTestDouble());
-                    workout.setListSpeed(generateTestDouble());
-                    dbHelper.insertWorkout(workout);
-
                     RecordWorkout.setText("record workout");
                     running=false;
                     chronometer.setVisibility(View.INVISIBLE);
                     distanceTextView.setVisibility(View.INVISIBLE);
                     distanceTitleTextView.setVisibility(View.INVISIBLE);
-                    WorkoutDuration=chronometer.getBase();
+                    WorkoutDuration = chronometer.getBase();
                     resetWorkoutDistance(); //Reset the workout distance
                     Toast.makeText(getActivity(),"Workout Recorded",Toast.LENGTH_SHORT).show();
+                    stopRecordingService();
                 }
 
             }
@@ -139,9 +115,9 @@ public class FitnessFragment extends Fragment {
     public void onStop() {
         super.onStop();
         // Saving the information of the timer when leaving the fragment
+        Log.d(TAG,"onStop()");
         ((MainActivity)getActivity()).SaveTimerState(running);
         ((MainActivity)getActivity()).SaveTimerTime(chronometer.getBase());
-        Log.d(TAG,"onStop()");
     }
 
     @Override
@@ -157,40 +133,80 @@ public class FitnessFragment extends Fragment {
         if (running) {
             chronometer.setVisibility(View.VISIBLE);
             RecordWorkout.setText("Stop Recording");
+            distanceTitleTextView.setVisibility(View.VISIBLE);
+            distanceTextView.setVisibility(View.VISIBLE);
         chronometer.start();
         }
     }
 
     private void resetWorkoutDistance()
     {
-        GPSFragment.WORKOUT_DISTANCE = 0;
+        LocationService.WORKOUT_DISTANCE = 0;
         TextView distanceTextView = getActivity().findViewById(R.id.text_distance_rt);
         DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
         if (distanceTextView != null)
         {
-            distanceTextView.setText(dec_0.format(GPSFragment.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
+            distanceTextView.setText(dec_0.format(LocationService.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
         }
     }
 
     /*
-    The following methods are for testing only
+    This methods displays an alert dialog prior to beginning a workout.
+    It informs the user to secure their phone and make sure the sensor connection is stable.
+    The user has the ability to proceed or cancel.
      */
-    //TODO: remove testing methods once tests complete
-    private List<Long> generateTestTime(){
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        List<Long> timeList = new ArrayList<>();
-        for( int i =0; i<10; i++){
-            timeList.add(System.currentTimeMillis() - chronometer.getBase());
-        }
-        return timeList;
-    }
-    private List<Double> generateTestDouble(){
-        List<Double> listOfDoubles = new ArrayList<Double>();
-        Random random = new Random();
-        for (int i = 0; i< 10; i++){
-            listOfDoubles.add(random.nextDouble());
-        }
-        return listOfDoubles;
+    private void startRecording()
+    {
+        //First we create a dialog to be displayed to the user
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(getString(R.string.text_record_workout));
+        builder.setCancelable(true);
+        builder.setNegativeButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                //If user selects continue, then we begin a workout
+                //******************************************************************************
+                resetWorkoutDistance(); //Reset the workout distance before we display it
+                chronometer.setVisibility(View.VISIBLE);
+                distanceTextView.setVisibility(View.VISIBLE);
+                distanceTitleTextView.setVisibility(View.VISIBLE);
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                RecordWorkout.setText("Stop Recording");
+                running=true;
+                createRecordingService();
+                //******************************************************************************
+            }
+        });
+        //If the user selects close, then we disregard
+        //**************************************************************************************
+        builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        //**************************************************************************************
     }
 
+    /*
+    This method creates a recording service.
+     */
+    public void createRecordingService()
+    {
+        Log.d(TAG,"createRecordingService()");
+        getActivity().startService(new Intent(getActivity(), RecordingService.class));
+    }
+
+    /*
+    This method STOPS the recording service.
+     */
+    public void stopRecordingService()
+    {
+        Log.d(TAG,"createRecordingService()");
+        getActivity().stopService(new Intent(getActivity(), RecordingService.class));
+    }
 }

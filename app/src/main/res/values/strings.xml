@@ -7,4 +7,18 @@
     <string name = "title_activity_profile">activity profile</string>
     <string name="google_maps_API_key">AIzaSyDQ35gJ3JiiLhHA-mRvcBsgbfDpSo4Weq0</string>
     <string name="date_format">dd/MM/yyyy HH:mm:ss</string>
+
+    <string name="notification_description_location">Inform the user that services are running</string>
+    <string name="notification_name_location">Background Notification</string>
+    <string name="notification_text_location">BikeBuddy is running in the background. Location updates will now be recorded less frequently.</string>
+    <string name="notification_title_location">Services Running</string>
+
+    <string name="notification_description_recording">Inform the user that a workout is being recorded</string>
+    <string name="notification_name_recording">Recording Notification</string>
+    <string name="notification_text_recording">Workout is being recorded</string>
+    <string name="notification_title_recording">Recording Workout</string>
+
+    <string name="text_record_workout">You may now proceed to record a workout. Please ensure that your sensor is properly attached
+    and your phone is secure. In order to ensure a good connection, it might be necessary to sprinkle a small amount of water on
+    the fabric sensors before wearing.</string>
 </resources>
