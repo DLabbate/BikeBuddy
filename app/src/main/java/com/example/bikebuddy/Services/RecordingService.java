@@ -189,7 +189,7 @@ public class RecordingService extends Service {
         //      hardcoded for now
         int age = 27;           //years
         int weight = 95;        //kg
-        Boolean gender = true;  //true = male, false = female
+        Boolean male = true;  //true = male, false = female
         //*****************************************************************************************************************************
 
         //Internal Parameters
@@ -209,7 +209,13 @@ public class RecordingService extends Service {
         //*****************************************************************************************************************************
         //Performing the filter approximation.
         //  assume keytelPower only
-        newVal = ((-55.0969 + (0.6309*heartRate) + (0.1988*weight) + (0.2017*age))/4.184)*(deltaTime)*(1/60);  //kcal/min
+        if(male) {
+            //Male
+            newVal = ((-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184) * (deltaTime) * (1 / 60);  //kcal/min
+        } else{
+            //Female
+            newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.074 * age)) / 4.184) * (deltaTime) * (1/60);     //kcal/min
+        }
         K = (sigma * C)/(sigma*sigma * C*C + Q*Q);
         estimate = estimate + K*(newVal-C*estimate);
         sigma = (1-K*C)*sigma;
