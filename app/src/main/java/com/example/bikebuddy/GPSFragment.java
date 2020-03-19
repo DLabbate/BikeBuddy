@@ -1,8 +1,5 @@
 package com.example.bikebuddy;
 
-import android.content.Context;
-import android.content.Intent;
-import android.hardware.camera2.CameraAccessException;
 import android.location.Location;
 
 /*
@@ -19,13 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.bikebuddy.Services.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -47,7 +43,8 @@ import java.text.DecimalFormat;
 
 
 public class GPSFragment extends Fragment implements
-        GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener,
+        GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -74,18 +71,12 @@ public class GPSFragment extends Fragment implements
     private LocationCallback locationCallback;
     //******************************************************************************
 
-    //The following fields are used for computing speed and distance
+    //The following fields are used for onLocationChanged
     //*****************************************************************************
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     private static final long INTERVAL = 5000;
     private static final long FASTEST_INTERVAL = 1000;
-    double oldLat = 0.0;
-    double oldLon = 0.0;
-    public static double WORKOUT_DISTANCE = 0.0;
-    public static double SPEED_RT; //Speed (km/h)
-    long DURATION_SAMPLING_TIME = 10000; //Sample the distance every 10 seconds
-    long lastTimeMillis = System.currentTimeMillis();
     //*****************************************************************************
 
 
@@ -128,9 +119,6 @@ public class GPSFragment extends Fragment implements
                     .addApi(LocationServices.API)
                     .build();
         }
-
-        Log.d(TAG,"oncreate distance: " + WORKOUT_DISTANCE);
-        WORKOUT_DISTANCE = 0.0;
 
         return view;
 
@@ -234,14 +222,14 @@ public class GPSFragment extends Fragment implements
     public void onStop() {
         super.onStop();
         Log.d(TAG,"onStop");
-        mGoogleApiClient.disconnect();
+        //mGoogleApiClient.disconnect();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log.d(TAG,"onPause");
-        stopLocationUpdates();
+        //stopLocationUpdates();
     }
 
     @Override
@@ -271,6 +259,9 @@ public class GPSFragment extends Fragment implements
 
     @Override
     public void onLocationChanged(Location location) {
+
+        Log.d(TAG,"onLocationChanged");
+
         //Update Map
         //**********************************************************************************************
         LatLng myCoordinates = new LatLng(location.getLatitude(),location.getLongitude());
@@ -278,13 +269,8 @@ public class GPSFragment extends Fragment implements
         //Toast.makeText(getActivity(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
         //**********************************************************************************************
 
-        //Update speed and distance
+        //Update speed and distance UI
         //**********************************************************************************************
-        lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        updateValues(location);
-        //incrementWorkoutDistance(location);
-        Log.d(TAG,"Latitude: " + lastKnownLatLng.latitude + " Longitude" + lastKnownLatLng.longitude);
-        Log.d(TAG,"Workout Distance: " + WORKOUT_DISTANCE);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -319,68 +305,14 @@ public class GPSFragment extends Fragment implements
         //****************************************************************************************************************
     }
 
-    protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
-    }
-
-    /*
-    This method updates the values (speed and distance in real time)
-    Note that the GPS sampling is done every 10 seconds and only updated if it is greater than 1 metre to minimize inaccuracies
-    This can be done using Latitude and Longitude coordinates
-    For more information, see:
-    //https://stackoverflow.com/questions/20398898/how-to-get-speed-in-android-app-using-location-or-accelerometer-or-some-other-wa
-     */
-    private void updateValues(Location location)
-    {
-        double newLat = location.getLatitude();
-        double newLon = location.getLongitude();
-
-        //Check if the location has a speed
-        if(location.hasSpeed()) {
-            float speed = location.getSpeed();
-            SPEED_RT = speed * 3.6; //Convert to km/h
-            Log.d(TAG,Float.toString(speed));
-
-
-            /*
-                We update distance every sample of time to avoid inaccuracies in the GPS
-                Check if more than 10 seconds has elapsed
-            */
-            if ((System.currentTimeMillis() - lastTimeMillis) > DURATION_SAMPLING_TIME)
-            {
-                /*
-                The following few lines calculates distance between old location and new location
-                using latitude and longitudes
-                 */
-                float[] distanceResults = new float[1];
-                Location.distanceBetween(oldLat, oldLon,
-                        newLat, newLon, distanceResults);
-
-                Log.d(TAG, "Distance between old location and new location: " + distanceResults[0]);
-
-
-                if (oldLon != 0 && oldLat != 0)
-                {
-                    if (distanceResults[0] > 1.0) //Only update if distance is greater than a metre
-                    {
-                        WORKOUT_DISTANCE += distanceResults[0]; //Increment distance
-                    }
-                }
-                oldLat = newLat;
-                oldLon = newLon;
-                lastTimeMillis = System.currentTimeMillis();
-            }
-        }
-    }
-
     private void updateTextViewSpeed()
     {
         TextView speedTextView = getActivity().findViewById(R.id.text_speed_rt);
         DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
         if (speedTextView != null)
         {
-            speedTextView.setText(dec_0.format(SPEED_RT)); //Update the Heart Rate TextView (Real Time)
+            Log.d(TAG,"updateTextViewSpeed: " + LocationService.SPEED_RT);
+            speedTextView.setText(dec_0.format(LocationService.SPEED_RT)); //Update the Heart Rate TextView (Real Time)
         }
     }
 
@@ -390,8 +322,11 @@ public class GPSFragment extends Fragment implements
         DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
         if (distanceTextView != null)
         {
-            distanceTextView.setText(dec_0.format(WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
+            Log.d(TAG,"updateTextViewDistance: " + LocationService.WORKOUT_DISTANCE);
+            distanceTextView.setText(dec_0.format(LocationService.WORKOUT_DISTANCE)); //Update the Heart Rate TextView (Real Time)
         }
     }
+
+
 
 }
