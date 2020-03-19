@@ -7,7 +7,7 @@
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -15,13 +15,13 @@
         android:theme="?attr/actionBarTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/linearlayout_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/text_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
@@ -35,29 +35,29 @@
                 android:textStyle="bold"/>
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/image_profile_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
                 android:layout_marginStart="300dp"
                 android:src="@drawable/ic_profile"
                 android:tint="#FFFFFFFF"
-                app:layout_constraintBottom_toBottomOf="@+id/textView"
-                app:layout_constraintStart_toStartOf="@id/textView"
-                app:layout_constraintTop_toTopOf="@+id/textView"
+                app:layout_constraintBottom_toBottomOf="@+id/text_toolbar"
+                app:layout_constraintStart_toStartOf="@id/text_toolbar"
+                app:layout_constraintTop_toTopOf="@+id/text_toolbar"
                 app:layout_constraintVertical_bias="1.0" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/image_bike_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:src="@drawable/ic_bike"
                 android:tint="#FFFFFF"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintBottom_toBottomOf="@+id/image_profile_toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView" />
+                app:layout_constraintStart_toEndOf="@+id/image_profile_toolbar"
+                app:layout_constraintTop_toTopOf="@+id/image_profile_toolbar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

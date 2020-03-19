@@ -1,6 +1,7 @@
 package com.example.bikebuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.NotificationChannel;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
     //************************************************************************************************
 
     //Shared Preferences
+    //***********************************************************************************************
     SharedPreferenceHelper sharedpreferencehelper;
+    //***********************************************************************************************
 
     //Notifications
     //************************************************************************************************
@@ -75,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
     //************************************************************************************************
     DbHelper dbHelper;
     //************************************************************************************************
+
+    //Toolbar
+    //***********************************************************************************************
+    Toolbar toolbarMain;
+    ImageView profileImageView;
+    //***********************************************************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +168,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_navigation);
         tabLayout.getTabAt(2).setText("Fitness");
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_heart);
+
+        toolbarMain = findViewById(R.id.toolbar_main);
+        profileImageView = findViewById(R.id.image_profile_toolbar);
+        setToolbarOnClickListener();
     }
 
     private DeviceCallback deviceCallback = new DeviceCallback() {
@@ -359,6 +373,17 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void setToolbarOnClickListener()
+    {
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
