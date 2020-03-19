@@ -174,14 +174,14 @@ public class ProfileActivity extends AppCompatActivity {
             Spinner GenderSpinner = (Spinner) findViewById(R.id.Gender_Spinner);
             String gender = sharedPreferenceHelper.getProfileGender();
 
-            if (gender == "Male")
+            if (gender.equals("Male"))
             {
-                //GenderSpinner.setSelection(0);
+                GenderSpinner.setSelection(0);
             }
 
             else
             {
-                //GenderSpinner.setSelection(1);
+                GenderSpinner.setSelection(1);
             }
         }
 
