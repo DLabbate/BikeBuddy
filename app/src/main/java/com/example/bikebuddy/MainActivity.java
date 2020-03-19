@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setText("GPS");
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_navigation);
         tabLayout.getTabAt(2).setText("Fitness");
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_bike);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_heart);
     }
 
     private DeviceCallback deviceCallback = new DeviceCallback() {
