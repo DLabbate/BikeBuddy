@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                 //Check permissions (Location,etc.)
                 checkPermissions();
 
-                if (permissionsGranted == true && isServicesAvailable() && isMapsEnabled()) {
+                if (isServicesAvailable() && isMapsEnabled() && permissionsGranted == true) {
                     Log.d(TAG,"Moving to MainActivity");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
