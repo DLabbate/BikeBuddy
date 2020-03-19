@@ -20,17 +20,20 @@ public class SharedPreferenceHelper {
     public String saveProfileName(String name){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Profilename", name);
+        Log.d(TAG,"Saving Profile Name: " + name);
         editor.commit();
         return name;
     }
     public void saveProfileAge(Integer age){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("Profileage", age);
+        Log.d(TAG,"Saving Profile Age: " + age);
         editor.commit();
     }
     public void saveProfileWeight(Integer weight){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("Profileweight", weight);
+        Log.d(TAG,"Saving Profile Weight: " + weight);
         editor.commit();
     }
 
@@ -38,6 +41,7 @@ public class SharedPreferenceHelper {
     {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Profilegender", gender);
+        Log.d(TAG,"Saving Profile Gender: " + gender);
         editor.commit();
     }
 

@@ -31,6 +31,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected SharedPreferenceHelper sharedPreferenceHelper;
 
+    public static final String TAG = "ProfileActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
                     age = Integer.parseInt(age_temp);
                     weight = Integer.parseInt(weight_temp);
                     gender = GenderSpinner.getSelectedItem().toString();
+                    Log.d(TAG,"Spinner: " + gender);
 
                     sharedPreferenceHelper.saveProfileName(name);
                     sharedPreferenceHelper.saveProfileAge(age);
@@ -165,20 +168,20 @@ public class ProfileActivity extends AppCompatActivity {
         if (sharedPreferenceHelper.getProfile() == true) //First we check if a profile exists or not
         {
             NameEditText.setText(sharedPreferenceHelper.getProfileName());
-            AgeEditText.setText(sharedPreferenceHelper.getProfileAge());
-            WeightEditText.setText(sharedPreferenceHelper.getProfileWeight());
+            AgeEditText.setText(Integer.toString(sharedPreferenceHelper.getProfileAge()));
+            WeightEditText.setText(Integer.toString(sharedPreferenceHelper.getProfileWeight()));
 
             Spinner GenderSpinner = (Spinner) findViewById(R.id.Gender_Spinner);
             String gender = sharedPreferenceHelper.getProfileGender();
 
             if (gender == "Male")
             {
-                GenderSpinner.setSelection(0);
+                //GenderSpinner.setSelection(0);
             }
 
             else
             {
-                GenderSpinner.setSelection(1);
+                //GenderSpinner.setSelection(1);
             }
         }
 
