@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
 */
         /*drop down menu for gender*/
 
-        Spinner GenderSpinner = (Spinner) findViewById(R.id.Gender_Spinner);
+        final Spinner GenderSpinner = (Spinner) findViewById(R.id.Gender_Spinner);
 
 
         /*Create an ArrayAdapter using the string array and a default spinner
@@ -80,7 +80,8 @@ public class ProfileActivity extends AppCompatActivity {
                 String weight_temp = WeightEditText.getText().toString();
                 int age = 0;
                 int weight = 0;
-                String name="";
+                String name = "";
+                String gender = "";
 
                 /*
                 if(!"".equals(name_temp)){
@@ -121,10 +122,13 @@ public class ProfileActivity extends AppCompatActivity {
                     name = name_temp;
                     age = Integer.parseInt(age_temp);
                     weight = Integer.parseInt(weight_temp);
+                    gender = GenderSpinner.getSelectedItem().toString();
 
                     sharedPreferenceHelper.saveProfileName(name);
                     sharedPreferenceHelper.saveProfileAge(age);
                     sharedPreferenceHelper.saveProfileWeight((weight));
+                    sharedPreferenceHelper.saveProfileGender(gender);
+                    sharedPreferenceHelper.saveProfile();//Indicates that a profile has been saved
                     Toast.makeText(ProfileActivity.this, "Profile Saved",
                             Toast.LENGTH_SHORT).show();
 
@@ -153,4 +157,37 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /*
+    This method loads the profile info if it already exists
+     */
+    public void loadProfile()
+    {
+        if (sharedPreferenceHelper.getProfile() == true) //First we check if a profile exists or not
+        {
+            NameEditText.setText(sharedPreferenceHelper.getProfileName());
+            AgeEditText.setText(sharedPreferenceHelper.getProfileAge());
+            WeightEditText.setText(sharedPreferenceHelper.getProfileWeight());
+
+            Spinner GenderSpinner = (Spinner) findViewById(R.id.Gender_Spinner);
+            String gender = sharedPreferenceHelper.getProfileGender();
+
+            if (gender == "Male")
+            {
+                GenderSpinner.setSelection(0);
+            }
+
+            else
+            {
+                GenderSpinner.setSelection(1);
+            }
+        }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadProfile();
+    }
 }
