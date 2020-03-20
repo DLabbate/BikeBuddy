@@ -21,12 +21,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.bikebuddy.Models.PolylineData;
 import com.example.bikebuddy.Services.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,6 +45,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,7 +68,8 @@ public class GPSFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        GoogleMap.OnPolylineClickListener {
 
     public static final String TAG = "GPSfragment";
     private Context mContext;
@@ -100,6 +104,11 @@ public class GPSFragment extends Fragment implements
     //Google Directions Api
     private GeoApiContext mGeoApiContext = null;
 
+    //Flag for camera updates after Start button is clicked
+    private boolean cameraUpdates = false;
+
+    //Array list of polyline data for every polyline shown on google map (is reset every time a new marker is added)
+    private ArrayList<PolylineData> mPolylines = new ArrayList<>();
 
 
     @Nullable
@@ -157,6 +166,7 @@ public class GPSFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
+        gMap.setOnPolylineClickListener(this);
 
         gMap.setMyLocationEnabled(true);
         //gMap.setOnMyLocationButtonClickListener(this);
@@ -430,14 +440,23 @@ public class GPSFragment extends Fragment implements
 
     private void addPolylinesToMap(final DirectionsResult result){
 
-        //******Posts to main thread
+        //******Posts to main thread********
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run: result routes: " + result.routes.length);
 
+                //Ensures that the current polylines array list contains only those shown on the map
+                if (mPolylines.size() > 0){
+                    for (PolylineData polylineData: mPolylines){
+                        polylineData.getPolyine().remove();
+                    }
+                    mPolylines.clear();
+                    mPolylines = new ArrayList<>();
+                }
+
                 for(DirectionsRoute route: result.routes){
-                    Log.d(TAG, "run: leg: " + route.legs[0].toString());
+                    Log.d(TAG, "run: leg1: " + route.legs[0].toString());
                     
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
@@ -456,10 +475,17 @@ public class GPSFragment extends Fragment implements
                     Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                     polyline.setClickable(true);
+                    mPolylines.add(new PolylineData(polyline,route.legs[0]));
 
                 }
             }
         });
     }
 
+
+    @Override
+    public void onPolylineClick(Polyline polyline) {
+        polyline.setColor(ContextCompat.getColor(getActivity(),R.color.colorPrimaryDark));
+
+    }
 }
