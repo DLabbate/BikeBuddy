@@ -34,12 +34,15 @@ public class LoginActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
 
     Button loginButton;
+    protected SharedPreferenceHelper sharedpreferencehelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setupUI();
+
+        sharedpreferencehelper = new SharedPreferenceHelper(LoginActivity.this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
@@ -61,10 +64,11 @@ public class LoginActivity extends AppCompatActivity {
                 Otherwise, inform user they have entered incorrect information
                  */
 
+
                 //Check permissions (Location,etc.)
                 checkPermissions();
 
-                if (permissionsGranted == true && isServicesAvailable() && isMapsEnabled()) {
+                if (isServicesAvailable() && isMapsEnabled() && permissionsGranted == true) {
                     Log.d(TAG,"Moving to MainActivity");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
