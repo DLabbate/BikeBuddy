@@ -28,10 +28,12 @@ public class DbContract {
         //TABLE NAME
         public static final String TABLE_NAME = "bikes";
         //BIKES TABLE COLUMNS
+        public static final String COLUMN_NAME = "bikeName";
         public static final String COLUMN_BRAND = "bikeBrand";
         public static final String COLUMN_MODEL = "bikeModel";
         public static final String COLUMN_WHEELDIAMETER = "bikeWheelDiameter";
         public static final String COLUMN_CUMULATIVEDISTANCE = "bikeDistance";
+        public static final String COLUMN_TOTALDURATION = "bikeDuration";
     }
 
 }

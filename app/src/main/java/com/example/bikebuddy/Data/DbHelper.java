@@ -64,10 +64,12 @@ public class DbHelper extends SQLiteOpenHelper {
  */
     private static final String CREATE_TABLE_BIKES = "CREATE TABLE " + DbContract.BikeEntry.TABLE_NAME + "(" +
             DbContract.BikeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            DbContract.BikeEntry.COLUMN_NAME + " STRING NOT NULL," +
             DbContract.BikeEntry.COLUMN_BRAND + " STRING NOT NULL," +
             DbContract.BikeEntry.COLUMN_MODEL + " STRING NOT NULL," +
             DbContract.BikeEntry.COLUMN_WHEELDIAMETER + " REAL NOT NULL," +
-            DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE + " REAL NOT NULL" + ")";
+            DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE + " REAL NOT NULL, " +
+            DbContract.BikeEntry.COLUMN_TOTALDURATION + " REAL NOT NULL" + ")";
 
     //*****************************************************************************************************************************
 
@@ -312,10 +314,12 @@ public class DbHelper extends SQLiteOpenHelper {
         Set content values to be sent to DB. Takes from bike class passed to insert.
          */
         ContentValues contentValues = new ContentValues();
+        contentValues.put(DbContract.BikeEntry.COLUMN_NAME,bike.getName());
         contentValues.put(DbContract.BikeEntry.COLUMN_BRAND,bike.getBrand());
         contentValues.put(DbContract.BikeEntry.COLUMN_MODEL,bike.getModel());
         contentValues.put(DbContract.BikeEntry.COLUMN_WHEELDIAMETER,bike.getWheelDiameter());
         contentValues.put(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE,bike.getCumulativeDistance());
+        contentValues.put(DbContract.BikeEntry.COLUMN_TOTALDURATION,bike.getCumulativeDistance());
 
         try{
             id = db.insertOrThrow(DbContract.WorkoutEntry.TABLE_NAME, null, contentValues);
@@ -350,18 +354,21 @@ public class DbHelper extends SQLiteOpenHelper {
 
             //Retrieving data from DB
             int id = cursor.getInt(cursor.getColumnIndex(DbContract.BikeEntry._ID));
+            String name = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_NAME));
             String brand = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_BRAND));
             String model = cursor.getString(cursor.getColumnIndex((DbContract.BikeEntry.COLUMN_MODEL)));
             double wheelDiameter = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_WHEELDIAMETER));
             double cumulativeDistance = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE));
+            long totalDistance = cursor.getLong(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_TOTALDURATION));
 
             //adding all bike parameters to bike object to be returned.
             bike.setID(id);
+            bike.setName(name);
             bike.setBrand(brand);
             bike.setModel(model);
             bike.setWheelDiameter(wheelDiameter);
             bike.setCumulativeDistance(cumulativeDistance);
-
+            bike.setTotalDuration(totalDistance);
 
             return bike; //returns bike
         } catch (Exception error) {
@@ -395,18 +402,21 @@ public class DbHelper extends SQLiteOpenHelper {
                     //Retrieving data from DB
                     //Retrieving data from DB
                     int id = cursor.getInt(cursor.getColumnIndex(DbContract.BikeEntry._ID));
+                    String name = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_NAME));
                     String brand = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_BRAND));
                     String model = cursor.getString(cursor.getColumnIndex((DbContract.BikeEntry.COLUMN_MODEL)));
                     double wheelDiameter = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_WHEELDIAMETER));
                     double cumulativeDistance = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE));
+                    long totalDuration = cursor.getLong(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_TOTALDURATION));
 
                     //adding all bike parameters to bike object to be returned.
                     bike.setID(id);
+                    bike.setName(name);
                     bike.setBrand(brand);
                     bike.setModel(model);
                     bike.setWheelDiameter(wheelDiameter);
                     bike.setCumulativeDistance(cumulativeDistance);
-
+                    bike.setTotalDuration(totalDuration);
 
                     bikeList.add(bike);
 
