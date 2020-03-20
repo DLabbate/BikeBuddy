@@ -33,10 +33,18 @@ public class BikeActivity extends AppCompatActivity {
     RecyclerView.LayoutManager linearLayoutManager;
     //***********************************************************************************************
 
+
+    //SharedPreferences
+    //***********************************************************************************************
+    SharedPreferenceHelper sharedPreferenceHelper;
+    //***********************************************************************************************
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike);
+
+        sharedPreferenceHelper = new SharedPreferenceHelper(BikeActivity.this);
 
         setupUI();
         setupToolbar();
@@ -70,12 +78,12 @@ public class BikeActivity extends AppCompatActivity {
         bikes = new ArrayList<Bike>();
         bikes.add(new Bike(1,"Bike 1","Trek","123456",30,10000,100000));
         bikes.add(new Bike(2,"Bike 2","Brand 2","654321",31,10000,100000));
-        bikes.add(new Bike(3,"Bike 3","Brand 3","171717",32,10000,100000));
+        bikes.add(new Bike(3,"Bike 3","Brand 3","171717",32,10000,100));
     }
 
     public void loadBikes()
     {
-        bikeAdapter = new BikeAdapter(bikes);
+        bikeAdapter = new BikeAdapter(bikes,sharedPreferenceHelper);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewBikes.setAdapter(bikeAdapter);
         recyclerViewBikes.setLayoutManager(linearLayoutManager);
