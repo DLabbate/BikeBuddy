@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbarMain = findViewById(R.id.toolbar_main);
         profileImageView = findViewById(R.id.image_profile_toolbar);
+        bikeImageView = findViewById(R.id.image_bike_toolbar);
         setToolbarOnClickListener();
     }
 
