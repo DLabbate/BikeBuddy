@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Bike;
 import com.example.bikebuddy.Utils.BikeAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BikeActivity extends AppCompatActivity {
 
@@ -24,7 +26,7 @@ public class BikeActivity extends AppCompatActivity {
 
     //Bikes
     //***********************************************************************************************
-    ArrayList<Bike> bikes;
+    List<Bike> bikes;
     //***********************************************************************************************
 
     //RecyclerView
@@ -34,7 +36,6 @@ public class BikeActivity extends AppCompatActivity {
     RecyclerView.LayoutManager linearLayoutManager;
     //***********************************************************************************************
 
-
     //SharedPreferences
     //***********************************************************************************************
     SharedPreferenceHelper sharedPreferenceHelper;
@@ -43,6 +44,11 @@ public class BikeActivity extends AppCompatActivity {
     //Floating Action Button
     //***********************************************************************************************
     FloatingActionButton FABaddBike;
+    //***********************************************************************************************
+
+    //Database
+    //***********************************************************************************************
+    DbHelper dbHelper;
     //***********************************************************************************************
 
     @Override
@@ -55,7 +61,8 @@ public class BikeActivity extends AppCompatActivity {
         setupUI();
         setupToolbar();
 
-        testData();
+        //testData();
+        setupDB();
         loadBikes();
 
         setupFAB();
@@ -66,6 +73,12 @@ public class BikeActivity extends AppCompatActivity {
         backImageView = findViewById(R.id.image_bike_back);
         recyclerViewBikes = findViewById(R.id.recycler_view_bikes);
         FABaddBike = findViewById(R.id.FAB_add_bike);
+    }
+
+    private void setupDB()
+    {
+        dbHelper = new DbHelper(this);
+        bikes = dbHelper.getBikes();
     }
 
     private void setupToolbar()
@@ -103,6 +116,7 @@ public class BikeActivity extends AppCompatActivity {
 
     public void loadBikes()
     {
+        bikes = dbHelper.getBikes();
         bikeAdapter = new BikeAdapter(bikes,sharedPreferenceHelper);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewBikes.setAdapter(bikeAdapter);

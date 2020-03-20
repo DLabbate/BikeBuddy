@@ -31,6 +31,9 @@ public class AddBikeFragment extends DialogFragment {
     Button button_addBike;
     Button button_cancel;
 
+    //Database
+    DbHelper dbHelper;
+
     //constructor
     public AddBikeFragment(){};
 
@@ -39,6 +42,7 @@ public class AddBikeFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate");
         this.context = getActivity();
+        dbHelper = new DbHelper(getActivity());
     }
 
     @Nullable
@@ -94,6 +98,8 @@ public class AddBikeFragment extends DialogFragment {
                     bike.setWheelDiameter(bikeWheelDiameter);
 
                     try {
+                        Log.d(TAG,"Attempting to Insert Bike: ");
+                        bike.print(TAG);
                         dbHelper.insertBike(bike);
                         ((BikeActivity)getActivity()).loadBikes();
                     } catch(Exception error){
