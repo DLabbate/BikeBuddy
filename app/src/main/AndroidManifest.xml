@@ -20,10 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".AddBikeFragment"></activity>
+
         <service
             android:name=".Services.RecordingService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".Services.LocationService"
             android:enabled="true"

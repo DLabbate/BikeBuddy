@@ -14,6 +14,11 @@ public class Bike {
 
     //CONSTRUCTORS
     public Bike() {
+
+        //Initializes integer terms to avoid error in storage
+        wheelDiameter = 0;
+        cumulativeDistance = 0;
+        totalDuration = 0;
     }
 
 

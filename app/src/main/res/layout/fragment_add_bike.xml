@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddBikeFragment">
+
+    <TextView
+        android:id="@+id/text_View_Fragement_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:textSize="18sp"
+        android:text="New Bike" />
+
+    <TextView
+        android:id="@+id/text_View_Bike_Name"
+        android:layout_width="@dimen/bikeFragTitleWidth"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_below="@+id/text_View_Fragement_Title"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/textMarginTop"
+        android:gravity="center|right"
+        android:text="Name:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_View_Bike_Brand"
+        android:layout_width="@dimen/bikeFragTitleWidth"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_below="@+id/text_View_Bike_Name"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/textMarginTop"
+        android:gravity="center|right"
+        android:text="Brand:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_View_Bike_Model"
+        android:layout_width="@dimen/bikeFragTitleWidth"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_below="@+id/text_View_Bike_Brand"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/textMarginTop"
+        android:gravity="center|right"
+        android:text="Model:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_View_Bike_WheelDiameter"
+        android:layout_width="@dimen/bikeFragTitleWidth"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_below="@+id/text_View_Bike_Model"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/textMarginTop"
+        android:gravity="center|right"
+        android:text="Wheel Diameter"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/edit_Text_Bike_Name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_alignTop="@id/text_View_Bike_Name"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentEnd="false"
+        android:layout_toEndOf="@+id/text_View_Bike_Name"
+        android:ems="10"
+        android:layout_marginStart="@dimen/editTextStartMargin7"
+        android:layout_alignParentRight="true"
+        android:hint="Name your bike"
+
+        android:inputType="textPersonName"
+        />
+
+    <EditText
+        android:id="@+id/edit_Text_Bike_Brand"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_alignTop="@id/text_View_Bike_Brand"
+        android:layout_toEndOf="@+id/text_View_Bike_Brand"
+        android:ems="10"
+        android:layout_marginStart="@dimen/editTextStartMargin7"
+        android:layout_alignParentRight="true"
+        android:inputType="textPersonName"
+        android:hint="ex. Schwin"/>
+
+    <EditText
+        android:id="@+id/edit_Text_Bike_Model"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_alignTop="@id/text_View_Bike_Model"
+        android:layout_toEndOf="@+id/text_View_Bike_Brand"
+        android:ems="10"
+        android:layout_marginStart="@dimen/editTextStartMargin7"
+        android:layout_alignParentRight="true"
+        android:hint="Model Name"
+        android:inputType="textPersonName"
+        />
+
+    <EditText
+        android:id="@+id/edit_Text_Wheel_Diameter"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/bikeFrageTitleHeight"
+        android:layout_alignTop="@id/text_View_Bike_WheelDiameter"
+        android:layout_toEndOf="@+id/text_View_Bike_Brand"
+        android:ems="10"
+        android:layout_marginStart="@dimen/editTextStartMargin7"
+        android:layout_alignParentRight="true"
+        android:hint="(inches)"
+        android:inputType="textPersonName"
+        />
+
+    <Button
+        android:id="@+id/button_addBike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_Text_Wheel_Diameter"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/textMarginTop"
+        android:layout_marginRight="@dimen/textMarginTop"
+        android:text="Add" />
+
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_Text_Wheel_Diameter"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="false"
+        android:layout_marginTop="@dimen/textMarginTop"
+        android:layout_marginLeft="@dimen/textMarginTop"
+        android:text="Cancel" />
+</RelativeLayout>
