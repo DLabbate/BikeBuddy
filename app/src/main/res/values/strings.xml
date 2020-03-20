@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">BikeBuddy</string>
-    <string-array name = "gender_array">
+    <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
     </string-array>
-    <string name = "title_activity_profile">activity profile</string>
+    <string name="title_activity_profile">activity profile</string>
     <string name="google_maps_API_key">AIzaSyDQ35gJ3JiiLhHA-mRvcBsgbfDpSo4Weq0</string>
     <string name="date_format">dd/MM/yyyy HH:mm:ss</string>
 
