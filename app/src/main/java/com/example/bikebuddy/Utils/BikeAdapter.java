@@ -32,7 +32,13 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        Bike currentBike = bikeList.get(position);
+        holder.textViewBikeName.setText(currentBike.getName());
+        holder.textViewBikeModel.setText(currentBike.getModel());
+        holder.textViewBikeBrand.setText(currentBike.getBrand());
+        holder.textViewBikeWheelDiameter.setText(Double.toString(currentBike.getWheelDiameter()));
+        holder.textViewDistance.setText(Double.toString(currentBike.getCumulativeDistance()));
+        holder.textViewDuration.setText(Long.toString(currentBike.getTotalDuration()));
     }
 
     @Override
@@ -44,6 +50,12 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
 
         public ImageView imageViewcheckmark;
         public ImageView imageViewdelete;
+
+        public TextView textViewBikeName;
+        public TextView textViewBikeModel;
+        public TextView textViewBikeBrand;
+        public TextView textViewBikeWheelDiameter;
+
         public TextView textViewDuration;
         public TextView textViewDistance;
 
@@ -54,10 +66,19 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
 
         public void setupUI(View view)
         {
-            imageViewcheckmark = view.findViewById(R.id.image_select_bike);
-            imageViewdelete = view.findViewById(R.id.image_delete_bike);
+            //Bike Info
+            textViewBikeName = view.findViewById(R.id.text_bike_name);
+            textViewBikeModel = view.findViewById(R.id.text_bike_model);;
+            textViewBikeBrand = view.findViewById(R.id.text_bike_brand);;
+            textViewBikeWheelDiameter = view.findViewById(R.id.text_bike_wheel_diameter);;
+
+            //Bike stats
             textViewDistance = view.findViewById(R.id.text_bike_distance);
             textViewDuration = view.findViewById(R.id.text_bike_duration);
+
+            //Icons (select/delete)
+            imageViewcheckmark = view.findViewById(R.id.image_select_bike);
+            imageViewdelete = view.findViewById(R.id.image_delete_bike);
         }
     }
 }

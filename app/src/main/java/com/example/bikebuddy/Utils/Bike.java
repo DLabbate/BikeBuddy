@@ -5,6 +5,7 @@ import android.util.Log;
 public class Bike {
 
     private int ID;
+    private String name;
     private String brand;
     private String model;
     private double wheelDiameter;
@@ -34,6 +35,18 @@ public class Bike {
         this.cumulativeDistance = cumulativeDistance;
         this.totalDuration = totalDuration;
     }
+
+    public Bike(int ID, String name, String brand, String model, double wheelDiameter, double cumulativeDistance, long totalDuration) {
+        this.ID = ID;
+        this.name = name;
+        this.brand = brand;
+        this.model = model;
+        this.wheelDiameter = wheelDiameter;
+        this.cumulativeDistance = cumulativeDistance;
+        this.totalDuration = totalDuration;
+    }
+
+
 
     //SETTERS AND GETTERS
     public int getID() {
@@ -71,6 +84,13 @@ public class Bike {
     }
     public void setTotalDuration(long totalDuration) {
         this.totalDuration = totalDuration;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void print(String TAG)
