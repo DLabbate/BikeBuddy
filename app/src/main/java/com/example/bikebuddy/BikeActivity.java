@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.example.bikebuddy.Utils.Bike;
 import com.example.bikebuddy.Utils.BikeAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,11 @@ public class BikeActivity extends AppCompatActivity {
     SharedPreferenceHelper sharedPreferenceHelper;
     //***********************************************************************************************
 
+    //Floating Action Button
+    //***********************************************************************************************
+    FloatingActionButton FABaddBike;
+    //***********************************************************************************************
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +57,15 @@ public class BikeActivity extends AppCompatActivity {
 
         testData();
         loadBikes();
+
+        setupFAB();
     }
 
     private void setupUI()
     {
         backImageView = findViewById(R.id.image_bike_back);
         recyclerViewBikes = findViewById(R.id.recycler_view_bikes);
+        FABaddBike = findViewById(R.id.FAB_add_bike);
     }
 
     private void setupToolbar()
@@ -66,6 +75,17 @@ public class BikeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BikeActivity.this,MainActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void setupFAB()
+    {
+        FABaddBike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddBikeFragment addBikeFragment = new AddBikeFragment();
+                addBikeFragment.show(getSupportFragmentManager(),"Add Bike Fragment");
             }
         });
     }

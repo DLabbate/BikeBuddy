@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -67,6 +69,9 @@ public class AddBikeFragment extends DialogFragment {
         editText_bikeModel = view.findViewById(R.id.edit_Text_Bike_Model);
         editText_wheelDiameter = view.findViewById(R.id.edit_Text_Wheel_Diameter);
 
+        button_addBike = view.findViewById(R.id.button_addBike);
+        button_cancel = view.findViewById(R.id.button_cancel);
+
         editText_bikeName.requestFocus();
 
         button_addBike.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +80,7 @@ public class AddBikeFragment extends DialogFragment {
 
                 DbHelper dbHelper = new DbHelper(getActivity());
                 Bike bike = new Bike();
-                //check if inputs are valie
+                //check if inputs are valid
                 if(checkInputs()) {
                     //Retrieve Data to be stored
                     String bikeName = editText_bikeName.getText().toString();
@@ -90,6 +95,7 @@ public class AddBikeFragment extends DialogFragment {
 
                     try {
                         dbHelper.insertBike(bike);
+                        ((BikeActivity)getActivity()).loadBikes();
                     } catch(Exception error){
                         Toast.makeText(context, "insert failed: " + error.getMessage(), Toast.LENGTH_SHORT);
                     }
@@ -135,6 +141,32 @@ public class AddBikeFragment extends DialogFragment {
             return false;
         }
         return true;
+    }
+
+    /*
+    @Override
+    public void onResume() {
+        super.onResume();
+        Window window = getDialog().getWindow();
+        if(window == null) return;
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = 1000;
+        params.height = 1100;
+        window.setAttributes(params);
+    }
+
+     */
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Window window = getDialog().getWindow();
+        assert window != null;
+
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        window.setAttributes(layoutParams);
     }
 }
 

@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".AddBikeFragment">
 
     <TextView
@@ -58,7 +58,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="@dimen/textMarginTop"
         android:gravity="center|right"
-        android:text="Wheel Diameter"
+        android:text="Wheel Diameter:"
         android:textSize="18sp" />
 
     <EditText
@@ -132,6 +132,7 @@
         android:layout_below="@id/edit_Text_Wheel_Diameter"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="false"
+        android:layout_alignStart="@+id/button_addBike"
         android:layout_marginTop="@dimen/textMarginTop"
         android:layout_marginLeft="@dimen/textMarginTop"
         android:text="Cancel" />
