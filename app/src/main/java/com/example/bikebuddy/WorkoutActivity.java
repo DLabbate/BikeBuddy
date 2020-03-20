@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -27,6 +28,13 @@ public class WorkoutActivity extends AppCompatActivity {
     LineChart chart_Speed;
     ArrayList<Entry> data_HR;
     ArrayList<Entry> data_speed;
+    TextView DateText;
+    TextView DurationText;
+    TextView DistanceText;
+    TextView AverageHRText;
+    TextView AverageSpeedText;
+    TextView CaloriesText;
+
 
     public static final String TAG = "WorkoutActivity";
 
@@ -39,6 +47,21 @@ public class WorkoutActivity extends AppCompatActivity {
         setupUI();
         loadDataHR();
         loadDataSpeed();
+
+        DateText = findViewById(R.id.text_date_value);
+        DurationText = findViewById(R.id.text_duration_value);
+        DistanceText = findViewById(R.id.text_distance_value);
+        AverageHRText = findViewById(R.id.text_heart_rate_value);
+        AverageSpeedText = findViewById(R.id.text_speed_value);
+        CaloriesText = findViewById(R.id.text_calories_value);
+
+        DateText.setText(getIntent().getStringExtra("Date"));
+        DurationText.setText(getIntent().getStringExtra("Duration"));
+        DistanceText.setText(getIntent().getStringExtra("Distance") + " m");
+        CaloriesText.setText(getIntent().getStringExtra("Calories"));
+        AverageSpeedText.setText(getIntent().getStringExtra("AverageSpeed"));
+        AverageHRText.setText(getIntent().getStringExtra("AverageHR"));
+        //TODO work on the graphs
     }
 
     /*

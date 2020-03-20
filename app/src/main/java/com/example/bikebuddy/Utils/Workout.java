@@ -59,7 +59,7 @@ public class Workout {
         this.listSpeed = listSpeed;
         this.totalDistance = totalDistance;
         this.totalDuration = totalDuration;
-        this.caloriesBurned = 0; //TO DO
+        this.caloriesBurned = 0; //TODO
         this.averageHR = calculateAverageHR();
         this.averageSpeed = calculateAverageSpeed();
     }
