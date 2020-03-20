@@ -113,6 +113,9 @@ public class RecordingService extends Service {
         super.onDestroy();
         Log.d(TAG,"onDestroy");
         createNewWorkout();
+        
+        //Stop the periodic update
+        handler.removeCallbacks(periodicUpdate);
     }
 
     /*

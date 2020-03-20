@@ -1,6 +1,7 @@
 package com.example.bikebuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.NotificationChannel;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
     public static double HR_RT; //Heart Rate
     //************************************************************************************************
 
+    //Shared Preferences
+    //***********************************************************************************************
+    SharedPreferenceHelper sharedpreferencehelper;
+    //***********************************************************************************************
+
     //Notifications
     //************************************************************************************************
     public static final String CHANNEL_ID_LOCATION = "workout_notifications";
@@ -73,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
     DbHelper dbHelper;
     //************************************************************************************************
 
+    //Toolbar
+    //***********************************************************************************************
+    Toolbar toolbarMain;
+    ImageView profileImageView;
+    //***********************************************************************************************
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
         bluetooth.setReader(DelimiterReader.class); //Set the custom delimiter for the Zephyr HxM sensor, which uses ETX to end the message
         bluetooth.setDeviceCallback(deviceCallback);
+
+        sharedpreferencehelper = new SharedPreferenceHelper(this);
 
         createNotificationChannelLocation();
         createNotificationChannelRecording();
@@ -104,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             bluetooth.enable();
             bluetooth.connectToName(SENSOR_NAME);}
 
+        checkProfile();
         //Start Location Services
         createLocationService();
     }
@@ -151,7 +167,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setText("GPS");
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_navigation);
         tabLayout.getTabAt(2).setText("Fitness");
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_bike);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_heart);
+
+        toolbarMain = findViewById(R.id.toolbar_main);
+        profileImageView = findViewById(R.id.image_profile_toolbar);
+        setToolbarOnClickListener();
     }
 
     private DeviceCallback deviceCallback = new DeviceCallback() {
@@ -297,6 +317,17 @@ public class MainActivity extends AppCompatActivity {
         return stateOfTimer;
     }
 
+    private void checkProfile()
+    {
+        if(sharedpreferencehelper.getProfileName() == null ||
+                sharedpreferencehelper.getProfileAge() == -1 ||
+                sharedpreferencehelper.getProfileWeight() == -1)
+        {
+            Intent intentp = new Intent(MainActivity.this,
+                    ProfileActivity.class);
+            startActivity(intentp);
+        }
+    }
     private void connectToZephyr()
     {
         bluetooth.connectToName(SENSOR_NAME);
@@ -342,6 +373,17 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void setToolbarOnClickListener()
+    {
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
