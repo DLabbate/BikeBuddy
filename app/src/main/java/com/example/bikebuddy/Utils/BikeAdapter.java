@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bikebuddy.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
@@ -67,14 +66,14 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
         public void setupUI(View view)
         {
             //Bike Info
-            textViewBikeName = view.findViewById(R.id.text_bike_name);
-            textViewBikeModel = view.findViewById(R.id.text_bike_model);;
-            textViewBikeBrand = view.findViewById(R.id.text_bike_brand);;
-            textViewBikeWheelDiameter = view.findViewById(R.id.text_bike_wheel_diameter);;
+            textViewBikeName = view.findViewById(R.id.text_bike_name_value);
+            textViewBikeModel = view.findViewById(R.id.text_bike_model_value);
+            textViewBikeBrand = view.findViewById(R.id.text_bike_brand_value);
+            textViewBikeWheelDiameter = view.findViewById(R.id.text_bike_wheel_diameter_value);
 
             //Bike stats
-            textViewDistance = view.findViewById(R.id.text_bike_distance);
-            textViewDuration = view.findViewById(R.id.text_bike_duration);
+            textViewDistance = view.findViewById(R.id.text_bike_distance_value);
+            textViewDuration = view.findViewById(R.id.text_bike_value);
 
             //Icons (select/delete)
             imageViewcheckmark = view.findViewById(R.id.image_select_bike);
