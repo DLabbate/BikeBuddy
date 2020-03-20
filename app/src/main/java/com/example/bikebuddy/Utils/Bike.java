@@ -14,16 +14,23 @@ public class Bike {
 
     //CONSTRUCTORS
     public Bike() {
+
+        //Initializes integer terms to avoid error in storage
+        wheelDiameter = 0;
+        cumulativeDistance = 0;
+        totalDuration = 0;
     }
 
 
 
-    public Bike(int ID, String brand, String model, double wheelDiameter, double cumulativeDistance) {
+    public Bike(int ID,String name, String brand, String model, double wheelDiameter, double cumulativeDistance, long totalDuration) {
         this.ID = ID;
+        this.name = name;
         this.brand = brand;
         this.model = model;
         this.wheelDiameter = wheelDiameter;
         this.cumulativeDistance = cumulativeDistance;
+        this.totalDuration = totalDuration;
     }
 
     //This constructor also takes the total duration
@@ -79,14 +86,17 @@ public class Bike {
     public void setCumulativeDistance(double cumulativeDistance) {
         this.cumulativeDistance = cumulativeDistance;
     }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
     public long getTotalDuration() {
         return totalDuration;
     }
     public void setTotalDuration(long totalDuration) {
         this.totalDuration = totalDuration;
-    }
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
