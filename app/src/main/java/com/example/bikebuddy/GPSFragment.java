@@ -487,6 +487,16 @@ public class GPSFragment extends Fragment implements
     public void onPolylineClick(Polyline polyline) {
         polyline.setColor(ContextCompat.getColor(getActivity(),R.color.colorPrimaryDark));
 
-
+        for (PolylineData polylineData: mPolylines){
+            Log.d(TAG, "onPolylineClick: " + mPolylines.toString());
+            if(polyline.getId().equals(polylineData.getPolyine().getId())){
+                polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                polylineData.getPolyine().setZIndex(1);
+            }
+            else{
+                polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
+                polylineData.getPolyine().setZIndex(0);
+            }
+        }
     }
 }
