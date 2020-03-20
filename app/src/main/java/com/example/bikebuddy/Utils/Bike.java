@@ -43,18 +43,6 @@ public class Bike {
         this.totalDuration = totalDuration;
     }
 
-    public Bike(int ID, String name, String brand, String model, double wheelDiameter, double cumulativeDistance, long totalDuration) {
-        this.ID = ID;
-        this.name = name;
-        this.brand = brand;
-        this.model = model;
-        this.wheelDiameter = wheelDiameter;
-        this.cumulativeDistance = cumulativeDistance;
-        this.totalDuration = totalDuration;
-    }
-
-
-
     //SETTERS AND GETTERS
     public int getID() {
         return ID;
@@ -97,10 +85,6 @@ public class Bike {
     }
     public void setTotalDuration(long totalDuration) {
         this.totalDuration = totalDuration;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void print(String TAG)
