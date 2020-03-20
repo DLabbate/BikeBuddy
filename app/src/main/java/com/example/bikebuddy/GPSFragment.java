@@ -473,7 +473,7 @@ public class GPSFragment extends Fragment implements
                         ));
                     }
                     Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
                     polyline.setClickable(true);
                     mPolylines.add(new PolylineData(polyline,route.legs[0]));
 
@@ -486,6 +486,7 @@ public class GPSFragment extends Fragment implements
     @Override
     public void onPolylineClick(Polyline polyline) {
         polyline.setColor(ContextCompat.getColor(getActivity(),R.color.colorPrimaryDark));
+
 
     }
 }
