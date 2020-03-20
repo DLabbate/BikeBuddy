@@ -9,6 +9,7 @@ public class Bike {
     private String model;
     private double wheelDiameter;
     private double cumulativeDistance;
+    private long totalDuration;
 
     //CONSTRUCTORS
     public Bike() {
@@ -22,6 +23,16 @@ public class Bike {
         this.model = model;
         this.wheelDiameter = wheelDiameter;
         this.cumulativeDistance = cumulativeDistance;
+    }
+
+    //This constructor also takes the total duration
+    public Bike(int ID, String brand, String model, double wheelDiameter, double cumulativeDistance, long totalDuration) {
+        this.ID = ID;
+        this.brand = brand;
+        this.model = model;
+        this.wheelDiameter = wheelDiameter;
+        this.cumulativeDistance = cumulativeDistance;
+        this.totalDuration = totalDuration;
     }
 
     //SETTERS AND GETTERS
@@ -54,6 +65,12 @@ public class Bike {
     }
     public void setCumulativeDistance(double cumulativeDistance) {
         this.cumulativeDistance = cumulativeDistance;
+    }
+    public long getTotalDuration() {
+        return totalDuration;
+    }
+    public void setTotalDuration(long totalDuration) {
+        this.totalDuration = totalDuration;
     }
 
     public void print(String TAG)
