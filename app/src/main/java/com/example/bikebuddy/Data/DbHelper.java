@@ -322,7 +322,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(DbContract.BikeEntry.COLUMN_TOTALDURATION,bike.getCumulativeDistance());
 
         try{
-            id = db.insertOrThrow(DbContract.WorkoutEntry.TABLE_NAME, null, contentValues);
+            id = db.insertOrThrow(DbContract.BikeEntry.TABLE_NAME, null, contentValues);
         }
         catch (Exception error){
             Toast.makeText(context, "insert failed: " + error.getMessage(), Toast.LENGTH_SHORT);
