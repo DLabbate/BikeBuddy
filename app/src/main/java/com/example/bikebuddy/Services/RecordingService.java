@@ -7,17 +7,21 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.FitnessFragment;
+import com.example.bikebuddy.LoginActivity;
 import com.example.bikebuddy.MainActivity;
 import com.example.bikebuddy.R;
+import com.example.bikebuddy.SharedPreferenceHelper;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class RecordingService extends Service {
 
@@ -35,8 +39,6 @@ public class RecordingService extends Service {
     private double averageHR;
     private double averageSpeed;
 
-
-
     private Workout workout;
     //******************************************************************************************************
 
@@ -45,16 +47,29 @@ public class RecordingService extends Service {
     //******************************************************************************************************
     private double[] kalReturn = new double[2];     //containts estimate and deviation from kalman filter
     double C = 1.5;                     //Kalman filter parameter
-    double Q = 0.5;                     //Kalman filter parameter
-    private int initialRate = 1;        //1=first time getting estimate, 0=first estimate complete
+    double Q = 0.05;                     //Kalman filter parameter
     private double calRateEstimate = 0; //current best approximation of rate
     private double sigma = Q;           //Variable Kalman filter parameter
+    int userAge;                        //to be taken from shared pref
+    int userWeight;                     //to be taken from shared pref
+    String userGender;                  //to be taken from shared pref
+
+    //Lists used for testing
+    //TODO: remove these lists after testing with sensor
+    private List<Double> calorieList = new ArrayList<Double>();
+    private List<Double> keytelList = new ArrayList<Double>();
+    private List<Double> metList = new ArrayList<Double>();
     //******************************************************************************************************
 
 
     //DB
     //******************************************************************************************************
     DbHelper dbHelper;
+    //******************************************************************************************************
+
+    //Shared Preferences
+    //******************************************************************************************************
+    SharedPreferenceHelper sharedPreferenceHelper;
     //******************************************************************************************************
 
 
@@ -92,6 +107,7 @@ public class RecordingService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG,"onCreate");
+        getUserInfo();              //imports shared preference data
     }
 
     @Override
@@ -108,10 +124,7 @@ public class RecordingService extends Service {
 
         startForeground(2,notification);
 
-
         return START_NOT_STICKY;
-
-
     }
 
     @Override
@@ -144,10 +157,9 @@ public class RecordingService extends Service {
 
         //Here we calculate the caloric output
         //*****************************************************************************************************************************
-            kalReturn = calculateCalorieRate(MainActivity.HR_RT, LocationService.SPEED_RT, calRateEstimate, sigma, Q, C);
+            kalReturn = calculateCalorieRate(MainActivity.HR_RT, LocationService.SPEED_RT, calRateEstimate, sigma, Q, C, userAge, userWeight, userGender);
             calRateEstimate = kalReturn[0];
             sigma = kalReturn[1];
-            //TODO: insert calRateEstimate into workout on completion of recording
         //*****************************************************************************************************************************
 
         //Now we want to fill all the workout data
@@ -156,7 +168,6 @@ public class RecordingService extends Service {
         listHR.add(MainActivity.HR_RT);                                                                 //Heart Rate list
         listSpeed.add(LocationService.SPEED_RT);                                                        //Speed list
         totalDistance = LocationService.WORKOUT_DISTANCE;                                               //Total Distance
-        //totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
         //*****************************************************************************************************************************
     }
 
@@ -168,14 +179,30 @@ public class RecordingService extends Service {
     {
         Log.d(TAG,"createNewWorkout");
         totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
-        workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, caloriesRate);
+        workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, calRateEstimate);
         workout.print(TAG);
 
         //Add the workout to the DB;
         dbHelper.insertWorkout(workout);
     }
 
-    private double[] calculateCalorieRate(double heartRate, double speed, double estimate, double sigma, double Q, double C){
+    /*
+    Takes user info from shared preferences and stores it for use in the caloric estimation.
+     */
+    public void getUserInfo(){
+        sharedPreferenceHelper = new SharedPreferenceHelper(this);
+        if(sharedPreferenceHelper.getProfile()){
+            userGender = sharedPreferenceHelper.getProfileGender();
+            userAge = sharedPreferenceHelper.getProfileAge();
+            userWeight = sharedPreferenceHelper.getProfileWeight();
+        } else{
+            Toast.makeText(this,"No Profile Found, Please create a profile " ,Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+        Log.d(TAG,"\ngetUserInfo\nAge: " + userAge + "\nWeight: " + userWeight + "\nGender: " + userGender);
+    }
+    private double[] calculateCalorieRate(double heartRate, double speed, double estimate, double sigma, double Q, double C, int age, int weight, String gender){
         /*
         Returns value of best guess for power output. Uses velocity data to approximate power
         based on MET standards and then HR to approximate output based on Keytel approximation.
@@ -184,13 +211,7 @@ public class RecordingService extends Service {
         clinical trials).
          */
 
-        //*****************************************************************************************************************************
-        //TODO: THIS DATA NEEDS TO BE TAKEN FROM PROFILE
-        //      hardcoded for now
-        int age = 27;           //years
-        int weight = 95;        //kg
-        Boolean male = true;  //true = male, false = female
-        //*****************************************************************************************************************************
+        Boolean male = gender.equals("Male");
 
         //Internal Parameters
         double deltaTime = 10;
@@ -209,28 +230,41 @@ public class RecordingService extends Service {
         //*****************************************************************************************************************************
         //Performing the filter approximation.
         //  assume keytelPower only
-        if(male) {
-            //Male
-            newVal = ((-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184) * (deltaTime) * (1 / 60);  //kcal/min
+        K = (sigma * C) / (sigma * sigma * C * C + Q * Q);
+        if(heartRate > 25) {
+            if (male) {
+                //Male
+                newVal = ((-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184) * (deltaTime) * (1 / 60);  //kcal/min
+            } else {
+                //Female
+                newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.0740 * age)) / 4.184) * (deltaTime) * (1 / 60);  //kcal/min
+            }
+            estimate = estimate + K * (newVal - C * estimate);
         } else{
-            //Female
-            newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.0740 * age)) / 4.184) * (deltaTime) * (1 / 60);     //kcal/min
+            newVal = estimate;
         }
-        K = (sigma * C)/(sigma*sigma * C*C + Q*Q);
-        estimate = estimate + K*(newVal-C*estimate);
-        sigma = (1-K*C)*sigma;
+        sigma = (1 - K * C) * sigma;
+        keytelList.add(newVal);
+        Log.d(TAG,"Keytel Values = " + keytelList);
 
         //  update with metPower
-        newVal = MET*weight/60;     //kcal/min
-        K = (sigma * C)/(sigma*sigma * C*C + Q*Q);
-        estimate = estimate + K*(newVal-C*estimate);
-        sigma = (1-K*C)*sigma;
+        K = (sigma * C) / (sigma * sigma * C * C + Q * Q);
+        if(speed>3) {
+            newVal = MET * weight / 60;     //kcal/min
+            estimate = estimate + K * (newVal - C * estimate);
+        } else{
+            newVal=estimate;
+        }
+        sigma = (1 - K * C) * sigma;
+        metList.add(newVal);
+        Log.d(TAG,"MET Values: " + metList);
         //*****************************************************************************************************************************
 
         //Returning estimate and deviation, both used at next method call
         kalReturn = new double[]{estimate, sigma};
+        //Log.d(TAG,"Kalman Filter Prediction: " + kalReturn[0] + "cal/min");
+        calorieList.add(kalReturn[0]);
+        Log.d(TAG,"Calorie Values: " + calorieList);
         return kalReturn;
-
     }
-
 }
