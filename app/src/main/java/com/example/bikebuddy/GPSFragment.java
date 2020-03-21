@@ -103,6 +103,7 @@ public class GPSFragment extends Fragment implements
 
     //Google Directions Api
     private GeoApiContext mGeoApiContext = null;
+    private Marker marker;
 
     //Flag for camera updates after Start button is clicked
     private boolean cameraUpdates = false;
@@ -189,22 +190,14 @@ public class GPSFragment extends Fragment implements
             @Override
             public void onMapClick(LatLng latLng) {
                 gMap.clear();
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
 
-                gMap.addMarker(markerOptions);
-
-                Marker marker = gMap.addMarker(new MarkerOptions()
+                marker = gMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(latLng.latitude + " : " + latLng.longitude));
 
             }
         });
-
     }
-
-
 
     /*
     @Override
@@ -482,7 +475,9 @@ public class GPSFragment extends Fragment implements
         });
     }
 
-
+    /**
+     *Highlights the selected polyline and places it over other polyline routes
+     */
     @Override
     public void onPolylineClick(Polyline polyline) {
         polyline.setColor(ContextCompat.getColor(getActivity(),R.color.colorPrimaryDark));
@@ -492,6 +487,14 @@ public class GPSFragment extends Fragment implements
             if(polyline.getId().equals(polylineData.getPolyine().getId())){
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                 polylineData.getPolyine().setZIndex(1);
+
+                LatLng endlocation = new LatLng(
+                        polylineData.getLeg().endLocation.lat,
+                        polylineData.getLeg().endLocation.lng
+                );
+
+                marker.setPosition(endlocation);
+                marker.setTitle("Duration: " + polylineData.getLeg().duration);
             }
             else{
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
