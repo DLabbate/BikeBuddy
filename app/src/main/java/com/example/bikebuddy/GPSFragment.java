@@ -75,7 +75,6 @@ public class GPSFragment extends Fragment implements
         GoogleMap.OnPolylineClickListener {
 
     public static final String TAG = "GPSfragment";
-    private Context mContext;
 
     private ImageButton cameraUpdatesButton;
     private MapView gMapView;
@@ -143,9 +142,11 @@ public class GPSFragment extends Fragment implements
             public void onClick(View v) {
                 if (!cameraUpdates){
                     cameraUpdates = true;
+                    Toast.makeText(getActivity(),"Real time Updates: Enabled", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     cameraUpdates = false;
+                    Toast.makeText(getActivity(),"Real time Updates: Disabled", Toast.LENGTH_SHORT).show();
                 }
             }
         });
