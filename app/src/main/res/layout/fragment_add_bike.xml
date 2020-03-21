@@ -73,7 +73,6 @@
         android:layout_marginStart="@dimen/editTextStartMargin7"
         android:layout_alignParentRight="true"
         android:hint="Name your bike"
-
         android:inputType="textPersonName"
         />
 
