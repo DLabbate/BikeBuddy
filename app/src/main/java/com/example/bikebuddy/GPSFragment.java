@@ -115,23 +115,24 @@ public class GPSFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gps,container,false);
+        View view = inflater.inflate(R.layout.fragment_gps, container, false);
         Log.d(TAG, ": ONcreateview");
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
-        locationCallback = new LocationCallback(){
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                if (locationResult == null){
-                    return;
+
+            locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    super.onLocationResult(locationResult);
+                    if (locationResult == null) {
+                        return;
+                    }
+                    for (Location location : locationResult.getLocations()) {
+                        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM));
+                    }
                 }
-                for (Location location: locationResult.getLocations()){
-                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM));
-                }
-            }
-        };
+            };
 
 
 
@@ -173,6 +174,7 @@ public class GPSFragment extends Fragment implements
         //gMap.setOnMyLocationButtonClickListener(this);
         //gMap.setOnMyLocationClickListener(this);
 
+
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -181,6 +183,12 @@ public class GPSFragment extends Fragment implements
                 return false;
             }
         });
+
+
+        //if (marker != null) {
+        //    calculateDirections(marker);
+        //}
+
         gMap.getUiSettings().setMapToolbarEnabled(false);
 
         getDeviceLocation();
@@ -268,7 +276,9 @@ public class GPSFragment extends Fragment implements
         if (mGoogleApiClient.isConnected()) {
             createLocationRequest();
         }
-        startLocationUpdates();
+        if (cameraUpdates) {
+            startLocationUpdates();
+        }
     }
 
     private void startLocationUpdates(){
@@ -322,9 +332,11 @@ public class GPSFragment extends Fragment implements
 
         //Update Map
         //**********************************************************************************************
-        lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
-        Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
+        if (cameraUpdates) {
+            lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
+            Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
+        }
         //**********************************************************************************************
 
         //Update speed and distance UI
@@ -421,6 +433,7 @@ public class GPSFragment extends Fragment implements
                 addPolylinesToMap(result);
             }
 
+
             @Override
             public void onFailure(Throwable e) {
                 Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
@@ -445,6 +458,7 @@ public class GPSFragment extends Fragment implements
                     mPolylines.clear();
                     mPolylines = new ArrayList<>();
                 }
+
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg1: " + route.legs[0].toString());
