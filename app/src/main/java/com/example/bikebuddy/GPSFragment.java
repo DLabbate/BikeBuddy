@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,8 +77,8 @@ public class GPSFragment extends Fragment implements
     public static final String TAG = "GPSfragment";
     private Context mContext;
 
-    Button cameraUpdatesButton;
-    MapView gMapView;
+    private ImageButton cameraUpdatesButton;
+    private MapView gMapView;
     private GoogleMap gMap = null;
     FusedLocationProviderClient fusedLocationClient;
     private Location mLastKnownLocation;
@@ -137,8 +138,19 @@ public class GPSFragment extends Fragment implements
             };
 
         cameraUpdatesButton = view.findViewById(R.id.cameraUpdatesButton);
+        cameraUpdatesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!cameraUpdates){
+                    cameraUpdates = true;
+                }
+                else{
+                    cameraUpdates = false;
+                }
+            }
+        });
 
-        gMapView = (MapView) view.findViewById(R.id.mapView2);
+        gMapView = view.findViewById(R.id.mapView2);
 
         gMapView.onCreate(savedInstanceState);
         gMapView.onResume();
@@ -185,11 +197,6 @@ public class GPSFragment extends Fragment implements
                 return false;
             }
         });
-
-
-        //if (marker != null) {
-        //    calculateDirections(marker);
-        //}
 
         gMap.getUiSettings().setMapToolbarEnabled(false);
 
@@ -337,7 +344,7 @@ public class GPSFragment extends Fragment implements
         if (cameraUpdates) {
             lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
-            Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         }
         //**********************************************************************************************
 
