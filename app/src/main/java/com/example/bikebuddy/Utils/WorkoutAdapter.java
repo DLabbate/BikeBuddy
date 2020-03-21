@@ -20,6 +20,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
 
@@ -64,8 +65,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                 // converting the distance from double to int to get rid of the decimals (we are measuring the distance in meter)
                 intent.putExtra("Distance", Integer.toString((int)(workoutList.get(position).getTotalDistance())));
 
+                //converting the time from long into hours, minutes and seconds
+                long hours = TimeUnit.SECONDS.toHours(workoutList.get(position).getTotalDuration());
+                long minute =TimeUnit.SECONDS.toMinutes(workoutList.get(position).getTotalDuration())-hours*60;
+                long seconds = TimeUnit.SECONDS.toSeconds(workoutList.get(position).getTotalDuration())-TimeUnit.SECONDS.toMinutes(workoutList.get(position).getTotalDuration())*60;;
+                intent.putExtra("Duration",hours + "h, " + minute + "m, "+ seconds + "s");
 
-                intent.putExtra("Duration",(new Time(workoutList.get(position).getTotalDuration())).toString());
                 intent.putExtra("Calories",Double.toString(workoutList.get(position).getCaloriesBurned()));
                 intent.putExtra("AverageHR",Double.toString(workoutList.get(position).getAverageHR()));
                 intent.putExtra("AverageSpeed",Double.toString(workoutList.get(position).getAverageSpeed()));
