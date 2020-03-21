@@ -52,7 +52,7 @@ public class LocationService extends Service implements
     long DURATION_SAMPLING_TIME = 10000; //Sample the distance every 10 seconds
     long lastTimeMillis = System.currentTimeMillis();
 
-    LatLng lastKnownLatLng;
+    public static LatLng lastKnownLatLng;
     //*****************************************************************************
 
     Context context;
