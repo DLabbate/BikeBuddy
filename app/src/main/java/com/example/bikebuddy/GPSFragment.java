@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -74,7 +76,7 @@ public class GPSFragment extends Fragment implements
     public static final String TAG = "GPSfragment";
     private Context mContext;
 
-
+    Button cameraUpdatesButton;
     MapView gMapView;
     private GoogleMap gMap = null;
     FusedLocationProviderClient fusedLocationClient;
@@ -134,7 +136,7 @@ public class GPSFragment extends Fragment implements
                 }
             };
 
-
+        cameraUpdatesButton = view.findViewById(R.id.cameraUpdatesButton);
 
         gMapView = (MapView) view.findViewById(R.id.mapView2);
 
@@ -459,6 +461,7 @@ public class GPSFragment extends Fragment implements
                     mPolylines = new ArrayList<>();
                 }
 
+                double duration = 99999999;
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg1: " + route.legs[0].toString());
@@ -482,6 +485,17 @@ public class GPSFragment extends Fragment implements
                     polyline.setClickable(true);
                     mPolylines.add(new PolylineData(polyline,route.legs[0]));
 
+                    double tmp = route.legs[0].duration.inSeconds;
+
+                    if(tmp < duration){
+
+                        duration = tmp;
+                        onPolylineClick(polyline);
+                        focusCamera(polyline.getPoints());
+
+                    }
+
+
                 }
             }
         });
@@ -493,6 +507,7 @@ public class GPSFragment extends Fragment implements
     @Override
     public void onPolylineClick(Polyline polyline) {
         polyline.setColor(ContextCompat.getColor(getActivity(),R.color.colorPrimaryDark));
+
 
         for (PolylineData polylineData: mPolylines){
             Log.d(TAG, "onPolylineClick: " + mPolylines.toString());
@@ -507,8 +522,8 @@ public class GPSFragment extends Fragment implements
 
                 marker.setPosition(endlocation);
                 marker.setTitle(polylineData.getLeg().endAddress);
-                marker.setSnippet("Duration: " + polylineData.getLeg().duration);
-                marker.setSnippet("Distance: " + polylineData.getLeg().distance);
+                marker.setSnippet("Duration: " + polylineData.getLeg().duration +
+                        ",  Distance: " + polylineData.getLeg().distance);
                 marker.showInfoWindow();
             }
             else{
@@ -516,5 +531,26 @@ public class GPSFragment extends Fragment implements
                 polylineData.getPolyine().setZIndex(0);
             }
         }
+    }
+
+    /**
+     *Zooms the camera on a route
+     */
+    public void focusCamera(List<LatLng> LatLngRoute) {
+
+        if (gMap == null || LatLngRoute == null || LatLngRoute.isEmpty()) return;
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : LatLngRoute)
+            boundsBuilder.include(latLngPoint);
+
+        int routePadding = 400;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+
+        gMap.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
+                600,
+                null
+        );
     }
 }
