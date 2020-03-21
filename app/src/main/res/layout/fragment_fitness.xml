@@ -17,23 +17,23 @@
         app:layout_constraintVertical_bias="0.1">
 
         <FrameLayout
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_margin="10dp"
             android:background="@drawable/shape_fitness_circle">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/text_heart_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Heart Rate (bpm)"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:text="Heart Rate (bpm)" />
 
                 <TextView
                     android:id="@+id/text_heart_rate_rt"
@@ -49,23 +49,23 @@
 
         <FrameLayout
             android:id="@+id/frame_speed"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_margin="10dp"
             android:background="@drawable/shape_fitness_circle">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/text_speed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Speed (km/h)"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:text="Speed (km/h)" />
 
                 <TextView
                     android:id="@+id/text_speed_rt"
@@ -81,8 +81,8 @@
 
         <FrameLayout
             android:id="@+id/frame_distance"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_margin="10dp"
             android:background="@drawable/shape_fitness_circle"
             android:visibility="invisible">
@@ -141,9 +141,10 @@
         android:id="@+id/image_bluetooth_status"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
         android:src="@drawable/ic_bluetooth_off"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
