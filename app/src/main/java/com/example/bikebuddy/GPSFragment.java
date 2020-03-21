@@ -345,12 +345,18 @@ public class GPSFragment extends Fragment implements
         if (cameraUpdates) {
             lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
+            mLastKnownLocation = location;
+
             //Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         }
         //**********************************************************************************************
 
         //Update speed and distance UI
         //**********************************************************************************************
+        if (getActivity()==null){
+            return;
+        }
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
