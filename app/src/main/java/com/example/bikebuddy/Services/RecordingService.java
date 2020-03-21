@@ -214,7 +214,7 @@ public class RecordingService extends Service {
             newVal = ((-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184) * (deltaTime) * (1 / 60);  //kcal/min
         } else{
             //Female
-            newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.074 * age)) / 4.184) * (deltaTime) * (1/60);     //kcal/min
+            newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.0740 * age)) / 4.184) * (deltaTime) * (1 / 60);     //kcal/min
         }
         K = (sigma * C)/(sigma*sigma * C*C + Q*Q);
         estimate = estimate + K*(newVal-C*estimate);
