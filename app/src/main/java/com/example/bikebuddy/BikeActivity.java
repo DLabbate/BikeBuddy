@@ -117,7 +117,7 @@ public class BikeActivity extends AppCompatActivity {
     public void loadBikes()
     {
         bikes = dbHelper.getBikes();
-        bikeAdapter = new BikeAdapter(bikes,sharedPreferenceHelper);
+        bikeAdapter = new BikeAdapter(bikes,sharedPreferenceHelper,this);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewBikes.setAdapter(bikeAdapter);
         recyclerViewBikes.setLayoutManager(linearLayoutManager);

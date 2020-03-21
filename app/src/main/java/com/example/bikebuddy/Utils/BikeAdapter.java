@@ -1,10 +1,15 @@
 package com.example.bikebuddy.Utils;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -21,12 +26,14 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
     protected List<Bike> bikeList;
     protected SharedPreferenceHelper sharedPreferenceHelper;
     protected int selectedBikeID;
+    protected Context context;
 
-    public BikeAdapter(List<Bike> bikeList, SharedPreferenceHelper sharedPreferenceHelper)
+    public BikeAdapter(List<Bike> bikeList, SharedPreferenceHelper sharedPreferenceHelper,Context context)
     {
         this.bikeList = bikeList;
         this.sharedPreferenceHelper = sharedPreferenceHelper;
         this.selectedBikeID = sharedPreferenceHelper.getSelectedBike();
+        this.context = context;
     }
 
     @NonNull
@@ -63,6 +70,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
         updateSelectedBike(currentBike,holder); //Update the checkmark (UI)
 
         //Setup onclick listener to select a bike
+        //**************************************************************************************************************************
         final int pos = position; //Make a final variable so it can be accessed from inner class
         holder.cardViewBike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +80,43 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
                 notifyDataSetChanged();
             }
         });
+        //**************************************************************************************************************************
+
+        //Setup onclick listener for deleting a bike
+        //**************************************************************************************************************************
+        holder.imageViewdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(context.getString(R.string.text_delete_bike));
+                builder.setCancelable(true);
+                builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        //If user selects Yes, then delete the workout
+                        //******************************************************************************
+
+                        //TODO: dbHelper.deleteBike(currentBike.getID();
+
+                        Toast.makeText(context,"Bike Deleted",Toast.LENGTH_SHORT).show();
+                        //******************************************************************************
+                    }
+                });
+                //If the user selects close, then we disregard
+                //**************************************************************************************
+                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                //**************************************************************************************
+            }
+        });
+        //**************************************************************************************************************************
     }
 
     @Override

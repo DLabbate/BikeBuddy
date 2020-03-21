@@ -21,4 +21,7 @@
     <string name="text_record_workout">You may now proceed to record a workout. Please ensure that your sensor is properly attached
     and your phone is secure. In order to ensure a good connection, it might be necessary to sprinkle a small amount of water on
     the fabric sensors before wearing.</string>
+
+    <string name="text_delete_bike">Are you sure you want to delete this bike?</string>
+
 </resources>
