@@ -192,9 +192,7 @@ public class GPSFragment extends Fragment implements
                 gMap.clear();
 
                 marker = gMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title(latLng.latitude + " : " + latLng.longitude));
-
+                .position(latLng));
             }
         });
     }
@@ -494,7 +492,10 @@ public class GPSFragment extends Fragment implements
                 );
 
                 marker.setPosition(endlocation);
-                marker.setTitle("Duration: " + polylineData.getLeg().duration);
+                marker.setTitle(polylineData.getLeg().endAddress);
+                marker.setSnippet("Duration: " + polylineData.getLeg().duration);
+                marker.setSnippet("Distance: " + polylineData.getLeg().distance);
+                marker.showInfoWindow();
             }
             else{
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
