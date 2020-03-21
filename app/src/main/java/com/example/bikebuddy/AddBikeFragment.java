@@ -102,8 +102,10 @@ public class AddBikeFragment extends DialogFragment {
                         bike.print(TAG);
                         dbHelper.insertBike(bike);
                         ((BikeActivity)getActivity()).loadBikes();
+                        getDialog().dismiss();
+                        Toast.makeText(context, "Added Bike", Toast.LENGTH_SHORT);
                     } catch(Exception error){
-                        Toast.makeText(context, "insert failed: " + error.getMessage(), Toast.LENGTH_SHORT);
+                        Toast.makeText(context, "Insert Failed: " + error.getMessage(), Toast.LENGTH_SHORT);
                     }
                 }
             }
