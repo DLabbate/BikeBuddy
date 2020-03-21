@@ -11,8 +11,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class WorkoutActivity extends AppCompatActivity {
 
@@ -45,8 +50,7 @@ public class WorkoutActivity extends AppCompatActivity {
         Log.d(TAG,"onCreate");
 
         setupUI();
-        loadDataHR();
-        loadDataSpeed();
+
 
         DateText = findViewById(R.id.text_date_value);
         DurationText = findViewById(R.id.text_duration_value);
@@ -61,7 +65,24 @@ public class WorkoutActivity extends AppCompatActivity {
         CaloriesText.setText(getIntent().getStringExtra("Calories"));
         AverageSpeedText.setText(getIntent().getStringExtra("AverageSpeed"));
         AverageHRText.setText(getIntent().getStringExtra("AverageHR"));
-        //TODO work on the graphs
+
+        // Deserializing the lists sent from log fragment
+        Log.d(TAG, "Deserializing from Log Fragment");
+        Gson gson = new Gson();
+        String JSONtime = getIntent().getStringExtra("Time");
+        String JSONhr =  getIntent().getStringExtra("HRList");
+        String JSONspeed = getIntent().getStringExtra("SpeedList");
+
+        Type listType_long = new TypeToken<Collection<Long>>() {
+        }.getType();
+        Type listType_double = new TypeToken<Collection<Double>>() {
+        }.getType();
+        List<Long> time = gson.fromJson(JSONtime, listType_long);
+        List<Double> heartRate = gson.fromJson(JSONhr, listType_double);
+        List<Double> speed = gson.fromJson(JSONspeed, listType_double);
+
+        loadDataHR(heartRate);
+        loadDataSpeed(speed);
     }
 
     /*
@@ -77,13 +98,13 @@ public class WorkoutActivity extends AppCompatActivity {
     /*
     This method will be used for populating the data of the HR graph
      */
-    private void loadDataHR()
+    private void loadDataHR(List<Double> HR)
     {
         data_HR = new ArrayList<Entry>();
 
         //These values are only for testing purposes.
-        for (int i = 0; i < 5; i++) {
-            data_HR.add(new Entry(i, i*i));
+        for (int i = 0; i < HR.size() ; i++) {
+            data_HR.add(new Entry(i, (HR.get(i).floatValue())));
         }
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
@@ -100,13 +121,13 @@ public class WorkoutActivity extends AppCompatActivity {
     /*
     This method will be used for populating the data of the speed graph
      */
-    private void loadDataSpeed()
+    private void loadDataSpeed(List<Double> Speed)
     {
         data_speed = new ArrayList<Entry>();
 
         //These values are only for testing purposes.
-        for (int i = 0; i < 5; i++) {
-            data_speed.add(new Entry(i, i + 1));
+        for (int i = 0; i < Speed.size(); i++) {
+            data_speed.add(new Entry(i, Speed.get(i).floatValue()));
         }
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
