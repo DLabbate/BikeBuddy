@@ -19,37 +19,86 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/NameEditText"
-            android:layout_width="160dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="Name"
-            android:inputType="textPersonName"/>
+            android:orientation="vertical"
+            android:layout_margin="20dp">
 
-        <EditText
-            android:id="@+id/WeightEditText"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="Weight (kg)"
-            android:inputType="number"
-            android:maxLength="3" />
+            <TextView
+                android:id="@+id/text_name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:layout_gravity=""/>
 
-        <EditText
-            android:id="@+id/AgeEditText"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="Age"
-            android:inputType="number"
-            android:maxLength="2" />
+            <EditText
+                android:id="@+id/NameEditText"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:inputType="textPersonName" />
+        </LinearLayout>
 
-        <Spinner
-            android:id="@+id/Gender_Spinner"
-            android:layout_width="160dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp" />
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Weight (kg)" />
+
+            <EditText
+                android:id="@+id/WeightEditText"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:hint="Weight (kg)"
+                android:inputType="number"
+                android:maxLength="3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Age" />
+
+            <EditText
+                android:id="@+id/AgeEditText"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:hint="Age"
+                android:inputType="number"
+                android:maxLength="2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gender" />
+
+            <Spinner
+                android:id="@+id/Gender_Spinner"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/SaveButton1"
