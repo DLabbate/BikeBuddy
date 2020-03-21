@@ -59,6 +59,7 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.TravelMode;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -425,13 +426,12 @@ public class GPSFragment extends Fragment implements
         );
         DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
 
+        directions.mode(TravelMode.BICYCLING);
         directions.alternatives(true);
+
         directions.origin(
                 new com.google.maps.model.LatLng(
 
-                        //mLastKnownLocation.getGeo_point().getLatitude(),
-                        //mLastKnownLocation.getGeo_point().getLongitude()
-                        //if (lastKnownLatLng.latitude != null && lastKnownLatLng.longitude != null) {
                             mLastKnownLocation.getLatitude(),
                             mLastKnownLocation.getLongitude()
 
