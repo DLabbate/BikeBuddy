@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:keepScreenOn="true">>
+    android:keepScreenOn="true">
 
     <include layout="@layout/toolbar_main"
         app:layout_constraintStart_toStartOf="parent"
