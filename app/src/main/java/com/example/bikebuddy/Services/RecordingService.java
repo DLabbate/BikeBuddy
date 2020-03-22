@@ -46,7 +46,7 @@ public class RecordingService extends Service {
     //Values for Kalman filter
     //******************************************************************************************************
     private double[] kalReturn = new double[2];     //containts estimate and deviation from kalman filter
-    double C = 1.5;                     //Kalman filter parameter
+    double C = 1.0;                     //Kalman filter parameter
     double Q = 0.05;                     //Kalman filter parameter
     private double calRateEstimate = 0; //current best approximation of rate
     private double sigma = Q;           //Variable Kalman filter parameter
@@ -210,7 +210,7 @@ public class RecordingService extends Service {
         approximation will be used to bring the output to a more appropriate level (matching
         clinical trials).
          */
-
+        Log.d(TAG,"\n" + "Received HR: " + heartRate + "\nReceived Speed: " + speed);
         Boolean male = gender.equals("Male");
 
         //Internal Parameters
@@ -230,41 +230,39 @@ public class RecordingService extends Service {
         //*****************************************************************************************************************************
         //Performing the filter approximation.
         //  assume keytelPower only
-        K = (sigma * C) / (sigma * sigma * C * C + Q * Q);
-        if(heartRate > 25) {
+        if(heartRate > 30) {
             if (male) {
                 //Male
-                newVal = ((-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184) * (deltaTime) * (1 / 60);  //kcal/min
+                newVal = ((-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184) * (deltaTime)  / 60;  //kcal/min
             } else {
                 //Female
-                newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.0740 * age)) / 4.184) * (deltaTime) * (1 / 60);  //kcal/min
+                newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.0740 * age)) / 4.184) * (deltaTime) / 60;  //kcal/min
             }
+            K = (sigma * sigma * C) / (sigma * sigma * C * C + Q * Q);
             estimate = estimate + K * (newVal - C * estimate);
-        } else{
-            newVal = estimate;
-        }
-        sigma = (1 - K * C) * sigma;
+            sigma = (1 - K * C) * sigma;
+        } else newVal = estimate;
         keytelList.add(newVal);
-        Log.d(TAG,"Keytel Values = " + keytelList);
+        //Log.d(TAG,"Keytel Values = " + keytelList);
+
 
         //  update with metPower
-        K = (sigma * C) / (sigma * sigma * C * C + Q * Q);
-        if(speed>3) {
+        if(speed > 3) {
             newVal = MET * weight / 60;     //kcal/min
+            K = (sigma * sigma * C) / (sigma * sigma * C * C + Q * Q);
             estimate = estimate + K * (newVal - C * estimate);
-        } else{
-            newVal=estimate;
-        }
-        sigma = (1 - K * C) * sigma;
+            sigma = (1 - K * C) * sigma;
+
+        } else newVal = estimate;
         metList.add(newVal);
-        Log.d(TAG,"MET Values: " + metList);
+        //Log.d(TAG, "MET Values: " + metList);
         //*****************************************************************************************************************************
 
         //Returning estimate and deviation, both used at next method call
         kalReturn = new double[]{estimate, sigma};
-        //Log.d(TAG,"Kalman Filter Prediction: " + kalReturn[0] + "cal/min");
         calorieList.add(kalReturn[0]);
-        Log.d(TAG,"Calorie Values: " + calorieList);
+        //Log.d(TAG,"Calorie Values: " + calorieList);
+        Log.d(TAG."Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
         return kalReturn;
     }
 }
