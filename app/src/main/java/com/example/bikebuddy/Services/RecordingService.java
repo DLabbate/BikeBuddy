@@ -262,7 +262,7 @@ public class RecordingService extends Service {
         kalReturn = new double[]{estimate, sigma};
         calorieList.add(kalReturn[0]);
         //Log.d(TAG,"Calorie Values: " + calorieList);
-        Log.d(TAG."Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
+        Log.d(TAG,"Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
         return kalReturn;
     }
 }
