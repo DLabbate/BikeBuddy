@@ -144,10 +144,12 @@ public class GPSFragment extends Fragment implements
                 if (!cameraUpdates){
                     cameraUpdates = true;
                     Toast.makeText(getActivity(),"Real time Updates: Enabled", Toast.LENGTH_SHORT).show();
+                    cameraUpdatesButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                 }
                 else{
                     cameraUpdates = false;
                     Toast.makeText(getActivity(),"Real time Updates: Disabled", Toast.LENGTH_SHORT).show();
+                    cameraUpdatesButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_light ));
                 }
             }
         });
