@@ -45,7 +45,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final int click_position = position; //We make a final int so it can be accessed by the onClickListener (inner class)
         Log.d(TAG,"onBindViewHolder: " + workoutList.get(position).getDate());
-        holder.textViewDate.setText(workoutList.get(position).getDate().toString());// we would like to display the Date on the log fragment
+        holder.textViewDate.setText(new SimpleDateFormat(" EEE, d MMM yyyy hh:mm:ss aaa").format(workoutList.get(position).getDate()));// we would like to display the Date on the log fragment
 
         /*
         We need to setup an onClickListener to open a detailed view of the workout

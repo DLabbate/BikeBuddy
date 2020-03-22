@@ -109,6 +109,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
         LineDataSet lineDataSet1 = new LineDataSet(data_HR,"HR Data Set");
+        lineDataSet1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
@@ -132,6 +133,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
         LineDataSet lineDataSet1 = new LineDataSet(data_speed,"Speed Data Set");
+        lineDataSet1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
