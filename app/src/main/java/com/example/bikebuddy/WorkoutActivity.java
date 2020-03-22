@@ -1,7 +1,10 @@
 package com.example.bikebuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -11,6 +14,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -116,6 +120,21 @@ public class WorkoutActivity extends AppCompatActivity {
         chart_HR.setData(lineData);
         chart_HR.getXAxis().setDrawLabels(false); //X-axis not visible for now
         chart_HR.getDescription().setEnabled(false); //Description not visible for now
+
+        //Add gradient fill
+        //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
+        lineData.setDrawValues(false);
+
+        lineDataSet1.setDrawFilled(true);
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.gradient_chart);
+            lineDataSet1.setFillDrawable(drawable);
+        }
+        else {
+            lineDataSet1.setFillColor(Color.BLACK);
+        }
+        
         chart_HR.invalidate();
     }
 
@@ -140,6 +159,21 @@ public class WorkoutActivity extends AppCompatActivity {
         chart_Speed.setData(lineData);
         chart_Speed.getXAxis().setDrawLabels(false); //X-axis not visible for now
         chart_Speed.getDescription().setEnabled(false); //Description not visible for now
+
+        //Add gradient fill
+        //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
+        lineData.setDrawValues(false);
+
+        lineDataSet1.setDrawFilled(true);
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.gradient_chart);
+            lineDataSet1.setFillDrawable(drawable);
+        }
+        else {
+            lineDataSet1.setFillColor(Color.BLACK);
+        }
+
         chart_Speed.invalidate();
     }
 }
