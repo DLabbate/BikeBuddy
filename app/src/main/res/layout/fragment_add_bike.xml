@@ -112,7 +112,8 @@
         android:layout_marginStart="@dimen/editTextStartMargin7"
         android:layout_alignParentRight="true"
         android:hint="(inches)"
-        android:inputType="textPersonName"
+        android:inputType="number"
+        android:maxLength="2"
         />
 
     <Button
