@@ -26,7 +26,7 @@ import java.util.List;
 public class RecordingService extends Service {
 
     public static final String TAG = "RecordingService";
-
+    private static final int delay_seconds = 3;
     //Values to be added for Workout
     //******************************************************************************************************
     private Date date;
@@ -81,7 +81,7 @@ public class RecordingService extends Service {
     private Runnable periodicUpdate = new Runnable() {
         @Override
         public void run() {
-            handler.postDelayed(periodicUpdate, 10000);
+            handler.postDelayed(periodicUpdate, delay_seconds * 1000);
                 fillWorkoutValues();
         }
     };
@@ -178,6 +178,23 @@ public class RecordingService extends Service {
     private void createNewWorkout()
     {
         Log.d(TAG,"createNewWorkout");
+
+        //Uncomment this block to retrieve hard caloric data in log at end of workout
+        /*
+        Log.d(TAG,"Keytel Data");
+        for(double item:keytelList){
+            Log.d(TAG,Double.toString(item));
+        }
+        Log.d(TAG,"MET Data");
+        for(double item:metList){
+            Log.d(TAG,Double.toString(item));
+        }
+        Log.d(TAG,"Kalman Data");
+        for(double item:calorieList){
+            Log.d(TAG,Double.toString(item));
+        }
+         */
+
         totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
         workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, calRateEstimate);
         workout.print(TAG);
@@ -214,7 +231,7 @@ public class RecordingService extends Service {
         Boolean male = gender.equals("Male");
 
         //Internal Parameters
-        double deltaTime = 10;
+        double deltaTime = delay_seconds;
         double K;
         double MET;
         double newVal;
@@ -238,12 +255,12 @@ public class RecordingService extends Service {
                 //Female
                 newVal = ((-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.0740 * age)) / 4.184) * (deltaTime) / 60;  //kcal/min
             }
+            if(newVal < 0) newVal = 0;
             K = (sigma * sigma * C) / (sigma * sigma * C * C + Q * Q);
             estimate = estimate + K * (newVal - C * estimate);
             sigma = (1 - K * C) * sigma;
         } else newVal = estimate;
         keytelList.add(newVal);
-        //Log.d(TAG,"Keytel Values = " + keytelList);
 
 
         //  update with metPower
@@ -252,16 +269,15 @@ public class RecordingService extends Service {
             K = (sigma * sigma * C) / (sigma * sigma * C * C + Q * Q);
             estimate = estimate + K * (newVal - C * estimate);
             sigma = (1 - K * C) * sigma;
-
+            if(newVal < 0) newVal = 0;
         } else newVal = estimate;
+
         metList.add(newVal);
-        //Log.d(TAG, "MET Values: " + metList);
         //*****************************************************************************************************************************
 
         //Returning estimate and deviation, both used at next method call
         kalReturn = new double[]{estimate, sigma};
         calorieList.add(kalReturn[0]);
-        //Log.d(TAG,"Calorie Values: " + calorieList);
         Log.d(TAG,"Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
         return kalReturn;
     }
