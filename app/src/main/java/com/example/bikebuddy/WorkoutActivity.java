@@ -1,17 +1,27 @@
 package com.example.bikebuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.Utils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class WorkoutActivity extends AppCompatActivity {
 
@@ -27,6 +37,13 @@ public class WorkoutActivity extends AppCompatActivity {
     LineChart chart_Speed;
     ArrayList<Entry> data_HR;
     ArrayList<Entry> data_speed;
+    TextView DateText;
+    TextView DurationText;
+    TextView DistanceText;
+    TextView AverageHRText;
+    TextView AverageSpeedText;
+    TextView CaloriesText;
+
 
     public static final String TAG = "WorkoutActivity";
 
@@ -37,8 +54,39 @@ public class WorkoutActivity extends AppCompatActivity {
         Log.d(TAG,"onCreate");
 
         setupUI();
-        loadDataHR();
-        loadDataSpeed();
+
+
+        DateText = findViewById(R.id.text_date_value);
+        DurationText = findViewById(R.id.text_duration_value);
+        DistanceText = findViewById(R.id.text_distance_value);
+        AverageHRText = findViewById(R.id.text_heart_rate_value);
+        AverageSpeedText = findViewById(R.id.text_speed_value);
+        CaloriesText = findViewById(R.id.text_calories_value);
+
+        DateText.setText(getIntent().getStringExtra("Date"));
+        DurationText.setText(getIntent().getStringExtra("Duration"));
+        DistanceText.setText(getIntent().getStringExtra("Distance") + " m");
+        CaloriesText.setText(getIntent().getStringExtra("Calories"));
+        AverageSpeedText.setText(getIntent().getStringExtra("AverageSpeed"));
+        AverageHRText.setText(getIntent().getStringExtra("AverageHR"));
+
+        // Deserializing the lists sent from log fragment
+        Log.d(TAG, "Deserializing from Log Fragment");
+        Gson gson = new Gson();
+        String JSONtime = getIntent().getStringExtra("Time");
+        String JSONhr =  getIntent().getStringExtra("HRList");
+        String JSONspeed = getIntent().getStringExtra("SpeedList");
+
+        Type listType_long = new TypeToken<Collection<Long>>() {
+        }.getType();
+        Type listType_double = new TypeToken<Collection<Double>>() {
+        }.getType();
+        List<Long> time = gson.fromJson(JSONtime, listType_long);
+        List<Double> heartRate = gson.fromJson(JSONhr, listType_double);
+        List<Double> speed = gson.fromJson(JSONspeed, listType_double);
+
+        loadDataHR(heartRate);
+        loadDataSpeed(speed);
     }
 
     /*
@@ -54,46 +102,84 @@ public class WorkoutActivity extends AppCompatActivity {
     /*
     This method will be used for populating the data of the HR graph
      */
-    private void loadDataHR()
+    private void loadDataHR(List<Double> HR)
     {
         data_HR = new ArrayList<Entry>();
 
         //These values are only for testing purposes.
-        for (int i = 0; i < 5; i++) {
-            data_HR.add(new Entry(i, i*i));
+        for (int i = 0; i < HR.size() ; i++) {
+            data_HR.add(new Entry(i, (HR.get(i).floatValue())));
         }
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
         LineDataSet lineDataSet1 = new LineDataSet(data_HR,"HR Data Set");
+        lineDataSet1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
         chart_HR.setData(lineData);
         chart_HR.getXAxis().setDrawLabels(false); //X-axis not visible for now
         chart_HR.getDescription().setEnabled(false); //Description not visible for now
+
+        //Remove circles
+        lineDataSet1.setDrawCircles(false);
+
+        //Add gradient fill
+        //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
+        lineData.setDrawValues(false);
+
+        lineDataSet1.setDrawFilled(true);
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.gradient_chart);
+            lineDataSet1.setFillDrawable(drawable);
+        }
+        else {
+            lineDataSet1.setFillColor(Color.BLACK);
+        }
+        
         chart_HR.invalidate();
     }
 
     /*
     This method will be used for populating the data of the speed graph
      */
-    private void loadDataSpeed()
+    private void loadDataSpeed(List<Double> Speed)
     {
         data_speed = new ArrayList<Entry>();
 
         //These values are only for testing purposes.
-        for (int i = 0; i < 5; i++) {
-            data_speed.add(new Entry(i, i + 1));
+        for (int i = 0; i < Speed.size(); i++) {
+            data_speed.add(new Entry(i, Speed.get(i).floatValue()));
         }
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
         LineDataSet lineDataSet1 = new LineDataSet(data_speed,"Speed Data Set");
+        lineDataSet1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
         chart_Speed.setData(lineData);
         chart_Speed.getXAxis().setDrawLabels(false); //X-axis not visible for now
         chart_Speed.getDescription().setEnabled(false); //Description not visible for now
+
+        //Remove circles
+        lineDataSet1.setDrawCircles(false);
+
+        //Add gradient fill
+        //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
+        lineData.setDrawValues(false);
+
+        lineDataSet1.setDrawFilled(true);
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.gradient_chart);
+            lineDataSet1.setFillDrawable(drawable);
+        }
+        else {
+            lineDataSet1.setFillColor(Color.BLACK);
+        }
+
         chart_Speed.invalidate();
     }
 }
