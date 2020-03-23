@@ -1,7 +1,9 @@
 package com.example.bikebuddy.Services;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,6 +19,7 @@ import com.example.bikebuddy.R;
 import com.example.bikebuddy.Services.LocationService;
 import com.example.bikebuddy.Utils.Workout;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -55,6 +58,7 @@ public class RecordingService extends Service {
         @Override
         public void run() {
             handler.postDelayed(periodicUpdate, 10000);
+                updateNotication();
                 fillWorkoutValues();
         }
     };
@@ -86,9 +90,16 @@ public class RecordingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG,"onStartCommand");
 
+        String stats = "Elapsed Time (s): " + (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000
+                + " \nHR: " + MainActivity.HR_RT
+                + " \nSpeed: " + LocationService.SPEED_RT
+                + " \nDistance: " + LocationService.WORKOUT_DISTANCE
+                + " \nPosition: " + LocationService.lastKnownLatLng;
         Notification notification = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID_RECORDING)
                 .setSmallIcon(R.drawable.ic_bike)
                 .setContentTitle(getString(R.string.notification_title_recording))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(stats)) //Show stats in background
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
 
         //fillWorkoutValues();
@@ -153,6 +164,29 @@ public class RecordingService extends Service {
 
         //Add the workout to the DB;
         dbHelper.insertWorkout(workout);
+    }
+
+
+    private void updateNotication()
+    {
+        DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
+        String hr = dec_0.format(MainActivity.HR_RT);
+        String speed = dec_0.format(LocationService.SPEED_RT);
+        String distance = dec_0.format(LocationService.WORKOUT_DISTANCE);
+
+        String stats = "Elapsed Time (s): " + (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000
+                + " \nHR (bpm): " + hr
+                + " \nSpeed (km/h): " + speed
+                + " \nDistance (m): " + distance
+                + " \nPosition, " + LocationService.lastKnownLatLng;
+        Notification notification = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID_RECORDING)
+                .setSmallIcon(R.drawable.ic_bike)
+                .setContentTitle(getString(R.string.notification_title_recording))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(stats)) //Show stats in background
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(2,notification);
     }
 
 

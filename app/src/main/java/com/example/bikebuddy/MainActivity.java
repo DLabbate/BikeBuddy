@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     //***********************************************************************************************
     Toolbar toolbarMain;
     ImageView profileImageView;
+    ImageView bikeImageView;
     //***********************************************************************************************
 
     @Override
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbarMain = findViewById(R.id.toolbar_main);
         profileImageView = findViewById(R.id.image_profile_toolbar);
+        bikeImageView = findViewById(R.id.image_bike_toolbar);
         setToolbarOnClickListener();
     }
 
@@ -384,8 +386,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        bikeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,BikeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
-
+    /*
+    Disable the back button
+     */
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        return;
+    }
 }
