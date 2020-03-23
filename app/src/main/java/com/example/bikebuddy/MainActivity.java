@@ -87,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
     ImageView bikeImageView;
     //***********************************************************************************************
 
+
+    //Heart Rate Sampling
+    //***********************************************************************************************
+    public long currentHRValue;
+    public long lastHRValue;
+    //***********************************************************************************************
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
         createNotificationChannelLocation();
         createNotificationChannelRecording();
+
+        currentHRValue = 0;
+        lastHRValue = 0;
     }
 
     @Override
@@ -128,9 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-
-
-
     protected void onStop() {
         super.onStop();
         //bluetooth.onStop();
@@ -225,8 +232,13 @@ public class MainActivity extends AppCompatActivity {
             See the following link for more details:
             https://www.zephyranywhere.com/media/download/hxm1-api-p-bluetooth-hxm-api-guide-20100722-v01.pdf
              */
+            lastHRValue = currentHRValue; //Update last value
             final long HR = 0x000000FF & message[12];
-            if (HR > 45)
+            currentHRValue = HR; //Update current value
+
+            //Check if the heart rate value makes sense (>45)
+            //Also check if the value is SIMILAR TO THE LAST VALUE THAT CAME IN (if difference between the 2 points is less than 30)
+            if (HR > 45 && (Math.abs(lastHRValue - currentHRValue ) < 30))
             {
                 HR_RT = HR; //Update HR Value
             }
