@@ -7,58 +7,129 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
+    <include layout="@layout/toolbar_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/toolbar_profile_include"/>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="30dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/SaveButton1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_profile_include">
 
-        <EditText
-            android:id="@+id/NameEditText"
-            android:layout_width="160dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="Name"
-            android:inputType="textPersonName"/>
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/WeightEditText"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="Weight (kg)"
-            android:inputType="number"
-            android:maxLength="3" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:background="@drawable/shape_profile_textview"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/AgeEditText"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="Age"
-            android:inputType="number"
-            android:maxLength="2" />
+                <TextView
+                    android:id="@+id/text_name_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity=""
+                    android:text="Name" />
 
-        <Spinner
-            android:id="@+id/Gender_Spinner"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp" />
+                <EditText
+                    android:id="@+id/NameEditText"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/SaveButton1"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Save"
-            tools:text="Save" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:orientation="vertical"
+                android:background="@drawable/shape_profile_textview">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Weight (kg)" />
+
+                <EditText
+                    android:id="@+id/WeightEditText"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Weight (kg)"
+                    android:inputType="number"
+                    android:maxLength="3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:orientation="vertical"
+                android:background="@drawable/shape_profile_textview">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Age" />
+
+                <EditText
+                    android:id="@+id/AgeEditText"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Age"
+                    android:inputType="number"
+                    android:maxLength="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:orientation="vertical"
+                android:background="@drawable/shape_profile_textview">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Gender" />
+
+                <Spinner
+                    android:id="@+id/Gender_Spinner"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/SaveButton1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        tools:text="Save"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/shape_button_rounded"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

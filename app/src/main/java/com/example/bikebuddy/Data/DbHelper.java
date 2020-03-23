@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.bikebuddy.Utils.Bike;
 import com.example.bikebuddy.Utils.Workout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,7 +38,7 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
-
+    //*****************************************************************************************************************************
     //Creating Table Statements
     /*
         This is the string to create the workout table. It uses the DB contract (which holds the
@@ -58,13 +59,24 @@ public class DbHelper extends SQLiteOpenHelper {
             DbContract.WorkoutEntry.COLUMN_CALORIES_TOT + " INTEGER NOT NULL" + ")";
 
     /*
-    We haven't quite decided whether we are going to be making a bike table with SQLite, if we do it should go here.
-     */
-    //TODO: add bike table
+    This is the string to create the bike table. It uses the DB contract (which holds the
+    format for tables to be created)
+ */
+    private static final String CREATE_TABLE_BIKES = "CREATE TABLE " + DbContract.BikeEntry.TABLE_NAME + "(" +
+            DbContract.BikeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            DbContract.BikeEntry.COLUMN_NAME + " STRING NOT NULL," +
+            DbContract.BikeEntry.COLUMN_BRAND + " STRING NOT NULL," +
+            DbContract.BikeEntry.COLUMN_MODEL + " STRING NOT NULL," +
+            DbContract.BikeEntry.COLUMN_WHEELDIAMETER + " REAL NOT NULL," +
+            DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE + " REAL NOT NULL, " +
+            DbContract.BikeEntry.COLUMN_TOTALDURATION + " REAL NOT NULL" + ")";
+
+    //*****************************************************************************************************************************
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_WORKOUTS);
+        db.execSQL(CREATE_TABLE_BIKES);
         Log.d(TAG, "workoutDB created successfully");
     }
 
@@ -72,9 +84,16 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG,"onUpgrade");
         db.execSQL("DROP TABLE IF EXISTS " + DbContract.WorkoutEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DbContract.BikeEntry.TABLE_NAME);
         onCreate(db);
     }
 
+
+
+
+    //*****************************************************************************************************************************
+    //THESE METHODS PERTAIN TO DEALING WITH WORKOUTS
+    //Accepts workout object and stores in DB
     public long insertWorkout(Workout workout) {
         Log.d(TAG,"insertWorkout");
         SQLiteDatabase db = this.getWritableDatabase();
@@ -191,7 +210,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             return workout; //returns completed workout
         } catch (Exception error) {
-            Log.d(TAG, "Attempting to retrieve Course data: " + error.getMessage());
+            Log.d(TAG, "Attempting to retrieve Workout data: " + error.getMessage());
         } finally {
         if (cursor != null) cursor.close();
         db.close();
@@ -271,13 +290,155 @@ public class DbHelper extends SQLiteOpenHelper {
                 return workoutList;
             }
         } catch (Exception error) {
-            Log.d(TAG, "Attempting to retrieve Course data: " + error.getMessage());
+            Log.d(TAG, "Attempting to retrieve Workout data: " + error.getMessage());
         } finally {
             if (cursor != null) cursor.close();
             db.close();
         }
         return Collections.emptyList(); //This return is only if the cursor doesn't find the table start, or exception thrown
     }
+    //*****************************************************************************************************************************
+
+
+
+
+    //*****************************************************************************************************************************
+    //THESE METHODS PERTAIN TO DEALING WITH BIKES
+    //Accepts bike object and stores in DB
+    public long insertBike(Bike bike){
+        Log.d(TAG,"insertBike");
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        /*
+        Set content values to be sent to DB. Takes from bike class passed to insert.
+         */
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbContract.BikeEntry.COLUMN_NAME,bike.getName());
+        contentValues.put(DbContract.BikeEntry.COLUMN_BRAND,bike.getBrand());
+        contentValues.put(DbContract.BikeEntry.COLUMN_MODEL,bike.getModel());
+        contentValues.put(DbContract.BikeEntry.COLUMN_WHEELDIAMETER,bike.getWheelDiameter());
+        contentValues.put(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE,bike.getCumulativeDistance());
+        contentValues.put(DbContract.BikeEntry.COLUMN_TOTALDURATION,bike.getCumulativeDistance());
+
+        try{
+            id = db.insertOrThrow(DbContract.BikeEntry.TABLE_NAME, null, contentValues);
+        }
+        catch (Exception error){
+            Toast.makeText(context, "insert failed: " + error.getMessage(), Toast.LENGTH_SHORT);
+        } finally{
+            db.close();
+        }
+        return id;
+    }
+
+    //Accepts workout id and returns workout object with that ID from DB
+    public Bike retrieveBike(long bikeID) throws ParseException {
+        Log.d(TAG,"retrieve bike");
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        Bike bike = new Bike();
+
+        //SQL command to return matching workout
+        try {
+            String selectQuery = "SELECT  * FROM " + DbContract.BikeEntry.TABLE_NAME +
+                    " WHERE " + DbContract.BikeEntry._ID + " = " + bikeID;
+            Log.d(TAG, "Select Query = " + selectQuery);
+            cursor = db.rawQuery(selectQuery, null);
+
+            //Checks if the list is empty
+            if (cursor != null) {
+                cursor.moveToFirst();
+            }
+
+            //Retrieving data from DB
+            int id = cursor.getInt(cursor.getColumnIndex(DbContract.BikeEntry._ID));
+            String name = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_NAME));
+            String brand = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_BRAND));
+            String model = cursor.getString(cursor.getColumnIndex((DbContract.BikeEntry.COLUMN_MODEL)));
+            double wheelDiameter = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_WHEELDIAMETER));
+            double cumulativeDistance = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE));
+            long totalDistance = cursor.getLong(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_TOTALDURATION));
+
+            //adding all bike parameters to bike object to be returned.
+            bike.setID(id);
+            bike.setName(name);
+            bike.setBrand(brand);
+            bike.setModel(model);
+            bike.setWheelDiameter(wheelDiameter);
+            bike.setCumulativeDistance(cumulativeDistance);
+            bike.setTotalDuration(totalDistance);
+
+            return bike; //returns bike
+        } catch (Exception error) {
+            Log.d(TAG, "Attempting to retrieve Bike data: " + error.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close();
+        }
+        return bike; //Returns NULL WORKOUT if the cursor doesn't find the workout, or exception thrown
+    }
+
+    /*
+    Returns all Bikes currently saved.
+    Returns empty list if there are no Bikes
+     */
+    public List<Bike> getBikes(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        Log.d(TAG,"getBike");
+        Log.d(TAG,"-------------------RETRIEVING ALL BIKE DATA FROM DB--------------------");
+        try {
+            cursor = db.query(DbContract.BikeEntry.TABLE_NAME, null, null, null, null, null, null);
+
+            if (cursor != null) {
+                cursor.moveToFirst();   //initializes cursor at table start
+                ArrayList<Bike> bikeList = new ArrayList<>();
+                do {
+                    //Stores all columns in the table as a new entry to the arraylist
+                    Bike bike = new Bike();
+
+                    //Retrieving data from DB
+                    //Retrieving data from DB
+                    int id = cursor.getInt(cursor.getColumnIndex(DbContract.BikeEntry._ID));
+                    String name = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_NAME));
+                    String brand = cursor.getString(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_BRAND));
+                    String model = cursor.getString(cursor.getColumnIndex((DbContract.BikeEntry.COLUMN_MODEL)));
+                    double wheelDiameter = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_WHEELDIAMETER));
+                    double cumulativeDistance = cursor.getDouble(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE));
+                    long totalDuration = cursor.getLong(cursor.getColumnIndex(DbContract.BikeEntry.COLUMN_TOTALDURATION));
+
+                    //adding all bike parameters to bike object to be returned.
+                    bike.setID(id);
+                    bike.setName(name);
+                    bike.setBrand(brand);
+                    bike.setModel(model);
+                    bike.setWheelDiameter(wheelDiameter);
+                    bike.setCumulativeDistance(cumulativeDistance);
+                    bike.setTotalDuration(totalDuration);
+
+                    bikeList.add(bike);
+
+                    //Print bike data for debugging
+                    bike.print(TAG);
+
+                } while (cursor.moveToNext()); //movetoNext returns true if next is nonNull
+                return bikeList;
+            }
+        } catch (Exception error) {
+            Log.d(TAG, "Attempting to retrieve bike data: " + error.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close();
+        }
+        return Collections.emptyList(); //This return is only if the cursor doesn't find the table start, or exception thrown
+    }
+    //*****************************************************************************************************************************
+
+
+
+
 
     /*
     These two methods are used to handle storing the workout date in the DB.
