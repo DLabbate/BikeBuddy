@@ -121,6 +121,9 @@ public class WorkoutActivity extends AppCompatActivity {
         chart_HR.getXAxis().setDrawLabels(false); //X-axis not visible for now
         chart_HR.getDescription().setEnabled(false); //Description not visible for now
 
+        //Remove circles
+        lineDataSet1.setDrawCircles(false);
+
         //Add gradient fill
         //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
         lineData.setDrawValues(false);
@@ -159,6 +162,9 @@ public class WorkoutActivity extends AppCompatActivity {
         chart_Speed.setData(lineData);
         chart_Speed.getXAxis().setDrawLabels(false); //X-axis not visible for now
         chart_Speed.getDescription().setEnabled(false); //Description not visible for now
+
+        //Remove circles
+        lineDataSet1.setDrawCircles(false);
 
         //Add gradient fill
         //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
