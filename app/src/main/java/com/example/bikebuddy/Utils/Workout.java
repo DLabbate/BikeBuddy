@@ -50,16 +50,17 @@ public class Workout {
         this.averageSpeed = averageSpeed;
     }
 
-    // Constructor without average values and calories burned
+    // Constructor without average values
     // Date is not included either
-    public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, double totalDistance, long totalDuration) {
+    public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, double totalDistance, long totalDuration, double caloriesRate) {
         this.date=  Calendar.getInstance().getTime();
         this.time = time;
         this.listHR = listHR;
         this.listSpeed = listSpeed;
         this.totalDistance = totalDistance;
         this.totalDuration = totalDuration;
-        this.caloriesBurned = 0; //TODO
+        this.caloriesBurned = calculateCaloriesBurned(caloriesRate);
+        this.caloriesRate = caloriesRate;
         this.averageHR = calculateAverageHR();
         this.averageSpeed = calculateAverageSpeed();
     }
@@ -159,7 +160,10 @@ public class Workout {
         }
         return -1; // when the method returns -1, that means the list is empty
     }
-
+    public double calculateCaloriesBurned(double calRate) {
+        caloriesBurned = calRate * time.get(time.size()-1) / 60;   //returns total burned
+        return caloriesBurned;
+    }
     /*
     Prints all the data of a workout in a log
     Used for debugging
@@ -188,6 +192,7 @@ public class Workout {
 
         workoutData += " Total Distance: " + totalDistance + "\n";
         workoutData += " Total Duration: " + totalDuration + "\n";
+        workoutData += " Calories Rate(cal/min): " + caloriesRate + "\n";
         workoutData += " Calories Burned: " + caloriesBurned + "\n";
         workoutData += " Average HR: " + averageHR + "\n";
         workoutData += " Average Speed: " + averageSpeed + "\n";

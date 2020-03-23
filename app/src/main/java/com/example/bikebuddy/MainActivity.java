@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             https://www.zephyranywhere.com/media/download/hxm1-api-p-bluetooth-hxm-api-guide-20100722-v01.pdf
              */
             final long HR = message[12];
-            if (HR >= 30)
+            if (HR > 45)
             {
                 HR_RT = HR; //Update HR Value
             }
