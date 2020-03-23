@@ -93,4 +93,31 @@ public class SharedPreferenceHelper {
     }
 
 
+
+    //Bike Info
+    //***********************************************************************************************
+
+
+    /*
+    This method returns the ID of the selected bike
+    -1 is default (no bike selected)
+     */
+    public int getSelectedBike()
+    {
+        int ID = sharedPreferences.getInt("BikeID",-1);
+        Log.d(TAG,"Getting Selected Bike ID: " + ID);
+        return ID;
+    }
+
+    public void setSelectedBike(int ID)
+    {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Log.d(TAG,"Saving Bike ID: " + ID);
+        editor.putInt("BikeID", ID);
+        editor.commit();
+    }
+
+    //***********************************************************************************************
+
+
 }

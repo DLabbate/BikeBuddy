@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,8 @@ public class FitnessFragment extends Fragment {
     TextView distanceTextView;
     TextView distanceTitleTextView;
 
+    FrameLayout distanceFrameLayout;
+
     //Added by brady to test DB
     //TODO: remove once recording manager is setup
     private Workout workout;
@@ -59,6 +62,7 @@ public class FitnessFragment extends Fragment {
         speedTextView = view.findViewById(R.id.text_speed_rt);
         distanceTextView = view.findViewById(R.id.text_distance_rt);
         distanceTitleTextView = view.findViewById(R.id.text_distance);
+        distanceFrameLayout = view.findViewById(R.id.frame_distance);
 
 
         imageViewBluetoothStatus = view.findViewById(R.id.image_bluetooth_status);
@@ -98,6 +102,7 @@ public class FitnessFragment extends Fragment {
                     chronometer.setVisibility(View.INVISIBLE);
                     distanceTextView.setVisibility(View.INVISIBLE);
                     distanceTitleTextView.setVisibility(View.INVISIBLE);
+                    distanceFrameLayout.setVisibility(View.INVISIBLE);
                     WorkoutDuration = chronometer.getBase();
                     resetWorkoutDistance(); //Reset the workout distance
                     Toast.makeText(getActivity(),"Workout Recorded",Toast.LENGTH_SHORT).show();
@@ -135,6 +140,7 @@ public class FitnessFragment extends Fragment {
             RecordWorkout.setText("Stop Recording");
             distanceTitleTextView.setVisibility(View.VISIBLE);
             distanceTextView.setVisibility(View.VISIBLE);
+            distanceFrameLayout.setVisibility(View.VISIBLE);
         chronometer.start();
         }
     }
@@ -171,6 +177,7 @@ public class FitnessFragment extends Fragment {
                 chronometer.setVisibility(View.VISIBLE);
                 distanceTextView.setVisibility(View.VISIBLE);
                 distanceTitleTextView.setVisibility(View.VISIBLE);
+                distanceFrameLayout.setVisibility(View.VISIBLE);
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
                 RecordWorkout.setText("Stop Recording");
