@@ -23,6 +23,8 @@ import com.example.bikebuddy.Services.LocationService;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
+import org.w3c.dom.Text;
+
 import java.text.DecimalFormat;
 
 import me.aflak.bluetooth.Bluetooth;
@@ -195,9 +197,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     ImageView imageViewBluetoothStatus = findViewById(R.id.image_bluetooth_status);
-                    if (imageViewBluetoothStatus != null)
+                    TextView textBluetoothStatus = findViewById(R.id.text_bluetooth_status);
+                    if (imageViewBluetoothStatus != null && textBluetoothStatus != null)
                     {
                         imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_on);
+                        textBluetoothStatus.setText("Connected");
                     }
                 }
             });
@@ -215,9 +219,11 @@ public class MainActivity extends AppCompatActivity {
                  @Override
                  public void run() {
                      ImageView imageViewBluetoothStatus = findViewById(R.id.image_bluetooth_status);
-                     if (imageViewBluetoothStatus != null)
+                     TextView textBluetoothStatus = findViewById(R.id.text_bluetooth_status);
+                     if (imageViewBluetoothStatus != null && textBluetoothStatus != null)
                      {
                          imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_off);
+                         textBluetoothStatus.setText("Disconnected");
                      }
                  }
              });

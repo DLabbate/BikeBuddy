@@ -53,6 +53,8 @@ public class FitnessFragment extends Fragment {
     public static final String TAG = "FitnessFragment";
 
     private ImageView imageViewBluetoothStatus; //This is the ImageView that displays whether a device is connected or not
+    private TextView textBluetoothStatus;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,13 +68,17 @@ public class FitnessFragment extends Fragment {
 
 
         imageViewBluetoothStatus = view.findViewById(R.id.image_bluetooth_status);
+        textBluetoothStatus = view.findViewById(R.id.text_bluetooth_status);
+
         if (MainActivity.isDeviceConnected == true)
         {
             imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_on);
+            textBluetoothStatus.setText("Connected");
         }
         else
         {
             imageViewBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_off);
+            textBluetoothStatus.setText("Disconnected");
         }
 
         imageViewBluetoothStatus.setOnClickListener(new View.OnClickListener() {
