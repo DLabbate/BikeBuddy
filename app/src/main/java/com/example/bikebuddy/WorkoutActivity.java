@@ -182,4 +182,9 @@ public class WorkoutActivity extends AppCompatActivity {
 
         chart_Speed.invalidate();
     }
+
+    private void loadDateHRZones()
+    {
+        
+    }
 }
