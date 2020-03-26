@@ -7,6 +7,8 @@ import com.example.bikebuddy.SharedPreferenceHelper;
 
 public class HeartRateZoneHelper {
 
+    //------------------------------------------------------FIELDS----------------------------------------------------------//
+
     //Log
     //*********************************************************************************************
     public static final String TAG = "HeartRateZoneHelper";
@@ -37,6 +39,8 @@ public class HeartRateZoneHelper {
     //*********************************************************************************************
 
 
+    //------------------------------------------------------CONSTRUCTOR----------------------------------------------------------//
+
     public HeartRateZoneHelper(Context context)
     {
         this.context = context;
@@ -47,6 +51,8 @@ public class HeartRateZoneHelper {
         Log.d(TAG,"HeartRateZoneHelper Constructor. " + "Age: " + age + " MHR: " + Double.toString(maxHeartRate));
     }
 
+
+    //------------------------------------------------------METHODS----------------------------------------------------------//
     public double getMaxHeartRate() {
         return maxHeartRate;
     }
