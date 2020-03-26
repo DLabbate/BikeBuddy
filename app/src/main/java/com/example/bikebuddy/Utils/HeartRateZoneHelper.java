@@ -1,6 +1,7 @@
 package com.example.bikebuddy.Utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.bikebuddy.SharedPreferenceHelper;
 
@@ -42,6 +43,8 @@ public class HeartRateZoneHelper {
         sharedPreferenceHelper = new SharedPreferenceHelper(context);
         int age = sharedPreferenceHelper.getProfileAge();
         maxHeartRate = 208 - 0.7*age;
+
+        Log.d(TAG,"HeartRateZoneHelper Constructor. " + "Age: " + age + " MHR: " + Double.toString(maxHeartRate));
     }
 
     public double getMaxHeartRate() {
@@ -56,14 +59,33 @@ public class HeartRateZoneHelper {
     public int getZone(double HR)
     {
         if (HR >= (0.9*maxHeartRate))
+        {
+            Log.d(TAG,"Heart Rate Zone 5");
             return 5;
+        }
+
         else if (HR >= (0.8*maxHeartRate))
+        {
+            Log.d(TAG,"Heart Rate Zone 4");
             return 4;
+        }
+
         else if (HR >= (0.7*maxHeartRate))
+        {
+            Log.d(TAG,"Heart Rate Zone 3");
             return 3;
+        }
+
         else if (HR >= (0.6*maxHeartRate))
+        {
+            Log.d(TAG,"Heart Rate Zone 2");
             return 2;
+        }
+
         else
+        {
+            Log.d(TAG,"Heart Rate Zone 1");
             return 1;
+        }
     }
 }
