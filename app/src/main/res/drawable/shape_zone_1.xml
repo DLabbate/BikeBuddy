@@ -3,7 +3,7 @@
     <item>
         <shape>
             android:shape="rectangle">
-            <corners android:radius="40dp" />
+            <corners android:radius="@dimen/HRZoneCircleRadius" />
             <solid android:color="#008EFF"/>
         </shape>
     </item>
