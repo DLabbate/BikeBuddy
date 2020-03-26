@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.bikebuddy.Utils.HeartRateZoneHelper;
+import com.example.bikebuddy.Utils.PercentFormatter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -250,19 +251,19 @@ public class WorkoutActivity extends AppCompatActivity {
 
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
-        if (zoneTotals[0] != 0)
+        //if (zoneTotals[0] != 0)
             pieEntries.add(new PieEntry(zoneTotals[0],getString(R.string.HR_zone1)));
 
-        if (zoneTotals[1] != 0)
+        //if (zoneTotals[1] != 0)
             pieEntries.add(new PieEntry(zoneTotals[1],getString(R.string.HR_zone2)));
 
-        if (zoneTotals[2] != 0)
+        //if (zoneTotals[2] != 0)
             pieEntries.add(new PieEntry(zoneTotals[2],getString(R.string.HR_zone3)));
 
-        if (zoneTotals[3] != 0)
+        //if (zoneTotals[3] != 0)
             pieEntries.add(new PieEntry(zoneTotals[3],getString(R.string.HR_zone4)));
 
-        if (zoneTotals[4] != 0)
+        //if (zoneTotals[4] != 0)
             pieEntries.add(new PieEntry(zoneTotals[4],getString(R.string.HR_zone5)));
 
         PieDataSet pieDataSet= new PieDataSet(pieEntries,"");
@@ -284,7 +285,8 @@ public class WorkoutActivity extends AppCompatActivity {
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueTextSize(10f);
         pieData.setValueTextColor(Color.WHITE);
-
+        pieData.setValueFormatter(new PercentFormatter(pieChartZones));
         pieChartZones.setData(pieData);
+
     }
 }
