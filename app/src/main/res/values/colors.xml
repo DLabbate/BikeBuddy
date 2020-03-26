@@ -5,4 +5,12 @@
     <color name="colorAccent">#03A9F4</color>
     <color name="gpsRoute_lightgrey">#888888</color>
     <color name="background_light">@android:color/background_light</color>
+
+    <!--Heart Rate Zone Colours-->
+    <color name="color_zone1">#008EFF</color>
+    <color name="color_zone2">#98E478</color>
+    <color name="color_zone3">#4C972C</color>
+    <color name="color_zone4">#FF9F2E</color>
+    <color name="color_zone5">#CC0900</color>
+
 </resources>
