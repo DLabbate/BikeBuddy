@@ -136,7 +136,11 @@
         android:text="Record Workout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/shape_button_rounded"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#FFFFFF"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3"
