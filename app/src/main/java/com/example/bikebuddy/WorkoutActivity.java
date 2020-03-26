@@ -9,11 +9,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.bikebuddy.Utils.HeartRateZoneHelper;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,6 +40,8 @@ public class WorkoutActivity extends AppCompatActivity {
     (...)
      */
 
+    //----------------------------------------Workout Data----------------------------------------------//
+
     LineChart chart_HR;
     LineChart chart_Speed;
     ArrayList<Entry> data_HR;
@@ -44,6 +53,9 @@ public class WorkoutActivity extends AppCompatActivity {
     TextView AverageSpeedText;
     TextView CaloriesText;
 
+    //----------------------------------------HR Zones------------------------------------------------//
+    HeartRateZoneHelper heartRateZoneHelper;
+    PieChart pieChartZones;
 
     public static final String TAG = "WorkoutActivity";
 
@@ -87,6 +99,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         loadDataHR(heartRate);
         loadDataSpeed(speed);
+        loadDateHRZones(heartRate);
     }
 
     /*
@@ -97,6 +110,8 @@ public class WorkoutActivity extends AppCompatActivity {
     {
         chart_HR = findViewById(R.id.line_chart_HR);
         chart_Speed = findViewById(R.id.line_chart_speed);
+        heartRateZoneHelper = new HeartRateZoneHelper(this);
+        pieChartZones = findViewById(R.id.pie_chart_zones);
     }
 
     /*
@@ -183,8 +198,93 @@ public class WorkoutActivity extends AppCompatActivity {
         chart_Speed.invalidate();
     }
 
-    private void loadDateHRZones()
+    /*
+    The following method approximates the amount of time spent in each HR Zone
+    NOTE THAT IT ASSUMES A SAMPLING RATE OF 3 SECONDS
+     */
+    private void loadDateHRZones(List<Double> HR)
     {
-        
+        int zoneTotals[] = new int[5];
+
+        for (int i = 0; i<HR.size(); i++)
+        {
+            //Calculate the current zone
+            int zone = heartRateZoneHelper.getZone(HR.get(i));
+            switch (zone)
+            {
+                case 1:
+                    zoneTotals[0] += 3;
+                    break;
+                case 2:
+                    zoneTotals[1] += 3;
+                    break;
+                case 3:
+                    zoneTotals[2] += 3;
+                    break;
+                case 4:
+                    zoneTotals[3] += 3;
+                    break;
+                case 5:
+                    zoneTotals[4] += 3;
+                    break;
+            }
+        }
+        pieChartZones.setUsePercentValues(true);
+
+        pieChartZones.setDragDecelerationFrictionCoef(0.99f);
+        pieChartZones.setDrawHoleEnabled(true);
+        pieChartZones.setHoleColor(Color.WHITE);
+        pieChartZones.setTransparentCircleRadius(55f);
+        pieChartZones.setHoleRadius(50f);
+
+        pieChartZones.getDescription().setEnabled(false);
+        pieChartZones.setDrawEntryLabels(false);
+        //pieChartZones.setEntryLabelColor(Color.WHITE);
+        pieChartZones.setDrawCenterText(false);
+        pieChartZones.setDrawMarkers(false);
+
+        Legend l = pieChartZones.getLegend();
+        l.setWordWrapEnabled(true);
+
+        pieChartZones.setExtraOffsets(10f,10f,10f,10f);
+
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+
+        if (zoneTotals[0] != 0)
+            pieEntries.add(new PieEntry(zoneTotals[0],getString(R.string.HR_zone1)));
+
+        if (zoneTotals[1] != 0)
+            pieEntries.add(new PieEntry(zoneTotals[1],getString(R.string.HR_zone2)));
+
+        if (zoneTotals[2] != 0)
+            pieEntries.add(new PieEntry(zoneTotals[2],getString(R.string.HR_zone3)));
+
+        if (zoneTotals[3] != 0)
+            pieEntries.add(new PieEntry(zoneTotals[3],getString(R.string.HR_zone4)));
+
+        if (zoneTotals[4] != 0)
+            pieEntries.add(new PieEntry(zoneTotals[4],getString(R.string.HR_zone5)));
+
+        PieDataSet pieDataSet= new PieDataSet(pieEntries,"");
+        pieDataSet.setSliceSpace(3f);
+        pieDataSet.setSelectionShift(5f);
+
+        /*
+        pieDataSet.setColors(new int[]{
+                R.color.color_zone1,
+                R.color.color_zone2,
+                R.color.color_zone3,
+                R.color.color_zone4,
+                R.color.color_zone5});
+
+         */
+
+        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+
+        PieData pieData = new PieData(pieDataSet);
+        pieData.setValueTextSize(10f);
+        pieData.setValueTextColor(Color.WHITE);
+
+        pieChartZones.setData(pieData);
     }
 }
