@@ -34,7 +34,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -139,7 +138,6 @@ public class FitnessFragment extends Fragment {
                     List<Double> listSpeed = new ArrayList<>();
                     double distance = 0;
                     Date date;
-                    LocalDateTime LDT;
 
                     //Parsing the JSON
                     try {
@@ -165,7 +163,8 @@ public class FitnessFragment extends Fragment {
                         Double calRate = mockFilter(listTime, listHR, listSpeed, userWeight, userAge);
 
                         //generating random date and time
-                        //TODO: create random date for workout
+                        date = generateRandomDate();
+                        Log.d(TAG,"Random date = " + date);
 
                         //Creating workout
                         Workout workout = new Workout();
@@ -179,7 +178,7 @@ public class FitnessFragment extends Fragment {
                         workout.setTotalDistance(distance);
                         workout.setTotalDuration(listTime.get(listTime.size()-1)-listTime.get(0));
                         workout.setDate(Calendar.getInstance().getTime());
-                        workout.print(TAG);
+                        //workout.print(TAG);
                         /* THIS SECTION IS USED TO VERIFY PARSING OF JSON DATA IN LOG
                         Log.d(TAG, "JSON RETRIEVED data: " + bikeData);
                         Log.d(TAG, "JSON CONVERTED LISTS:" + "time = " + listTime);
@@ -372,6 +371,35 @@ public class FitnessFragment extends Fragment {
             startActivity(intent);
         }
         Log.d(TAG,"\ngetUserInfo\nAge: " + userAge + "\nWeight: " + userWeight);
+    }
+
+    //returns random date in year 2020 and betwen jan-apr
+    //  time is random between 6am and 9pm
+    public Date generateRandomDate(){
+        //set date
+        int year = 2020;
+        int day = randBetween(1,30);
+        int month = randBetween(1,4);
+        //set time
+        int hour = randBetween(6,21);
+        int minute = randBetween(0,59);
+        int second = randBetween(0,59);
+
+        //create date object with Calendar
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DAY_OF_MONTH,day);
+        calendar.set(Calendar.HOUR,hour);
+        calendar.set(Calendar.MINUTE,minute);
+        calendar.set(Calendar.SECOND,second);
+
+        return calendar.getTime();
+    }
+    public static int randBetween(int start, int end) {
+        return start + (int)Math.round(Math.random() * (end - start));
     }
     //**************************************************************************************
 }
