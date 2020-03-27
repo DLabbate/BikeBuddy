@@ -223,75 +223,52 @@ public class DbHelper extends SQLiteOpenHelper {
      */
     public List<Workout> filterWorkoutByDate(Date lowerDate) throws ParseException {
         Log.d(TAG, "retrieve workouts by date: " + lowerDate);
+        List<Workout> filteredList = new ArrayList<>();
+        List<Date> retrievedDates = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
 
-        String[] arg = {String.valueOf(lowerDate)};
-        cursor = db.query(DbContract.WorkoutEntry.TABLE_NAME, null, DbContract.WorkoutEntry.COLUMN_DATE + ">?",
-                            arg, null, null, DbContract.WorkoutEntry.COLUMN_DATE + " DESC");
+        String[] retrieveColumns = {DbContract.WorkoutEntry._ID,
+                                    DbContract.WorkoutEntry.COLUMN_DATE,
+                                    DbContract.WorkoutEntry.COLUMN_DISTANCE,
+                                    DbContract.WorkoutEntry.COLUMN_DURATION};
         try {
+            cursor = db.query(DbContract.WorkoutEntry.TABLE_NAME, retrieveColumns, null, null, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();   //initializes cursor at table start
-                ArrayList<Workout> workoutList = new ArrayList<>();
                 do {
                     Workout workout = new Workout();
-                    //retrieve data from db
-                    /*
-                    DESERIALIZING:
-                        - Strings stored in DB are taken and converted back to Lists using the Collections
-                        object TypeToken.
-                        - Converted lists are then stored in workout class as normal.
-                        - Uses GSON api.
-                    */
-                    Log.d(TAG,"Deserializing");
-                    Gson gson = new Gson();
-                    String JSONtime = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_TIME_LIST));
-                    String JSONhr = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_LIST));
-                    String JSONspeed = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_LIST));
-
-                    Type listType_long = new TypeToken<Collection<Long>>(){}.getType();
-                    Type listType_double = new TypeToken<Collection<Double>>(){}.getType();
-                    List<Long> time = gson.fromJson(JSONtime,listType_long);
-                    List<Double> heartRate = gson.fromJson(JSONhr,listType_double);
-                    List<Double> speed = gson.fromJson(JSONspeed,listType_double);
 
                     //Retrieving data from DB
                     int id = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry._ID));
                     Date date = stringToDate(cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DATE)));
-                    double distance = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DISTANCE));
-                    long duration = cursor.getLong(cursor.getColumnIndex((DbContract.WorkoutEntry.COLUMN_DURATION)));
-                    int calTotal = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT));
-                    int calRate = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE));
-                    double avgHR = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_AVG));
-                    double avgSpeed = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_AVG));
-                    int bikeUsed = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_BIKE_USED));
+                    if(date.compareTo(lowerDate) > 0) {
+                        double distance = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DISTANCE));
+                        long duration = cursor.getLong(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DURATION));
 
-                    //Log.d(TAG,"Workout Inserted: ID = " + id + " Date = " + date);
-                    //adding all workout parameters to workout object to be returned.
-                    workout.setID(id);
-                    workout.setDate(date);
-                    workout.setTime(time);
-                    workout.setListHR(heartRate);
-                    workout.setListSpeed(speed);
-                    workout.setTotalDuration(duration);
-                    workout.setTotalDistance(distance);
-                    workout.setAverageHR(avgHR);
-                    workout.setAverageSpeed(avgSpeed);
-                    workout.setCaloriesRate(calRate);
-                    workout.setCaloriesBurned(calTotal);
-                    workoutList.add(workout);
-                } while (cursor.moveToNext()); //movetoNext returns true of next is nonNull
-                return workoutList;
+                        Log.d(TAG, "Workout Inserted: ID = " + id + " Date = " + date);
+                        //adding all workout parameters to workout object to be returned.
+                        workout.setID(id);
+                        workout.setDate(date);
+                        workout.setTotalDistance(distance);
+                        workout.setTotalDuration(duration);
+                        filteredList.add(workout);
+                    }
+                } while (cursor.moveToNext()); //movetoNext returns true if next is nonNull
+                return filteredList;
             }
+
         } catch (Exception error) {
-            Log.d(TAG, "Attempting to retrieve Assignment data: " + error.getMessage());
+            Log.d(TAG, "Attempting to retrieve Workout data: " + error.getMessage());
         } finally {
             if (cursor != null) cursor.close();
             db.close();
         }
-        Log.d(TAG,"Empty List Returned");
         return Collections.emptyList(); //This return is only if the cursor doesn't find the table start, or exception thrown
+
+
+
     }
 
 
@@ -361,7 +338,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     workoutList.add(workout);
 
                     //Print workout data for debugging
-                    workout.print(TAG);
+                    //workout.print(TAG);
 
                 } while (cursor.moveToNext()); //movetoNext returns true if next is nonNull
                 return workoutList;

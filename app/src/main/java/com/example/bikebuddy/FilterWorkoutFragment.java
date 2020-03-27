@@ -59,11 +59,11 @@ public class FilterWorkoutFragment extends DialogFragment {
         filter1week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date lowerDate;
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(Calendar.getInstance().getTime());
                 calendar.add(Calendar.DATE,-7);
-                lowerDate = calendar.getTime();
+                Date lowerDate = calendar.getTime();
+                Log.d(TAG,"LowerDate = " + lowerDate);
                 try {
                     dbHelper.filterWorkoutByDate(lowerDate);
                 } catch (ParseException e) {
