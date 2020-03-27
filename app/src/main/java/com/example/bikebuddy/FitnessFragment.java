@@ -60,7 +60,7 @@ public class FitnessFragment extends Fragment {
     //Added by brady to test DB
     //TODO: remove once recording manager is setup
     private Workout workout;
-    private DbHelper dbHelper;
+
 
     public static final String TAG = "FitnessFragment";
 
@@ -131,40 +131,58 @@ public class FitnessFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                for(int j = 0; j < 14; j++) {       //this 14 is hardcoded  to make 20 workouts
+                DbHelper dbHelper = new DbHelper(getContext());
+                for(int j = 0; j < 5; j++) {       //this 14 is hardcoded  to make 14 workouts
                     //data initialization for workout
                     List<Long> listTime = new ArrayList<>();
                     List<Double> listHR = new ArrayList<>();
                     List<Double> listSpeed = new ArrayList<>();
-                    double distance = 0;
                     Date date;
+
+                    //Data for kalman filter
+                    double C = 1.0;
+                    double Q = 0.05;
+                    double[] kalReturn;
+                    double sigma = Q;
+                    double calRateEstimate = 0;
+                    int userWeight = 0;
+                    int userAge = 0;
+                    SharedPreferenceHelper sharedPreferenceHelper = new SharedPreferenceHelper(getActivity());
+                    if(sharedPreferenceHelper.getProfile()){
+                        userAge = sharedPreferenceHelper.getProfileAge();
+                        userWeight = sharedPreferenceHelper.getProfileWeight();
+                    } else{
+                        Toast.makeText(getContext(),"No Profile Found, Please create a profile " ,Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        startActivity(intent);
+                    }
 
                     //Parsing the JSON
                     try {
                         JSONObject obj = new JSONObject(loadJSONfromAsset());
                         String bikeData = "bikeData" + (j+1);
                         JSONObject data = obj.getJSONObject(bikeData);
-                        int id = data.getInt("id");
+                        int id = data.getInt("id");     //used to verify the correct object was retrieved
                         JSONArray heartRate = data.getJSONArray("heart_rate");
                         JSONArray speed = data.getJSONArray("speed");
                         JSONArray time = data.getJSONArray("timestamp");
+                        Long initialTime = time.getLong(0);
                         for (int i = 0; i < time.length(); i++) {
-                            listTime.add(time.getLong(i));
+                            listTime.add(time.getLong(i)-initialTime);
                             listHR.add(heartRate.getDouble(i));
                             listSpeed.add(speed.getDouble(i));
+                        }
+                        for(int i = 0; i<listTime.size(); i++){
                             if(i>0) {
-                                distance = distance + speed.getDouble(i) * (time.getDouble(i) - (double) time.getDouble(i - 1));
+                                //Run Kalman filter on data
+                                kalReturn = calculateCalorieRate(listHR.get(i),listSpeed.get(i),calRateEstimate,sigma,Q,C,userAge,userWeight);
+                                sigma = kalReturn[1];
+                                calRateEstimate = kalReturn[0];
                             }
                         }
-                        //Run Kalman filter on data
-                        double userWeight = 0;
-                        int userAge = 0;
-                        getUserInfo(userWeight, userAge);
-                        Double calRate = mockFilter(listTime, listHR, listSpeed, userWeight, userAge);
 
                         //generating random date and time
                         date = generateRandomDate();
-                        Log.d(TAG,"Random date = " + date);
 
                         //Creating workout
                         Workout workout = new Workout();
@@ -173,12 +191,19 @@ public class FitnessFragment extends Fragment {
                         workout.setListHR(listHR);
                         workout.setAverageSpeed(workout.calculateAverageSpeed());
                         workout.setAverageHR(workout.calculateAverageHR());
-                        workout.setCaloriesRate(calRate);
-                        workout.setCaloriesBurned(workout.calculateCaloriesBurned(calRate));
-                        workout.setTotalDistance(distance);
+                        workout.setCaloriesRate(calRateEstimate);
+                        workout.setCaloriesBurned(workout.calculateCaloriesBurned(calRateEstimate));
                         workout.setTotalDuration(listTime.get(listTime.size()-1)-listTime.get(0));
-                        workout.setDate(Calendar.getInstance().getTime());
+                        workout.setTotalDistance(workout.calculateAverageSpeed()*workout.getTotalDuration()/3.6);
+                        workout.setDate(date);
                         //workout.print(TAG);
+
+                        //add workout to database
+                        dbHelper.insertWorkout(workout);
+                        Log.d(TAG,"Workout created with random date: " + date);
+                        Log.d(TAG,"Workout calRate = " + calRateEstimate);
+                        Log.d(TAG,"Workout calBurned = " + workout.getCaloriesBurned());
+
                         /* THIS SECTION IS USED TO VERIFY PARSING OF JSON DATA IN LOG
                         Log.d(TAG, "JSON RETRIEVED data: " + bikeData);
                         Log.d(TAG, "JSON CONVERTED LISTS:" + "time = " + listTime);
@@ -314,18 +339,70 @@ public class FitnessFragment extends Fragment {
         }
         return json;
     }
+    private double[] calculateCalorieRate(double heartRate, double speed, double estimate, double sigma, double Q, double C, int age, int weight){
+        /*
+        Returns value of best guess for power output. Uses velocity data to approximate power
+        based on MET standards and then HR to approximate output based on Keytel approximation.
+        The MET standards typically provide approximations that are conservatively large. Keytel
+        approximation will be used to bring the output to a more appropriate level (matching
+        clinical trials).
+         */
+
+        //Internal Parameters
+        double K;
+        double MET;
+        double newVal;
+        double[] kalReturn;
+
+        //Calculating MET level
+        if(speed < 11) MET = 4.8;
+        else if(speed <16) MET = 5.9;
+        else if(speed <21) MET = 7.1;
+        else if(speed <26) MET = 8.4;
+        else MET = 9.8;
+
+        //*****************************************************************************************************************************
+        //Performing the filter approximation.
+        //  assume keytelPower only
+        if(heartRate > 30) {
+            //Male
+            newVal = ((-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184);  //kcal/min
+
+            if (newVal < 0) newVal = 0;
+
+            K = (sigma * sigma * C) / (sigma * sigma * C * C + Q * Q);
+            estimate = estimate + K * (newVal - C * estimate);
+            sigma = (1 - K * C) * sigma;
+        } else newVal = estimate;
+
+
+        //  update with metPower
+        if(speed > 3) {
+            newVal = MET * weight / 60;     //kcal/min
+            K = (sigma * sigma * C) / (sigma * sigma * C * C + Q * Q);
+            estimate = estimate + K * (newVal - C * estimate);
+            sigma = (1 - K * C) * sigma;
+            if(newVal < 0) newVal = 0;
+        } else newVal = estimate;
+
+        //*****************************************************************************************************************************
+
+        //Returning estimate and deviation, both used at next method call
+        kalReturn = new double[]{estimate, sigma};
+        Log.d(TAG,"Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
+        return kalReturn;
+    }
     public Double mockFilter(List<Long> time, List<Double> speed, List<Double> heartRate, double weight, int age){
         //Kalman filter parameters and values
         int N = time.size();
-        double C = 1.0;
-        double Q = 0.05;
+        double C = 1.5;
+        double Q = 0.5;
         double sigma = Q;
         List<Double> pGuess = new ArrayList<>();
         double newVal;
         double K;
         long delta_time;
         double MET;
-        //Retrieve user profile
 
         //initial guess
         newVal = ((-55.0969 + (0.6309*heartRate.get(0)) + (0.1988*weight) + (0.2017*age))/4.184)*(time.get(1)-time.get(0))*(1/60);  // kcal/min
@@ -359,20 +436,6 @@ public class FitnessFragment extends Fragment {
         }
         return pGuess.get(N-1);
     }
-   //Takes user info from shared preferences and stores it for use in the caloric estimation.
-    public void getUserInfo(double userWeight, int userAge){
-        SharedPreferenceHelper sharedPreferenceHelper = new SharedPreferenceHelper(getContext());
-        if(sharedPreferenceHelper.getProfile()){
-            userAge = sharedPreferenceHelper.getProfileAge();
-            userWeight = sharedPreferenceHelper.getProfileWeight();
-        } else{
-            Toast.makeText(getContext(),"No Profile Found, Please create a profile " ,Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginActivity.class);
-            startActivity(intent);
-        }
-        Log.d(TAG,"\ngetUserInfo\nAge: " + userAge + "\nWeight: " + userWeight);
-    }
-
     //returns random date in year 2020 and betwen jan-apr
     //  time is random between 6am and 9pm
     public Date generateRandomDate(){
