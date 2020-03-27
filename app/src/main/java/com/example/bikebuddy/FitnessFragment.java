@@ -50,17 +50,14 @@ public class FitnessFragment extends Fragment {
     //***************************************************************************************
 
     private Button RecordWorkout;
-    private Button generateMock;        //THIS IS JUST TO READ MOCK DATA
+    private Button generateMock;                       //THIS IS JUST TO READ MOCK DATA
+    private static Boolean mockDatagenerated = false;  //used to remove mock data button after use
+
     TextView speedTextView;
     TextView distanceTextView;
     TextView distanceTitleTextView;
 
     FrameLayout distanceFrameLayout;
-
-    //Added by brady to test DB
-    //TODO: remove once recording manager is setup
-    private Workout workout;
-
 
     public static final String TAG = "FitnessFragment";
 
@@ -71,6 +68,7 @@ public class FitnessFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fitness,container,false);
         RecordWorkout=view.findViewById(R.id.button_record_workout);
         generateMock = view.findViewById(R.id.button_mockData);     //THIS IS JUST TO READ MOCK DATA
+        if(mockDatagenerated) generateMock.setVisibility(View.GONE);
         chronometer= view.findViewById(R.id._chronometer);
         speedTextView = view.findViewById(R.id.text_speed_rt);
         distanceTextView = view.findViewById(R.id.text_distance_rt);
@@ -132,7 +130,7 @@ public class FitnessFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DbHelper dbHelper = new DbHelper(getContext());
-                for(int j = 0; j < 5; j++) {       //this 14 is hardcoded  to make 14 workouts
+                for(int j = 0; j < 14; j++) {       //this 14 is hardcoded  to make 14 workouts
                     //data initialization for workout
                     List<Long> listTime = new ArrayList<>();
                     List<Double> listHR = new ArrayList<>();
@@ -214,7 +212,8 @@ public class FitnessFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
-                generateMock.setVisibility(View.INVISIBLE);
+                generateMock.setVisibility(View.GONE);
+                mockDatagenerated = true;
             }
         });
         //**************************************************************************************
