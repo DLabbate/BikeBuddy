@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bikebuddy.Utils.HeartRateZoneHelper;
@@ -64,6 +68,10 @@ public class WorkoutActivity extends AppCompatActivity {
     //----------------------------------------TAG----------------------------------------------------//
     public static final String TAG = "WorkoutActivity";
 
+
+    //----------------------------------------Toolbar------------------------------------------------//
+    ImageView imageViewBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +114,9 @@ public class WorkoutActivity extends AppCompatActivity {
         loadDataHR(heartRate);
         loadDataSpeed(speed);
         loadDateHRZones(heartRate);
+
+        //Setup toolbar back button for navigation to main activity
+        setupBackButton();
     }
 
     /*
@@ -326,5 +337,18 @@ public class WorkoutActivity extends AppCompatActivity {
 
         pieChartZones.setData(pieData);
 
+    }
+
+    private void setupBackButton()
+    {
+        imageViewBack = findViewById(R.id.image_workout_back);
+        final Context context = this;
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
