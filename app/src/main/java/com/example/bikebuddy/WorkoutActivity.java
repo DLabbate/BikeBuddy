@@ -60,6 +60,8 @@ public class WorkoutActivity extends AppCompatActivity {
     PieChart pieChartZones;
     Context context;
 
+    
+    //----------------------------------------TAG----------------------------------------------------//
     public static final String TAG = "WorkoutActivity";
 
     @Override
