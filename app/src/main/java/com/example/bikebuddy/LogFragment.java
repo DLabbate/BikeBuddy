@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.example.bikebuddy.Utils.WorkoutAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,8 @@ public class LogFragment extends Fragment {
 
     private static final String TAG = "LogFragment";
     private DbHelper dbHelper;
+    //Filter button
+    FloatingActionButton FAB_filterByDate;
     //RecyclerView
     RecyclerView workoutRecyclerView;
     RecyclerView.Adapter workoutAdapter;
@@ -45,6 +48,9 @@ public class LogFragment extends Fragment {
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
 
+        FAB_filterByDate = view.findViewById(R.id.FAB_filter_workouts);
+        setupFAB();
+
         dbHelper = new DbHelper(this.getActivity());
         testStrings = dbHelper.getWorkouts();
       //  testStrings = new LinkedList<Workout>();
@@ -58,5 +64,16 @@ public class LogFragment extends Fragment {
         workoutRecyclerView.setLayoutManager(linearLayoutManager);
 
         return view;
+    }
+
+    private void setupFAB()
+    {
+        FAB_filterByDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FilterWorkoutFragment filterWorkoutFragment = new FilterWorkoutFragment();
+                filterWorkoutFragment.show(getFragmentManager(),"Filter Workouts Fragment");
+            }
+        });
     }
 }
