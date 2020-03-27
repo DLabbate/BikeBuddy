@@ -34,14 +34,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 public class FitnessFragment extends Fragment {
@@ -168,9 +165,7 @@ public class FitnessFragment extends Fragment {
                         Double calRate = mockFilter(listTime, listHR, listSpeed, userWeight, userAge);
 
                         //generating random date and time
-                        Instant lowerLimit = Instant.now().minus(Duration.ofDays(30));
-                        Instant dateInstance = dateAfter(lowerLimit, Instant.now());
-                        //date = Date.from(dateInstance);
+                        //TODO: create random date for workout
 
                         //Creating workout
                         Workout workout = new Workout();
@@ -377,14 +372,6 @@ public class FitnessFragment extends Fragment {
             startActivity(intent);
         }
         Log.d(TAG,"\ngetUserInfo\nAge: " + userAge + "\nWeight: " + userWeight);
-    }
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static Instant dateAfter(Instant startInclusive, Instant endExclusive) {
-        long startSeconds = startInclusive.getEpochSecond();
-        long endSeconds = endExclusive.getEpochSecond();
-        long random = ThreadLocalRandom.current().nextLong(startSeconds, endSeconds);
-
-        return Instant.ofEpochSecond(random);
     }
     //**************************************************************************************
 }
