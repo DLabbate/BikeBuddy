@@ -3,6 +3,7 @@ package com.example.bikebuddy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ public class WorkoutActivity extends AppCompatActivity {
     //----------------------------------------HR Zones------------------------------------------------//
     HeartRateZoneHelper heartRateZoneHelper;
     PieChart pieChartZones;
+    Context context;
 
     public static final String TAG = "WorkoutActivity";
 
@@ -66,6 +68,7 @@ public class WorkoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workout);
         Log.d(TAG,"onCreate");
 
+        context = this;
         setupUI();
 
 
@@ -250,21 +253,37 @@ public class WorkoutActivity extends AppCompatActivity {
         pieChartZones.setExtraOffsets(10f,10f,10f,10f);
 
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        List<Integer> colours = new ArrayList<>();
 
-        //if (zoneTotals[0] != 0)
-            pieEntries.add(new PieEntry(zoneTotals[0],getString(R.string.HR_zone1)));
+        if (zoneTotals[0] != 0)
+        {
+            pieEntries.add(new PieEntry(zoneTotals[0], getString(R.string.HR_zone1)));
+            colours.add(R.color.color_zone1);
+        }
 
-        //if (zoneTotals[1] != 0)
-            pieEntries.add(new PieEntry(zoneTotals[1],getString(R.string.HR_zone2)));
+        if (zoneTotals[1] != 0)
+        {
+            pieEntries.add(new PieEntry(zoneTotals[1], getString(R.string.HR_zone2)));
+            colours.add(R.color.color_zone2);
+        }
 
-        //if (zoneTotals[2] != 0)
-            pieEntries.add(new PieEntry(zoneTotals[2],getString(R.string.HR_zone3)));
+        if (zoneTotals[2] != 0)
+        {
+            pieEntries.add(new PieEntry(zoneTotals[2], getString(R.string.HR_zone3)));
+            colours.add(R.color.color_zone3);
+        }
 
-        //if (zoneTotals[3] != 0)
-            pieEntries.add(new PieEntry(zoneTotals[3],getString(R.string.HR_zone4)));
+        if (zoneTotals[3] != 0)
+        {
+            pieEntries.add(new PieEntry(zoneTotals[3], getString(R.string.HR_zone4)));
+            colours.add(R.color.color_zone4);
+        }
 
-        //if (zoneTotals[4] != 0)
+        if (zoneTotals[4] != 0)
+        {
             pieEntries.add(new PieEntry(zoneTotals[4],getString(R.string.HR_zone5)));
+            colours.add(R.color.color_zone5);
+        }
 
         PieDataSet pieDataSet= new PieDataSet(pieEntries,"");
         pieDataSet.setSliceSpace(3f);
@@ -280,12 +299,29 @@ public class WorkoutActivity extends AppCompatActivity {
 
          */
 
-        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        int colourArray[] = new int[colours.size()];
+        for (int i = 0; i < colourArray.length; i++)
+        {
+            colourArray[i] = colours.get(i);
+        }
+        pieDataSet.setColors(colourArray,context);
+        //pieDataSet.setColors(colours,context);
+        //pieDataSet.setColors(new int[] { R.color.color_zone1, R.color.color_zone2, R.color.color_zone3, R.color.color_zone4, R.color.color_zone5 }, context);
 
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueTextSize(10f);
         pieData.setValueTextColor(Color.WHITE);
         pieData.setValueFormatter(new PercentFormatter(pieChartZones));
+
+        //Make %Values outside
+        //See https://stackoverflow.com/questions/51493521/manage-text-in-some-situation-piechart-of-mpandroidchart
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setValueLinePart1OffsetPercentage(10.f);
+        pieDataSet.setValueLinePart1Length(0.55f);
+        pieDataSet.setValueLinePart2Length(.1f);
+        pieData.setValueTextColor(Color.BLACK);
+        pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
         pieChartZones.setData(pieData);
 
     }
