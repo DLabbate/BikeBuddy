@@ -391,57 +391,13 @@ public class FitnessFragment extends Fragment {
         Log.d(TAG,"Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
         return kalReturn;
     }
-    public Double mockFilter(List<Long> time, List<Double> speed, List<Double> heartRate, double weight, int age){
-        //Kalman filter parameters and values
-        int N = time.size();
-        double C = 1.5;
-        double Q = 0.5;
-        double sigma = Q;
-        List<Double> pGuess = new ArrayList<>();
-        double newVal;
-        double K;
-        long delta_time;
-        double MET;
-
-        //initial guess
-        newVal = ((-55.0969 + (0.6309*heartRate.get(0)) + (0.1988*weight) + (0.2017*age))/4.184)*(time.get(1)-time.get(0))*(1/60);  // kcal/min
-        pGuess.add(newVal);
-
-        newVal = 5*weight/60;        // kcal/min
-        K = (sigma*sigma * C)/(sigma*sigma * C*C + Q*Q);
-        pGuess.set(0, pGuess.get(0) + K*(newVal-C*pGuess.get(0)));
-        sigma = (1-K*C)*sigma;
-
-        for(int i = 1; i < N; i++) {
-            delta_time = time.get(i) - time.get(i - 1);
-            if(speed.get(i) < 11)          MET = 4.8;
-            else if(speed.get(i) < 16)     MET = 5.9;
-            else if(speed.get(i) < 21)     MET = 7.1;
-            else if(speed.get(i) < 26)     MET = 8.4;
-            else                           MET = 9.8;
-
-            //update guess with HR data
-            newVal = ((-55.0969 + (0.6309 * heartRate.get(i)) + (0.1988 * weight) + (0.2017 * age)) / 4.184) * delta_time * (1 / 60);  //kcal / min
-            K = (sigma*sigma * C)/(sigma*sigma * C*C + Q*Q);
-            pGuess.add(pGuess.get(i - 1) + K * (newVal - C * pGuess.get(i - 1)));
-            sigma = (1 - K * C) * sigma;
-
-
-            //update guess with Speed data
-            newVal = MET * weight / 60;        // kcal / min
-            K = (sigma*sigma * C)/(sigma*sigma * C*C + Q*Q);
-            pGuess.set(i,pGuess.get(i - 1) + K * (newVal - C * pGuess.get(i - 1)));
-            sigma = (1 - K * C) * sigma;
-        }
-        return pGuess.get(N-1);
-    }
     //returns random date in year 2020 and betwen jan-apr
     //  time is random between 6am and 9pm
     public Date generateRandomDate(){
         //set date
         int year = 2020;
         int day = randBetween(1,30);
-        int month = randBetween(1,4);
+        int month = randBetween(0,3);
         //set time
         int hour = randBetween(6,21);
         int minute = randBetween(0,59);

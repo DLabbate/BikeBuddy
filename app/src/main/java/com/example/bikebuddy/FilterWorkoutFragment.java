@@ -56,6 +56,7 @@ public class FilterWorkoutFragment extends DialogFragment {
         filter2week = view.findViewById(R.id.button_filter2weeks);
         filter1Month = view.findViewById(R.id.button_filter1month);
 
+        //Filter buttons
         filter1week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +70,39 @@ public class FilterWorkoutFragment extends DialogFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                getDialog().dismiss();
+            }
+        });
+        filter2week.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(Calendar.getInstance().getTime());
+                calendar.add(Calendar.DATE,-14);
+                Date lowerDate = calendar.getTime();
+                Log.d(TAG,"LowerDate = " + lowerDate);
+                try {
+                    dbHelper.filterWorkoutByDate(lowerDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                getDialog().dismiss();
+            }
+        });
+        filter1Month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(Calendar.getInstance().getTime());
+                calendar.add(Calendar.DATE,-30);
+                Date lowerDate = calendar.getTime();
+                Log.d(TAG,"LowerDate = " + lowerDate);
+                try {
+                    dbHelper.filterWorkoutByDate(lowerDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                getDialog().dismiss();
             }
         });
     }
