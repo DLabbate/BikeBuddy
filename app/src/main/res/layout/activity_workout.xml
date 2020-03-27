@@ -235,6 +235,15 @@
                         android:layout_gravity="center_horizontal"
                         android:textStyle="bold"/>
 
+                    <TextView
+                        android:id="@+id/HRSubTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(bpm vs. seconds)"
+                        android:textSize="9sp"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="normal"/>
+
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/line_chart_HR"
                         android:layout_width="match_parent"
@@ -264,6 +273,15 @@
                         android:layout_gravity="center_horizontal"
                         android:textStyle="bold"/>
 
+                    <TextView
+                        android:id="@+id/SpeedSubTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(km/h vs. seconds)"
+                        android:textSize="9sp"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="normal"/>
+
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/line_chart_speed"
                         android:layout_width="match_parent"
@@ -292,6 +310,15 @@
                         android:text="Heart Rate Zones"
                         android:layout_gravity="center_horizontal"
                         android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/HRZonesSubTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(% of Time in Each Zone)"
+                        android:textSize="9sp"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="normal"/>
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pie_chart_zones"
