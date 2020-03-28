@@ -28,13 +28,9 @@ public class LogFragment extends Fragment {
     RecyclerView.Adapter workoutAdapter;
     RecyclerView.LayoutManager linearLayoutManager;
 
-    // These are test variables (mock data)
-    //TODO remove test objects when recording is functional
-    private List<Workout> testStrings;
-    List <Double> doublelist= Collections.emptyList();
-    List <Long> longList=Collections.emptyList();
-    double doublevalue = 10;
-    long longvalue=10;
+
+    private List<Workout> Workouts;
+
 
 
 
@@ -44,19 +40,21 @@ public class LogFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_logs,container,false);
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
-
-        dbHelper = new DbHelper(this.getActivity());
-        testStrings = dbHelper.getWorkouts();
-      //  testStrings = new LinkedList<Workout>();
-      //  testStrings.add(new Workout(longList,doublelist,doublelist,doublevalue,longvalue,doublevalue,doublevalue,doublevalue));
-      //  testStrings.add("Test2");
-      //  testStrings.add("Test3");
-        Log.d(TAG,"testStrings size: " + testStrings.size());
-        workoutAdapter = new WorkoutAdapter(getActivity(),testStrings);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
-        workoutRecyclerView.setAdapter(workoutAdapter);
-        workoutRecyclerView.setLayoutManager(linearLayoutManager);
+        LoadWorkout();
 
         return view;
     }
+    public void LoadWorkout(){
+
+        dbHelper = new DbHelper(this.getActivity());
+        Workouts = dbHelper.getWorkouts();
+
+        Log.d(TAG,"Workoutlist size: " + Workouts.size());
+        workoutAdapter = new WorkoutAdapter(getActivity(),Workouts);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        workoutRecyclerView.setAdapter(workoutAdapter);
+        workoutRecyclerView.setLayoutManager(linearLayoutManager);
+    }
 }
+
+

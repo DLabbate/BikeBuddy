@@ -23,5 +23,5 @@
     the fabric sensors before wearing.</string>
 
     <string name="text_delete_bike">Are you sure you want to delete this bike?</string>
-
+    <string name="text_delete_workout">Are you sure you want to delete this workout?</string>
 </resources>
