@@ -53,9 +53,9 @@ public class FitnessFragment extends Fragment {
     private Button generateMock;                       //THIS IS JUST TO READ MOCK DATA
     private static Boolean mockDatagenerated = false;  //used to remove mock data button after use
 
-    TextView speedTextView;
-    TextView distanceTextView;
-    TextView distanceTitleTextView;
+    private TextView speedTextView;
+    private TextView distanceTextView;
+    private TextView distanceTitleTextView;
 
     FrameLayout distanceFrameLayout;
 

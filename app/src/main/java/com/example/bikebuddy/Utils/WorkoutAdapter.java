@@ -52,36 +52,11 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                 Log.d(TAG,"onClick, position #: " + click_position);
                 Intent intent = new Intent(context, WorkoutActivity.class);
 
-                intent.putExtra("__ID",workoutList.get(position).getID());
-
-
-                //AHMED'S VERSION TO BE RESTORED IF I FUCK UP
                 /*
-                 Converting the object into group of strings then sending them with the intent
-                */
-
-                /*
-                // converting the date after changing its format
-                intent.putExtra("Date",new SimpleDateFormat("hh:mma dd-MM-yyyy").format(workoutList.get(position).getDate()));
-
-                // converting the distance from double to int to get rid of the decimals (we are measuring the distance in meter)
-                intent.putExtra("Distance", Integer.toString((int)(workoutList.get(position).getTotalDistance())));
-
-                //converting the time from long into hours, minutes and seconds
-                long hours = TimeUnit.SECONDS.toHours(workoutList.get(position).getTotalDuration());
-                long minute =TimeUnit.SECONDS.toMinutes(workoutList.get(position).getTotalDuration())-hours*60;
-                long seconds = TimeUnit.SECONDS.toSeconds(workoutList.get(position).getTotalDuration())-TimeUnit.SECONDS.toMinutes(workoutList.get(position).getTotalDuration())*60;;
-                intent.putExtra("Duration",hours + "h, " + minute + "m, "+ seconds + "s");
-
-                intent.putExtra("Calories",Double.toString(workoutList.get(position).getCaloriesBurned()));
-                intent.putExtra("AverageHR",Double.toString(workoutList.get(position).getAverageHR()));
-                intent.putExtra("AverageSpeed",Double.toString(workoutList.get(position).getAverageSpeed()));
-                //Serializing
-                Gson gson = new Gson();
-                intent.putExtra("Time", gson.toJson(workoutList.get(position).getTime()));
-                intent.putExtra("HRList", gson.toJson(workoutList.get(position).getListHR()));
-                intent.putExtra("SpeedList", gson.toJson(workoutList.get(position).getListSpeed()));
+                Adds the workout ID to the intent when moving to the workoutActivity. This ID is
+                used to get workout data from DB once in workoutActivity.
                  */
+                intent.putExtra("__ID",workoutList.get(position).getID());
 
                 context.startActivity(intent);
             }

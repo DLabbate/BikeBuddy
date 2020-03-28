@@ -86,38 +86,13 @@ public class WorkoutActivity extends AppCompatActivity {
         String displayDistance = Integer.toString((int)workout.getTotalDistance()) + " m";
         DistanceText.setText(displayDuration);
 
+        // Importing remaining data from workout object
         CaloriesText.setText(Integer.toString((int)workout.getCaloriesBurned()));
         AverageSpeedText.setText(Double.toString(workout.getAverageSpeed()));
         AverageHRText.setText(Double.toString(workout.getAverageHR()));
         List<Long> time = workout.getTime();
         List<Double> heartRate = workout.getListHR();
         List<Double> speed = workout.getListSpeed();
-
-        //AHMED'S VERSION TO BE RESTORED IF I FUCK UP
-        // I put his UI object declarations in the setupUI method
-        /*
-        DateText.setText(getIntent().getStringExtra("Date"));
-        DurationText.setText(getIntent().getStringExtra("Duration"));
-        DistanceText.setText(getIntent().getStringExtra("Distance") + " m");
-        CaloriesText.setText(getIntent().getStringExtra("Calories"));
-        AverageSpeedText.setText(getIntent().getStringExtra("AverageSpeed"));
-        AverageHRText.setText(getIntent().getStringExtra("AverageHR"));
-
-        // Deserializing the lists sent from log fragment
-        Log.d(TAG, "Deserializing from Log Fragment");
-        Gson gson = new Gson();
-        String JSONtime = getIntent().getStringExtra("Time");
-        String JSONhr =  getIntent().getStringExtra("HRList");
-        String JSONspeed = getIntent().getStringExtra("SpeedList");
-
-        Type listType_long = new TypeToken<Collection<Long>>() {
-        }.getType();
-        Type listType_double = new TypeToken<Collection<Double>>() {
-        }.getType();
-        List<Long> time = gson.fromJson(JSONtime, listType_long);
-        List<Double> heartRate = gson.fromJson(JSONhr, listType_double);
-        List<Double> speed = gson.fromJson(JSONspeed, listType_double);
-         */
 
         loadDataHR(heartRate);
         loadDataSpeed(speed);
