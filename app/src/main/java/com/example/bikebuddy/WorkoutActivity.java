@@ -84,7 +84,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         // converting the distance from double to int to get rid of the decimals (we are measuring the distance in meter)
         String displayDistance = Integer.toString((int)workout.getTotalDistance()) + " m";
-        DistanceText.setText(displayDuration);
+        DistanceText.setText(displayDistance);
 
         // Importing remaining data from workout object
         CaloriesText.setText(Integer.toString((int)workout.getCaloriesBurned()));

@@ -2,6 +2,7 @@ package com.example.bikebuddy;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,18 +76,28 @@ public class LogFragment extends Fragment {
         return view;
     }
 
+
     //Method that can be called from child fragment to pass date value.
     static void setLowerDate(Date date){
         Log.d(TAG,"setLowerDate: " + date);
         lowerDate = date;
     }
 
-
     private void setupFAB()
     {
         FAB_filterByDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle args = new Bundle();
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                ((MainActivity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+
+                args.putInt("buttonX",(int)(FAB_filterByDate.getWidth()));
+                args.putInt("buttonY",(int)(FAB_filterByDate.getHeight()));
+                d.setArguments(args);
                 d.show(getFragmentManager(),"Filter Workouts Fragment");
             }
         });
@@ -107,6 +118,5 @@ public class LogFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
 
 }

@@ -11,15 +11,6 @@
         android:layout_gravity="bottom|end"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView_filterBy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Show Workouts From"
-            android:textSize="18sp" />
-
         <Button
             android:id="@+id/button_filter1week"
             android:layout_width="match_parent"
@@ -39,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="This Month" />
+            android:text="Last 30 Days" />
 
         <Button
             android:id="@+id/button_showAll"
