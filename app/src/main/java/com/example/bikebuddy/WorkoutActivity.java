@@ -1,27 +1,30 @@
 package com.example.bikebuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Utils.Workout;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class WorkoutActivity extends AppCompatActivity {
 
@@ -33,6 +36,12 @@ public class WorkoutActivity extends AppCompatActivity {
     (...)
      */
 
+    //Id passed from intent
+    int __ID;
+    Workout workout;
+    DbHelper dbHelper;
+
+    //Fields to be populated
     LineChart chart_HR;
     LineChart chart_Speed;
     ArrayList<Entry> data_HR;
@@ -53,16 +62,40 @@ public class WorkoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workout);
         Log.d(TAG,"onCreate");
 
+        dbHelper = new DbHelper(this);
         setupUI();
 
+        __ID = getIntent().getIntExtra("__ID",-1);
 
-        DateText = findViewById(R.id.text_date_value);
-        DurationText = findViewById(R.id.text_duration_value);
-        DistanceText = findViewById(R.id.text_distance_value);
-        AverageHRText = findViewById(R.id.text_heart_rate_value);
-        AverageSpeedText = findViewById(R.id.text_speed_value);
-        CaloriesText = findViewById(R.id.text_calories_value);
+        try {
+            workout = dbHelper.retrieveWorkout(__ID);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        DateText.setText(dateToString(workout.getDate()));
+
+        //converting the time from long into hours, minutes and seconds
+        long hours = TimeUnit.SECONDS.toHours(workout.getTotalDuration());
+        long minute =TimeUnit.SECONDS.toMinutes(workout.getTotalDuration())-hours*60;
+        long seconds = TimeUnit.SECONDS.toSeconds(workout.getTotalDuration())-TimeUnit.SECONDS.toMinutes(workout.getTotalDuration())*60;;
+        String displayDuration = hours + "h, " + minute + "m, "+ seconds + "s";
+        DurationText.setText(displayDuration);
+
+        // converting the distance from double to int to get rid of the decimals (we are measuring the distance in meter)
+        String displayDistance = Integer.toString((int)workout.getTotalDistance()) + " m";
+        DistanceText.setText(displayDuration);
+
+        CaloriesText.setText(Integer.toString((int)workout.getCaloriesBurned()));
+        AverageSpeedText.setText(Double.toString(workout.getAverageSpeed()));
+        AverageHRText.setText(Double.toString(workout.getAverageHR()));
+        List<Long> time = workout.getTime();
+        List<Double> heartRate = workout.getListHR();
+        List<Double> speed = workout.getListSpeed();
+
+        //AHMED'S VERSION TO BE RESTORED IF I FUCK UP
+        // I put his UI object declarations in the setupUI method
+        /*
         DateText.setText(getIntent().getStringExtra("Date"));
         DurationText.setText(getIntent().getStringExtra("Duration"));
         DistanceText.setText(getIntent().getStringExtra("Distance") + " m");
@@ -84,6 +117,7 @@ public class WorkoutActivity extends AppCompatActivity {
         List<Long> time = gson.fromJson(JSONtime, listType_long);
         List<Double> heartRate = gson.fromJson(JSONhr, listType_double);
         List<Double> speed = gson.fromJson(JSONspeed, listType_double);
+         */
 
         loadDataHR(heartRate);
         loadDataSpeed(speed);
@@ -97,6 +131,13 @@ public class WorkoutActivity extends AppCompatActivity {
     {
         chart_HR = findViewById(R.id.line_chart_HR);
         chart_Speed = findViewById(R.id.line_chart_speed);
+
+        DateText = findViewById(R.id.text_date_value);
+        DurationText = findViewById(R.id.text_duration_value);
+        DistanceText = findViewById(R.id.text_distance_value);
+        AverageHRText = findViewById(R.id.text_heart_rate_value);
+        AverageSpeedText = findViewById(R.id.text_speed_value);
+        CaloriesText = findViewById(R.id.text_calories_value);
     }
 
     /*
@@ -181,5 +222,13 @@ public class WorkoutActivity extends AppCompatActivity {
         }
 
         chart_Speed.invalidate();
+    }
+
+    //Converts imported date to a string for display in textView
+    private String dateToString(Date date){
+        String pattern = "dd/MM/yyyy HH:mm:ss";
+        DateFormat df = new SimpleDateFormat(pattern);
+        String dateString = df.format(date);
+        return dateString;
     }
 }

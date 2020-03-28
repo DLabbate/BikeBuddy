@@ -14,13 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bikebuddy.R;
 import com.example.bikebuddy.WorkoutActivity;
-import com.google.gson.Gson;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
 
@@ -56,9 +52,15 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                 Log.d(TAG,"onClick, position #: " + click_position);
                 Intent intent = new Intent(context, WorkoutActivity.class);
 
+                intent.putExtra("__ID",workoutList.get(position).getID());
+
+
+                //AHMED'S VERSION TO BE RESTORED IF I FUCK UP
                 /*
                  Converting the object into group of strings then sending them with the intent
                 */
+
+                /*
                 // converting the date after changing its format
                 intent.putExtra("Date",new SimpleDateFormat("hh:mma dd-MM-yyyy").format(workoutList.get(position).getDate()));
 
@@ -79,6 +81,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                 intent.putExtra("Time", gson.toJson(workoutList.get(position).getTime()));
                 intent.putExtra("HRList", gson.toJson(workoutList.get(position).getListHR()));
                 intent.putExtra("SpeedList", gson.toJson(workoutList.get(position).getListSpeed()));
+                 */
+
                 context.startActivity(intent);
             }
         });

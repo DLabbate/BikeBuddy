@@ -57,9 +57,12 @@ public class LogFragment extends Fragment {
                 refreshList();
             }
         });
+
+        //This is the default date that no workout can be before (i.e. filtering by this date
+        //  returns ALL workouts 28 June 1919 (the day the Treaty of Versailles was signed)
         lowerDate.setYear(19);
-        lowerDate.setMonth(11);
-        lowerDate.setDate(1);
+        lowerDate.setMonth(5);
+        lowerDate.setDate(28);
         dbHelper = new DbHelper(this.getActivity());
     }
 
@@ -89,28 +92,24 @@ public class LogFragment extends Fragment {
         return view;
     }
 
-
     //Method that can be called from child fragment to pass date value.
     static void setLowerDate(Date date){
         Log.d(TAG,"setLowerDate: " + date);
         lowerDate = date;
     }
 
-
+    //
     private void setupFAB()
     {
         FAB_filterByDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 d.show(getFragmentManager(),"Filter Workouts Fragment");
-                /*
-                FilterWorkoutFragment filterWorkoutFragment = new FilterWorkoutFragment();
-                filterWorkoutFragment.show(getFragmentManager(),"Filter Workouts Fragment");
-                 */
             }
         });
     }
 
+    //this replaces the original code in "onCreate", this function can be called throughout fragment
     private void refreshList(){
         Log.d(TAG,"Refresh List");
         List<Workout> filteredWorkoutList;
