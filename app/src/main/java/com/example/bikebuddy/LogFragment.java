@@ -42,7 +42,7 @@ public class LogFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    private List<Workout> Workouts;
+
         /*
         Dialog linked to dismiss listener. This method runs when the LogFragment detects the
         dialog "d" has been closed. Used to refresh list with new filtered list

@@ -1,13 +1,9 @@
 package com.example.bikebuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.bikebuddy.Data.DbHelper;
-import com.example.bikebuddy.Utils.Workout;
 import com.example.bikebuddy.Utils.HeartRateZoneHelper;
 import com.example.bikebuddy.Utils.PercentFormatter;
+import com.example.bikebuddy.Utils.Workout;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -31,7 +27,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
 
 import java.text.DateFormat;
@@ -74,7 +69,7 @@ public class WorkoutActivity extends AppCompatActivity {
     PieChart pieChartZones;
     Context context;
 
-    
+
     //----------------------------------------TAG----------------------------------------------------//
     public static final String TAG = "WorkoutActivity";
 
@@ -188,7 +183,7 @@ public class WorkoutActivity extends AppCompatActivity {
         else {
             lineDataSet1.setFillColor(Color.BLACK);
         }
-        
+
         chart_HR.invalidate();
     }
 
@@ -235,11 +230,12 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     //Converts imported date to a string for display in textView
-    private String dateToString(Date date){
+    private String dateToString(Date date) {
         String pattern = "dd/MM/yyyy HH:mm:ss";
         DateFormat df = new SimpleDateFormat(pattern);
         String dateString = df.format(date);
         return dateString;
+    }
       
       
     /*
