@@ -113,7 +113,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                 if (name_temp.equals("") || name_temp == null
                         || age_temp.equals("") || age_temp == null
-                        || weight_temp.equals("") || weight_temp == null)
+                        || age_temp.equals("0") || age_temp.equals("00")
+                        || weight_temp.equals("") || weight_temp == null
+                        || weight_temp.equals("0") ||weight_temp.equals("00") || weight_temp.equals("000"))
                 {
                     Toast.makeText(ProfileActivity.this, "Please Fill all Fields",
                             Toast.LENGTH_SHORT).show();

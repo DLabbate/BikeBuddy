@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bikebuddy.BikeActivity;
+import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.R;
 import com.example.bikebuddy.SharedPreferenceHelper;
 
@@ -27,6 +29,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
     protected SharedPreferenceHelper sharedPreferenceHelper;
     protected int selectedBikeID;
     protected Context context;
+    DbHelper dbHelper;
 
     public BikeAdapter(List<Bike> bikeList, SharedPreferenceHelper sharedPreferenceHelper,Context context)
     {
@@ -40,6 +43,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bike_view_holder,parent,false);
+        dbHelper=new DbHelper(context);
         return new ViewHolder(view);
     }
 
@@ -97,7 +101,9 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
                         //If user selects Yes, then delete the workout
                         //******************************************************************************
 
-                        //TODO: dbHelper.deleteBike(currentBike.getID();
+                        dbHelper.deleteBike(currentBike.getID());
+                        // refresh the page (update the log fragment)
+                        ((BikeActivity)context).loadBikes();
 
                         Toast.makeText(context,"Bike Deleted",Toast.LENGTH_SHORT).show();
                         //******************************************************************************

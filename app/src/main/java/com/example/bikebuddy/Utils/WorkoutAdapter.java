@@ -1,17 +1,23 @@
 package com.example.bikebuddy.Utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.MainActivity;
 import com.example.bikebuddy.R;
 import com.example.bikebuddy.WorkoutActivity;
 import com.google.gson.Gson;
@@ -27,17 +33,20 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     public static final String TAG = "WorkoutAdapter";
     private Context context;
     private List<Workout> workoutList;
-
+    DbHelper dbHelper;
     public WorkoutAdapter(Context context, List<Workout> workoutList)
     {
         this.context = context;
         this.workoutList = workoutList;
     }
 
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_view_holder,parent,false);
+        dbHelper=new DbHelper(context);
         return new ViewHolder(view);
     }
 
@@ -82,6 +91,44 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                 context.startActivity(intent);
             }
         });
+
+        //Setup onclick listener for deleting a Workout
+        //**************************************************************************************************************************
+        holder.imageViewdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(context.getString(R.string.text_delete_workout));
+                builder.setCancelable(true);
+                builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        //If user selects Yes, then delete the workout
+                        //******************************************************************************
+                        dbHelper.deleteWorkout(workoutList.get(position).getID());
+
+                        // refresh the page (update the log fragment)
+                        Intent intent = new Intent(context,context.getClass());
+                        context.startActivity(intent);
+
+                        Toast.makeText(context,"Workout Deleted",Toast.LENGTH_SHORT).show();
+                        //******************************************************************************
+                    }
+                });
+                //If the user selects close, then we disregard
+                //**************************************************************************************
+                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                //**************************************************************************************
+            }
+        });
     }
 
 
@@ -94,10 +141,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView textViewDate; //This is the TextView that displays the date for each workout
         public CardView cardView; //This is the card background for each view holder
+        public ImageView imageViewdelete;// This is the delete icon in each view holder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewDate = itemView.findViewById(R.id.text_date);
             cardView = itemView.findViewById(R.id.card_workout);
+            imageViewdelete = itemView.findViewById(R.id.image_delete_Workout);
         }
     }
 }
