@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
+    <!--Insert Bike Dialog-->
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="textMarginTop">20dp</dimen>
     <dimen name="editTextStartMargin7">7dp</dimen>
     <dimen name="bikeFragTitleWidth">150dp</dimen>
     <dimen name="bikeFrageTitleHeight">46dp</dimen>
+
+    <dimen name="HRZoneCircleRadius">40dp</dimen>
+
 </resources>

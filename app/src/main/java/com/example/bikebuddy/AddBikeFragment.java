@@ -148,6 +148,12 @@ public class AddBikeFragment extends DialogFragment {
             editText_wheelDiameter.requestFocus();
             return false;
         }
+        if(Double.parseDouble(editText_wheelDiameter.getText().toString())==0){
+            Toast toast = Toast.makeText(getContext(),"Bike must have a wheel diameter",Toast.LENGTH_SHORT);
+            toast.show();
+            editText_wheelDiameter.requestFocus();
+            return false;
+        }
 
         //Make sure user did not enter letters for wheel diameter
         //***************************************************************************************************************

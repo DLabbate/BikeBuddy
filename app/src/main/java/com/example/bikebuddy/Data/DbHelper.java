@@ -3,6 +3,7 @@ package com.example.bikebuddy.Data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -490,7 +491,46 @@ public class DbHelper extends SQLiteOpenHelper {
     }
     //*****************************************************************************************************************************
 
+    public void deleteWorkout(int WorkoutID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
 
+        try
+        {
+            //Drop class
+            db.delete(DbContract.WorkoutEntry.TABLE_NAME,DbContract.WorkoutEntry._ID + "=?",new String[]{Integer.toString(WorkoutID)});
+        }
+        catch (SQLException e)
+        {
+            Log.d(TAG,"ERROR" + e);
+            Toast.makeText(context,"ERROR DELETING"+ e,Toast.LENGTH_SHORT).show();
+        }
+        finally
+        {
+            db.close();
+        }
+    }
+
+    public void deleteBike(int BikeId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        try
+        {
+            db.delete(DbContract.BikeEntry.TABLE_NAME,DbContract.BikeEntry._ID + "=?",new String[]{Integer.toString(BikeId)});
+        }
+        catch (SQLException e)
+        {
+            Log.d(TAG,"ERROR" + e);
+            Toast.makeText(context,"ERROR DELETING"+ e,Toast.LENGTH_SHORT).show();
+        }
+        finally
+        {
+            db.close();
+        }
+    }
 
 
 

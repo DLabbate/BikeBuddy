@@ -23,5 +23,12 @@
     the fabric sensors before wearing.</string>
 
     <string name="text_delete_bike">Are you sure you want to delete this bike?</string>
+    <string name="text_delete_workout">Are you sure you want to delete this workout?</string>
 
+    <!--Heart Rate Zone Titles-->
+    <string name="HR_zone1">Rest</string>
+    <string name="HR_zone2">Light Intensity</string>
+    <string name="HR_zone3">Moderate Intensity</string>
+    <string name="HR_zone4">High Intensity</string>
+    <string name="HR_zone5">Maximal Intensity</string>
 </resources>
