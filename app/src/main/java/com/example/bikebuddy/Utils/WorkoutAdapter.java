@@ -17,7 +17,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bikebuddy.Data.DbHelper;
-import com.example.bikebuddy.MainActivity;
 import com.example.bikebuddy.R;
 import com.example.bikebuddy.WorkoutActivity;
 
@@ -51,7 +50,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         final int click_position = position; //We make a final int so it can be accessed by the onClickListener (inner class)
         Log.d(TAG,"onBindViewHolder: " + workoutList.get(position).getDate());
         holder.textViewDate.setText(new SimpleDateFormat(" EEE, d MMM yyyy hh:mm:ss aaa").format(workoutList.get(position).getDate()));// we would like to display the Date on the log fragment
-
+        holder.textViewDistance.setText("Distance: " + Integer.toString((int)workoutList.get(position).getTotalDistance()) + "m");
+        holder.textViewDuration.setText("Duration: " + durationToTime(workoutList.get(position).getTotalDuration()));
         /*
         We need to setup an onClickListener to open a detailed view of the workout
          */
@@ -118,14 +118,29 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView textViewDate; //This is the TextView that displays the date for each workout
-        public CardView cardView; //This is the card background for each view holder
-        public ImageView imageViewdelete;// This is the delete icon in each view holder
+        public TextView textViewDate;       //This is the TextView that displays the date for each workout
+        public TextView textViewDistance;   //This is the TextView that displays the distance for each workout
+        public TextView textViewDuration;   //this is the TextView that displays the distance for each workout
+        public CardView cardView;           //This is the card background for each view holder
+        public ImageView imageViewdelete;   // This is the delete icon in each view holder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewDate = itemView.findViewById(R.id.text_date);
+            textViewDistance = itemView.findViewById(R.id.text_distance);
+            textViewDuration = itemView.findViewById(R.id.text_duration);
             cardView = itemView.findViewById(R.id.card_workout);
             imageViewdelete = itemView.findViewById(R.id.image_delete_Workout);
         }
+    }
+
+    private String durationToTime(double seconds){
+
+        int P1 = (int) seconds % 60;
+        int P2 = (int) seconds / 60;
+        int P3 = (int) P2 % 60;
+        P2 = P2 % 60;
+
+        String time = P2 + ":" + P3 + ":" + P1;
+        return time;
     }
 }
