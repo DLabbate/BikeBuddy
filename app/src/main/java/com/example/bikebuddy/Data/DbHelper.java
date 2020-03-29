@@ -437,7 +437,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
     //*****************************************************************************************************************************
 
-    public void deleteWorkout(int CourseID)
+    public void deleteWorkout(int WorkoutID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         long id = -1;
@@ -445,7 +445,27 @@ public class DbHelper extends SQLiteOpenHelper {
         try
         {
             //Drop class
-            db.delete(DbContract.WorkoutEntry.TABLE_NAME,DbContract.WorkoutEntry._ID + "=?",new String[]{Integer.toString(CourseID)});
+            db.delete(DbContract.WorkoutEntry.TABLE_NAME,DbContract.WorkoutEntry._ID + "=?",new String[]{Integer.toString(WorkoutID)});
+        }
+        catch (SQLException e)
+        {
+            Log.d(TAG,"ERROR" + e);
+            Toast.makeText(context,"ERROR DELETING"+ e,Toast.LENGTH_SHORT).show();
+        }
+        finally
+        {
+            db.close();
+        }
+    }
+
+    public void deleteBike(int BikeId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        try
+        {
+            db.delete(DbContract.BikeEntry.TABLE_NAME,DbContract.BikeEntry._ID + "=?",new String[]{Integer.toString(BikeId)});
         }
         catch (SQLException e)
         {
