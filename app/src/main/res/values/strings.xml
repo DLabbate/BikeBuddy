@@ -31,4 +31,12 @@
     <string name="HR_zone3">Moderate Intensity</string>
     <string name="HR_zone4">High Intensity</string>
     <string name="HR_zone5">Maximal Intensity</string>
+
+    <!--Log Sorting Options-->
+    <string-array name="sorting_options">
+        <item>Sort By...</item>
+        <item>Date</item>
+        <item>Distance</item>
+        <item>Duration</item>
+    </string-array>
 </resources>

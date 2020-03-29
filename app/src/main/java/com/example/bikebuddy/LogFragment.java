@@ -1,15 +1,21 @@
 package com.example.bikebuddy;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +26,8 @@ import com.example.bikebuddy.Utils.WorkoutAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -27,11 +35,15 @@ public class LogFragment extends Fragment {
 
     private static final String TAG = "LogFragment";
     private DbHelper dbHelper;
+    List<Workout> filteredWorkoutList;
 
     //Filter functionality
     FloatingActionButton FAB_filterByDate;
     static Date lowerDate = new Date();
     FilterWorkoutFragment d = new FilterWorkoutFragment();
+
+    //Ordering Functionality
+    Spinner orderSpinner;
 
     //RecyclerView
     RecyclerView workoutRecyclerView;
@@ -61,6 +73,11 @@ public class LogFragment extends Fragment {
         lowerDate.setMonth(5);
         lowerDate.setDate(28);
         dbHelper = new DbHelper(this.getActivity());
+        try {
+            filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Nullable
@@ -71,7 +88,10 @@ public class LogFragment extends Fragment {
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
         FAB_filterByDate = view.findViewById(R.id.FAB_filter_workouts);
+        orderSpinner = view.findViewById(R.id.spinner_sort_workout);
+
         setupFAB();
+        setupSpinner();
 
         refreshList();
         return view;
@@ -104,20 +124,90 @@ public class LogFragment extends Fragment {
         });
     }
 
+    private void setupSpinner(){
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.sorting_options));
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        orderSpinner.setAdapter(arrayAdapter);
+
+        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //sort by date
+                if(position == 1){
+                    Log.d(TAG,"Selected sort by date ascending");
+                    Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+                        @Override
+                        public int compare(Workout o1, Workout o2) {
+                            return o1.getDate().compareTo(o2.getDate());
+                        }
+
+                        @Override
+                        public boolean equals(Object obj) {
+                            return false;
+                        }
+                    });
+                    Toast.makeText(getContext(),"Date: Highest to Lowest",Toast.LENGTH_SHORT).show();
+                    refreshList();
+                }
+                //sort by distance
+                if(position == 2){
+                    Log.d(TAG,"Selected sort by distance ascending");
+                    Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+                        @Override
+                        public int compare(Workout o1, Workout o2) {
+                            return (int) (o1.getTotalDistance() - o2.getTotalDistance());
+                        }
+
+                        @Override
+                        public boolean equals(Object obj) {
+                            return false;
+                        }
+                    });
+
+                    Toast.makeText(getContext(),"Distance: Highest to Lowest",Toast.LENGTH_SHORT).show();
+                    refreshList();
+                }
+                //sort by duration
+                if(position == 3){
+                    Log.d(TAG,"Selected sort by duration ascending");
+                    Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+                        @Override
+                        public int compare(Workout o1, Workout o2) {
+                            return (int) (o1.getTotalDuration() - o2.getTotalDuration());
+                        }
+
+                        @Override
+                        public boolean equals(Object obj) {
+                            return false;
+                        }
+                    });
+
+                    Toast.makeText(getContext(),"Duration: Highest to Lowest",Toast.LENGTH_SHORT).show();
+                    refreshList();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     //this replaces the original code in "onCreate", this function can be called throughout fragment
-    private void refreshList(){
-        Log.d(TAG,"Refresh List");
-        List<Workout> filteredWorkoutList;
-        try {
-            filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
-            Log.d(TAG,"filter List size: " + filteredWorkoutList.size());
-            workoutAdapter = new WorkoutAdapter(this.getContext(),filteredWorkoutList);
-            linearLayoutManager = new LinearLayoutManager(getActivity());
-            workoutRecyclerView.setAdapter(workoutAdapter);
-            workoutRecyclerView.setLayoutManager(linearLayoutManager);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    private void refreshList() {
+        Log.d(TAG, "Refresh List");
+        Log.d(TAG, "filter List size: " + filteredWorkoutList.size());
+        workoutAdapter = new WorkoutAdapter(this.getContext(), filteredWorkoutList);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        workoutRecyclerView.setAdapter(workoutAdapter);
+        workoutRecyclerView.setLayoutManager(linearLayoutManager);
+
     }
 
 }
