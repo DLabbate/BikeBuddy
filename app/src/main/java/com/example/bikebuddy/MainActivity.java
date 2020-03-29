@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.bikebuddy.Bluetooth.DelimiterReader;
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Services.LocationService;
+import com.example.bikebuddy.Utils.HeartRateZoneHelper;
 import com.example.bikebuddy.Utils.MainPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
@@ -96,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
     public long lastHRValue;
     //***********************************************************************************************
 
+    //Heart Rate Zones
+    //***********************************************************************************************
+    public HeartRateZoneHelper heartRateZoneHelper;
+    //***********************************************************************************************
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
         currentHRValue = 0;
         lastHRValue = 0;
+
+        setupHRZoneHelper();
     }
 
     @Override
@@ -262,7 +270,8 @@ public class MainActivity extends AppCompatActivity {
                     //DecimalFormat dec_2 = new DecimalFormat("#0.00"); //2 decimal places
                     DecimalFormat dec_0 = new DecimalFormat("#0"); //0 decimal places https://stackoverflow.com/questions/14845937/java-how-to-set-precision-for-double-value
                     TextView heartRateTextView = (findViewById(R.id.text_heart_rate_rt));
-                    if (heartRateTextView != null) //Check if it is null
+                    TextView zoneTextView = findViewById(R.id.text_zone); //Level of intensity of workout
+                    if (heartRateTextView != null && zoneTextView != null) //Check if it is null
                     {
                         /*
                         When a heart beat is not detected, the sensor sends a value of zero
@@ -270,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
                         if (!(HR_RT <= 0))
                         {
                             heartRateTextView.setText(dec_0.format(HR_RT)); //Update the Heart Rate TextView (Real Time)
+                            updateZoneText(zoneTextView);
                         }
                     }
                 }
@@ -422,5 +432,55 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         return;
+    }
+
+    //Creates a new instance of HeartRateZoneHelper
+    private void setupHRZoneHelper()
+    {
+        heartRateZoneHelper = new HeartRateZoneHelper(this);
+    }
+
+
+    /*
+    The following method updates a text view to display the appropriate intensity
+    Zone 1 --> "Rest"
+    Zone 2 --> "Light Intensity"
+    Zone 3 --> "Moderate Intensity"
+    Zone 4 --> "High Intensity"
+    Zone 5 --> "Maximal Intensity
+     */
+    private void updateZoneText(TextView HRZone)
+    {
+        int zone = heartRateZoneHelper.getZone(HR_RT);
+
+        if (zone == 5)
+        {
+            HRZone.setText(getString(R.string.HR_zone5));
+            HRZone.setBackgroundResource(R.drawable.shape_zone_5);
+        }
+
+        else if (zone == 4)
+        {
+            HRZone.setText(getString(R.string.HR_zone4));
+            HRZone.setBackgroundResource(R.drawable.shape_zone_4);
+        }
+
+        else if (zone == 3)
+        {
+            HRZone.setText(getString(R.string.HR_zone3));
+            HRZone.setBackgroundResource(R.drawable.shape_zone_3);
+        }
+
+        else if (zone == 2)
+        {
+            HRZone.setText(getString(R.string.HR_zone2));
+            HRZone.setBackgroundResource(R.drawable.shape_zone_2);
+        }
+
+        else
+        {
+            HRZone.setText(getString(R.string.HR_zone1));
+            HRZone.setBackgroundResource(R.drawable.shape_zone_1);
+        }
     }
 }
