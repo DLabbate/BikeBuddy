@@ -17,6 +17,7 @@
         app:layout_constraintVertical_bias="0.1">
 
         <FrameLayout
+            android:id="@+id/frame_HR"
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_margin="10dp"
@@ -135,17 +136,22 @@
         android:text="Record Workout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/shape_button_rounded"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#FFFFFF"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_margin="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
         app:cardBackgroundColor="#F5F5F5"
         app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/linearLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -170,5 +176,25 @@
 
     </androidx.cardview.widget.CardView>
 
+    <FrameLayout
+        android:id="@+id/frame_zone"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/text_zone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Rest"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/shape_zone_1"/>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
