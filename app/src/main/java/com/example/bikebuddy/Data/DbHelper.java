@@ -220,6 +220,60 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     /*
+    Filter query to return all workouts between the argument dat and present
+     */
+    public List<Workout> filterWorkoutByDate(Date lowerDate) throws ParseException {
+        Log.d(TAG, "retrieve workouts by date: " + lowerDate);
+        List<Workout> filteredList = new ArrayList<>();
+        List<Date> retrievedDates = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        String[] retrieveColumns = {DbContract.WorkoutEntry._ID,
+                                    DbContract.WorkoutEntry.COLUMN_DATE,
+                                    DbContract.WorkoutEntry.COLUMN_DISTANCE,
+                                    DbContract.WorkoutEntry.COLUMN_DURATION};
+        try {
+            cursor = db.query(DbContract.WorkoutEntry.TABLE_NAME, retrieveColumns, null, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();   //initializes cursor at table start
+                do {
+                    Workout workout = new Workout();
+
+                    //Retrieving data from DB
+                    int id = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry._ID));
+                    Date date = stringToDate(cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DATE)));
+                    if(date.compareTo(lowerDate) > 0) {
+                        double distance = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DISTANCE));
+                        long duration = cursor.getLong(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DURATION));
+
+                        Log.d(TAG, "Workout Inserted: ID = " + id + " Date = " + date);
+                        //adding all workout parameters to workout object to be returned.
+                        workout.setID(id);
+                        workout.setDate(date);
+                        workout.setTotalDistance(distance);
+                        workout.setTotalDuration(duration);
+                        filteredList.add(workout);
+                    }
+                } while (cursor.moveToNext()); //movetoNext returns true if next is nonNull
+                return filteredList;
+            }
+
+        } catch (Exception error) {
+            Log.d(TAG, "Attempting to retrieve Workout data: " + error.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close();
+        }
+        return Collections.emptyList(); //This return is only if the cursor doesn't find the table start, or exception thrown
+
+
+
+    }
+
+
+    /*
     Returns all workouts currently saved from the fitness fragment.
     Returns empty list if there are no workouts
      */
@@ -285,7 +339,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     workoutList.add(workout);
 
                     //Print workout data for debugging
-                    workout.print(TAG);
+                    //workout.print(TAG);
 
                 } while (cursor.moveToNext()); //movetoNext returns true if next is nonNull
                 return workoutList;
