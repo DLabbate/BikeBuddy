@@ -44,6 +44,7 @@ public class LogFragment extends Fragment {
 
     //Ordering Functionality
     Spinner orderSpinner;
+    int currentFilter;
 
     //RecyclerView
     RecyclerView workoutRecyclerView;
@@ -63,6 +64,11 @@ public class LogFragment extends Fragment {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 Log.d(TAG,"onDismiss");
+                try {
+                    filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 refreshList();
             }
         });
@@ -139,6 +145,7 @@ public class LogFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //sort by date
                 if(position == 1){
+                    currentFilter = position;
                     Log.d(TAG,"Selected sort by date ascending");
                     Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
                         @Override
@@ -151,16 +158,17 @@ public class LogFragment extends Fragment {
                             return false;
                         }
                     });
-                    Toast.makeText(getContext(),"Date: Highest to Lowest",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Sorted by Date",Toast.LENGTH_SHORT).show();
                     refreshList();
                 }
                 //sort by distance
                 if(position == 2){
+                    currentFilter = position;
                     Log.d(TAG,"Selected sort by distance ascending");
                     Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
                         @Override
                         public int compare(Workout o1, Workout o2) {
-                            return (int) (o1.getTotalDistance() - o2.getTotalDistance());
+                            return (int) (o2.getTotalDistance() - o1.getTotalDistance());
                         }
 
                         @Override
@@ -169,16 +177,17 @@ public class LogFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(),"Distance: Highest to Lowest",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Sorted by Distance",Toast.LENGTH_SHORT).show();
                     refreshList();
                 }
                 //sort by duration
                 if(position == 3){
+                    currentFilter = position;
                     Log.d(TAG,"Selected sort by duration ascending");
                     Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
                         @Override
                         public int compare(Workout o1, Workout o2) {
-                            return (int) (o1.getTotalDuration() - o2.getTotalDuration());
+                            return (int) (o2.getTotalDuration() - o1.getTotalDuration());
                         }
 
                         @Override
@@ -187,7 +196,7 @@ public class LogFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(),"Duration: Highest to Lowest",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Sorted by Duration",Toast.LENGTH_SHORT).show();
                     refreshList();
                 }
             }
@@ -209,7 +218,6 @@ public class LogFragment extends Fragment {
         workoutRecyclerView.setLayoutManager(linearLayoutManager);
 
     }
-
 }
 
 
