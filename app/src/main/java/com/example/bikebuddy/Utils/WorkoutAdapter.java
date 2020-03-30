@@ -50,7 +50,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         final int click_position = position; //We make a final int so it can be accessed by the onClickListener (inner class)
         Log.d(TAG,"onBindViewHolder: " + workoutList.get(position).getDate());
         holder.textViewDate.setText(new SimpleDateFormat(" EEE, d MMM yyyy hh:mm:ss aaa").format(workoutList.get(position).getDate()));// we would like to display the Date on the log fragment
-        holder.textViewDistance.setText("Distance: " + Integer.toString((int)workoutList.get(position).getTotalDistance()) + "m");
+        holder.textViewDistance.setText("Distance: " + Integer.toString((int)workoutList.get(position).getTotalDistance()) + " m");
         holder.textViewDuration.setText("Duration: " + durationToTime(workoutList.get(position).getTotalDuration()));
         /*
         We need to setup an onClickListener to open a detailed view of the workout
@@ -138,7 +138,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         int P1 = (int) seconds % 60;
         int P2 = (int) seconds / 60;
         int P3 = (int) P2 % 60;
-        P2 = P2 % 60;
+        P2 = P2 / 60;
 
         String time = P2 + ":" + P3 + ":" + P1;
         return time;
