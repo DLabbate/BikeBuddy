@@ -198,16 +198,14 @@ public class LogFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         workoutRecyclerView.setAdapter(workoutAdapter);
         workoutRecyclerView.setLayoutManager(linearLayoutManager);
-
     }
-
 
     //these functions are used to sort the current list of workouts
     private void orderByDate() {
         Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
             @Override
             public int compare(Workout o1, Workout o2) {
-                return o1.getDate().compareTo(o2.getDate());
+                return o2.getDate().compareTo(o1.getDate());
             }
 
             @Override
