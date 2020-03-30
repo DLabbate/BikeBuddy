@@ -70,10 +70,7 @@ public class LogFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                //Recall the last filter used to implement on the newly filtered list
-                if      (currentFilter == 1) orderByDate();
-                else if (currentFilter == 2) orderByDistance();
-                else                         orderByDuration();
+
                 refreshList();
             }
         });
@@ -104,10 +101,15 @@ public class LogFragment extends Fragment {
         setupFAB();
         setupSpinner();
 
+        try {
+            filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         refreshList();
         return view;
     }
-
 
     //Method that can be called from child fragment to pass date value.
     static void setLowerDate(Date date){
@@ -185,6 +187,13 @@ public class LogFragment extends Fragment {
     private void refreshList() {
         Log.d(TAG, "Refresh List");
         Log.d(TAG, "filter List size: " + filteredWorkoutList.size());
+
+        //Recall the last filter used to implement on the newly filtered list
+        if      (currentFilter == 1) orderByDate();
+        else if (currentFilter == 2) orderByDistance();
+        else                         orderByDuration();
+
+        //Populate the recycler view
         workoutAdapter = new WorkoutAdapter(this.getContext(), filteredWorkoutList);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         workoutRecyclerView.setAdapter(workoutAdapter);
