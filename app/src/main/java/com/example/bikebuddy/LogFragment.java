@@ -64,11 +64,16 @@ public class LogFragment extends Fragment {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 Log.d(TAG,"onDismiss");
+                //Filters the workout list based on the button clicked in the dialog fragment
                 try {
                     filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                //Recall the last filter used to implement on the newly filtered list
+                if      (currentFilter == 1) orderByDate();
+                else if (currentFilter == 2) orderByDistance();
+                else                         orderByDuration();
                 refreshList();
             }
         });
@@ -147,17 +152,7 @@ public class LogFragment extends Fragment {
                 if(position == 1){
                     currentFilter = position;
                     Log.d(TAG,"Selected sort by date ascending");
-                    Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
-                        @Override
-                        public int compare(Workout o1, Workout o2) {
-                            return o1.getDate().compareTo(o2.getDate());
-                        }
-
-                        @Override
-                        public boolean equals(Object obj) {
-                            return false;
-                        }
-                    });
+                    orderByDate();
                     Toast.makeText(getContext(),"Sorted by Date",Toast.LENGTH_SHORT).show();
                     refreshList();
                 }
@@ -165,18 +160,7 @@ public class LogFragment extends Fragment {
                 if(position == 2){
                     currentFilter = position;
                     Log.d(TAG,"Selected sort by distance ascending");
-                    Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
-                        @Override
-                        public int compare(Workout o1, Workout o2) {
-                            return (int) (o2.getTotalDistance() - o1.getTotalDistance());
-                        }
-
-                        @Override
-                        public boolean equals(Object obj) {
-                            return false;
-                        }
-                    });
-
+                    orderByDistance();
                     Toast.makeText(getContext(),"Sorted by Distance",Toast.LENGTH_SHORT).show();
                     refreshList();
                 }
@@ -184,18 +168,7 @@ public class LogFragment extends Fragment {
                 if(position == 3){
                     currentFilter = position;
                     Log.d(TAG,"Selected sort by duration ascending");
-                    Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
-                        @Override
-                        public int compare(Workout o1, Workout o2) {
-                            return (int) (o2.getTotalDuration() - o1.getTotalDuration());
-                        }
-
-                        @Override
-                        public boolean equals(Object obj) {
-                            return false;
-                        }
-                    });
-
+                    orderByDuration();
                     Toast.makeText(getContext(),"Sorted by Duration",Toast.LENGTH_SHORT).show();
                     refreshList();
                 }
@@ -217,6 +190,48 @@ public class LogFragment extends Fragment {
         workoutRecyclerView.setAdapter(workoutAdapter);
         workoutRecyclerView.setLayoutManager(linearLayoutManager);
 
+    }
+
+
+    //these functions are used to sort the current list of workouts
+    private void orderByDate() {
+        Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+            @Override
+            public int compare(Workout o1, Workout o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return false;
+            }
+        });
+    }
+    private void orderByDistance(){
+        Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+            @Override
+            public int compare(Workout o1, Workout o2) {
+                return (int) (o2.getTotalDistance() - o1.getTotalDistance());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return false;
+            }
+        });
+    }
+    private void orderByDuration(){
+        Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+            @Override
+            public int compare(Workout o1, Workout o2) {
+                return (int) (o2.getTotalDuration() - o1.getTotalDuration());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return false;
+            }
+        });
     }
 }
 
