@@ -21,7 +21,6 @@ public class Workout {
     private double averageHR;
     private double averageSpeed;
     private int maxHR;
-    private int minHR;
 
     // Empty Constructor
     public Workout(){}
@@ -66,7 +65,6 @@ public class Workout {
         this.averageHR = calculateAverageHR();
         this.averageSpeed = calculateAverageSpeed();
         this.maxHR = calculateMaxHR();
-        this.minHR = calculateMinHR();
     }
 
 
@@ -139,12 +137,6 @@ public class Workout {
     public void setMaxHR(int maxHR) {
         this.maxHR = maxHR;
     }
-    public int getMinHR() {
-        return minHR;
-    }
-    public void setMinHR(int minHR) {
-        this.minHR = minHR;
-    }
     public double getCaloriesRate() {
         return caloriesRate;
     }
@@ -182,9 +174,6 @@ public class Workout {
     }
     private int calculateMaxHR() {
         return Collections.max(listHR).intValue();
-    }
-    private int calculateMinHR() {
-        return Collections.min(listHR).intValue();
     }
     /*
     Prints all the data of a workout in a log

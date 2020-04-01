@@ -45,19 +45,17 @@ public class SharedPreferenceHelper {
         editor.commit();
     }
     //Setters for summary view
-    public void saveSummary(Integer distance, Integer duration, Integer HR_max, Integer HR_min, Integer burnedCal, Integer numWorkouts){
+    public void saveSummary(Integer distance, Integer duration, Integer HR_max, Integer burnedCal, Integer numWorkouts){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("TotalDistance", distance);
         editor.putInt("TotalDuration", duration);
         editor.putInt("maxHR", HR_max);
-        editor.putInt("minHR", HR_min);
         editor.putInt("burnedCalories", burnedCal);
         editor.putInt("number_of_Workouts", numWorkouts);
 
         Log.d(TAG,"Saving Total Distance: " + distance);
         Log.d(TAG,"Saving Total Duration: " + duration);
         Log.d(TAG,"Saving Max HR: " + HR_max);
-        Log.d(TAG,"Saving Min HR: " + HR_min);
         Log.d(TAG,"Saving Calories Burned: " + burnedCal);
         Log.d(TAG,"Saving Number of Workouts: " + numWorkouts);
         editor.commit();
@@ -101,21 +99,19 @@ public class SharedPreferenceHelper {
     }
     //Getter for summary Activity
     public int[] getSummaryData(){
-        int[] summaryData = new int[6];
+        int[] summaryData = new int[5];
 
         summaryData[0] = sharedPreferences.getInt("TotalDistance",-1);
         summaryData[1] = sharedPreferences.getInt("TotalDuration",-1);
         summaryData[2] = sharedPreferences.getInt("maxHR",-1);
-        summaryData[3] = sharedPreferences.getInt("minHR",-1);
-        summaryData[4] = sharedPreferences.getInt("burnedCalories",-1);
-        summaryData[5] = sharedPreferences.getInt("number_of_Workouts",-1);
+        summaryData[3] = sharedPreferences.getInt("burnedCalories",-1);
+        summaryData[4] = sharedPreferences.getInt("number_of_Workouts",-1);
 
         Log.d(TAG,"Retrieving Total Distance: " + summaryData[0]);
-        Log.d(TAG,"Retrieving Total Duration: " + summaryData[0]);
-        Log.d(TAG,"Retrieving Max HR: " + summaryData[0]);
-        Log.d(TAG,"Retrieving Min HR: " + summaryData[0]);
-        Log.d(TAG,"Retrieving Calories Burned: " + summaryData[0]);
-        Log.d(TAG,"Retrieving Number of Workouts: " + summaryData[0]);
+        Log.d(TAG,"Retrieving Total Duration: " + summaryData[1]);
+        Log.d(TAG,"Retrieving Max HR: " + summaryData[2]);
+        Log.d(TAG,"Retrieving Calories Burned: " + summaryData[3]);
+        Log.d(TAG,"Retrieving Number of Workouts: " + summaryData[4]);
 
         return summaryData;
     }
