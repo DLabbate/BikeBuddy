@@ -25,7 +25,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="@dimen/performanceCardCornerRadius">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -43,8 +44,9 @@
                         android:layout_height="wrap_content"
                         android:text="Max HR (bpm)"
                         android:layout_marginTop="10dp"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/performanceTitles"/>
                     <TextView
+                        android:id="@+id/textMaxHR"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="190"
@@ -57,7 +59,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="@dimen/performanceCardCornerRadius">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -74,8 +77,9 @@
                         android:layout_height="wrap_content"
                         android:text="Total Calories Burned"
                         android:layout_marginTop="10dp"
-                        android:textSize="16sp"/>
+                        android:textSize="@dimen/performanceTitles"/>
                     <TextView
+                        android:id="@+id/textTotalCaloriesBurned"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="40000"
@@ -92,7 +96,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="@dimen/performanceCardCornerRadius">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -111,8 +116,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Total Distance (m)"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/performanceTitles"/>
                     <TextView
+                        android:id="@+id/textTotalDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="100000"
@@ -125,7 +131,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="@dimen/performanceCardCornerRadius">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -144,8 +151,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Total Duration"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/performanceTitles"/>
                     <TextView
+                        android:id="@+id/textTotalDuration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="14d/23h/50m"
@@ -163,7 +171,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="@dimen/performanceCardCornerRadius">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -182,8 +191,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Total Workouts"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/performanceTitles" />
                     <TextView
+                        android:id="@+id/textTotalWorkouts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="50"
@@ -196,7 +206,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="@dimen/performanceCardCornerRadius">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -215,8 +226,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Average Distance (m)"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/performanceTitles" />
                     <TextView
+                        android:id="@+id/textAverageDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1200"
