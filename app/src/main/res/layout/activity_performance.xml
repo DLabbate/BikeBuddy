@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:gravity="center">
             <androidx.cardview.widget.CardView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
                 android:layout_margin="5dp">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -36,14 +36,14 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_heart"
-                        android:tint="#FF0000"/>
+                        android:src="@drawable/ic_heart_beat"
+                        />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Max HR (bpm)"
                         android:layout_marginTop="10dp"
-                        android:textSize="17sp"/>
+                        android:textSize="16sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -55,8 +55,49 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_distance"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Calories Burned"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="190"
+                        android:layout_marginTop="10dp"
+                        android:textSize="30sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <androidx.cardview.widget.CardView
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:layout_margin="5dp">
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="175dp"
+                android:layout_height="175dp"
                 android:layout_margin="5dp">
             </androidx.cardview.widget.CardView>
         </TableRow>
@@ -66,14 +107,14 @@
             android:layout_height="wrap_content"
             android:gravity="center">
             <androidx.cardview.widget.CardView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
                 android:layout_margin="5dp">
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
                 android:layout_margin="5dp">
             </androidx.cardview.widget.CardView>
         </TableRow>
