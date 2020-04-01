@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".PerformanceActivity">
 
+    <include layout="@layout/toolbar_performance"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
