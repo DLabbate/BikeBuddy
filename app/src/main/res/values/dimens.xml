@@ -10,4 +10,7 @@
 
     <dimen name="HRZoneCircleRadius">40dp</dimen>
 
+    <dimen name="performanceValues">24sp</dimen>
+    <dimen name="performanceValuesTopMargin">30dp</dimen>
+
 </resources>

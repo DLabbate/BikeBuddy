@@ -36,7 +36,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_heart_beat"
+                        android:src="@drawable/ic_performance_heart"
                         />
                     <TextView
                         android:layout_width="wrap_content"
@@ -48,8 +48,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="190"
-                        android:layout_marginTop="10dp"
-                        android:textSize="30sp"/>
+                        android:layout_marginTop="@dimen/performanceValuesTopMargin"
+                        android:textSize="@dimen/performanceValues"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -68,7 +68,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_distance"/>
+                        android:src="@drawable/ic_performance_calories"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -78,9 +78,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="190"
-                        android:layout_marginTop="10dp"
-                        android:textSize="30sp"/>
+                        android:text="40000"
+                        android:layout_marginTop="@dimen/performanceValuesTopMargin"
+                        android:textSize="@dimen/performanceValues"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </TableRow>
@@ -93,12 +93,66 @@
                 android:layout_width="175dp"
                 android:layout_height="175dp"
                 android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_performance_distance"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Total Distance (m)"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100000"
+                        android:layout_marginTop="@dimen/performanceValuesTopMargin"
+                        android:textSize="@dimen/performanceValues"/>
+
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
                 android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_performance_heart"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Total Duration"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="14d/23h/50m"
+                        android:layout_marginTop="@dimen/performanceValuesTopMargin"
+                        android:textSize="@dimen/performanceValues"/>
+
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
         </TableRow>
 
@@ -110,12 +164,66 @@
                 android:layout_width="175dp"
                 android:layout_height="175dp"
                 android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_performance_heart"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Total Workouts"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="50"
+                        android:layout_marginTop="@dimen/performanceValuesTopMargin"
+                        android:textSize="@dimen/performanceValues"/>
+
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="175dp"
                 android:layout_height="175dp"
                 android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_performance_heart"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Average Distance (m)"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1200"
+                        android:layout_marginTop="@dimen/performanceValuesTopMargin"
+                        android:textSize="@dimen/performanceValues"/>
+
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
         </TableRow>
     </TableLayout>
