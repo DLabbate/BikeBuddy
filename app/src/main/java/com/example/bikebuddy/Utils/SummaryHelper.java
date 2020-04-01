@@ -43,12 +43,11 @@ public class SummaryHelper {
 
 
         if(workout.getMaxHR() > maxHR) maxHR = workout.getMaxHR();
-        if(workout.getMinHR() > minHR) minHR = workout.getMinHR();
 
         calBurned += workout.getCaloriesBurned();
         numWorkouts = dbHelper.getWorkouts().size();
 
-        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, minHR, calBurned, numWorkouts);
+        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts);
     }
 
     private void updateDeleteWorkout(Workout workout){
@@ -57,12 +56,11 @@ public class SummaryHelper {
 
         //TODO: find way to get max HR with workout deletion
         if(Collections.max(workout.getListHR()) > maxHR) maxHR = Collections.max(workout.getListHR()).intValue();
-        if(Collections.max(workout.getListHR()) > minHR) minHR = Collections.min(workout.getListHR()).intValue();
 
         calBurned -= workout.getCaloriesBurned();
         numWorkouts = dbHelper.getWorkouts().size();
 
-        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, minHR, calBurned, numWorkouts);
+        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts);
     }
 
 
