@@ -217,7 +217,9 @@ public class RecordingService extends Service {
          */
 
         totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
-        workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, calRateEstimate);
+        //workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, calRateEstimate);
+        workout = new Workout(time,listHR,listSpeed, listLatPoints, listLngPoints, totalDistance,totalDuration, calRateEstimate);
+
         workout.print(TAG);
 
         //Add the workout to the DB;

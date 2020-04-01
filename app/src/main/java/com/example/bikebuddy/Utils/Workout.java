@@ -52,24 +52,26 @@ public class Workout {
         this.averageSpeed = averageSpeed;
     }
 
-    // Constructor without date and INCLUDES lists of Lat and Lng coordinates
-    public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, List<Double> listLatCoords, List<Double> listLngCoords, double totalDistance, long totalDuration, double caloriesBurned, double averageHR, double averageSpeed) {
-        this.date=  Calendar.getInstance().getTime();
-        this.time = time;
-        this.listHR = listHR;
-        this.listSpeed = listSpeed;
-        this.listLatCoords = listLatCoords;
-        this.listLngCoords = listLngCoords;
-        this.totalDistance = totalDistance;
-        this.totalDuration = totalDuration;
-        this.caloriesBurned = caloriesBurned;
-        this.averageHR = averageHR;
-        this.averageSpeed = averageSpeed;
-    }
 
     // Constructor without average values
     // Date is not included either
     public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, double totalDistance, long totalDuration, double caloriesRate) {
+        this.date=  Calendar.getInstance().getTime();
+        this.time = time;
+        this.listHR = listHR;
+        this.listSpeed = listSpeed;
+        this.totalDistance = totalDistance;
+        this.totalDuration = totalDuration;
+        this.caloriesBurned = calculateCaloriesBurned(caloriesRate);
+        this.caloriesRate = caloriesRate;
+        this.averageHR = calculateAverageHR();
+        this.averageSpeed = calculateAverageSpeed();
+    }
+
+    // Constructor without average values
+    // Date is not included either
+    //Includes LatLng lists
+    public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, List<Double> listLatCoords, List<Double> listLngCoords, double totalDistance, long totalDuration, double caloriesRate) {
         this.date=  Calendar.getInstance().getTime();
         this.time = time;
         this.listHR = listHR;
