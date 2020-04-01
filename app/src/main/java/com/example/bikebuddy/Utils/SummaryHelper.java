@@ -5,6 +5,8 @@ import android.content.Context;
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.SharedPreferenceHelper;
 
+import java.util.Collections;
+
 public class SummaryHelper {
 
     SharedPreferenceHelper sharedPreferenceHelper;
@@ -25,7 +27,43 @@ public class SummaryHelper {
         loadCurrentProfile();
     }
 
+    private void loadCurrentProfile(){
+        int[] retrievedData = sharedPreferenceHelper.getSummaryData();
+        distance = retrievedData[0];
+        duration = retrievedData[1];
+        maxHR = retrievedData[2];
+        minHR = retrievedData[3];
+        calBurned = retrievedData[4];
+        numWorkouts = retrievedData[5];
+    }
 
+    private void updateInsertWorkout(Workout workout){
+        distance += workout.getTotalDistance();
+        duration += workout.getTotalDuration();
+
+
+        if(Collections.max(workout.getListHR()) > maxHR) maxHR = Collections.max(workout.getListHR()).intValue();
+        if(Collections.max(workout.getListHR()) > minHR) minHR = Collections.min(workout.getListHR()).intValue();
+
+        calBurned += workout.getCaloriesBurned();
+        numWorkouts = dbHelper.getWorkouts().size();
+
+        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, minHR, calBurned, numWorkouts);
+    }
+
+    private void updateDeleteWorkout(Workout workout){
+        distance -= workout.getTotalDistance();
+        duration -= workout.getTotalDuration();
+
+        //TODO: find way to get max HR with workout deletion
+        if(Collections.max(workout.getListHR()) > maxHR) maxHR = Collections.max(workout.getListHR()).intValue();
+        if(Collections.max(workout.getListHR()) > minHR) minHR = Collections.min(workout.getListHR()).intValue();
+
+        calBurned -= workout.getCaloriesBurned();
+        numWorkouts = dbHelper.getWorkouts().size();
+
+        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, minHR, calBurned, numWorkouts);
+    }
 
 
 
