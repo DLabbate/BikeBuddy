@@ -2,6 +2,7 @@ package com.example.bikebuddy.Utils;
 
 import android.util.Log;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -19,7 +20,8 @@ public class Workout {
     private double caloriesRate;
     private double averageHR;
     private double averageSpeed;
-
+    private int maxHR;
+    private int minHR;
 
     // Empty Constructor
     public Workout(){}
@@ -63,7 +65,11 @@ public class Workout {
         this.caloriesRate = caloriesRate;
         this.averageHR = calculateAverageHR();
         this.averageSpeed = calculateAverageSpeed();
+        this.maxHR = calculateMaxHR();
+        this.minHR = calculateMinHR();
     }
+
+
 
 
     //Setters and Getters
@@ -127,11 +133,21 @@ public class Workout {
     public void setID(int ID) {
         this.ID = ID;
     }
-
+    public int getMaxHR() {
+        return maxHR;
+    }
+    public void setMaxHR(int maxHR) {
+        this.maxHR = maxHR;
+    }
+    public int getMinHR() {
+        return minHR;
+    }
+    public void setMinHR(int minHR) {
+        this.minHR = minHR;
+    }
     public double getCaloriesRate() {
         return caloriesRate;
     }
-
     public void setCaloriesRate(double caloriesRate) {
         this.caloriesRate = caloriesRate;
     }
@@ -163,6 +179,12 @@ public class Workout {
     public double calculateCaloriesBurned(double calRate) {
         caloriesBurned = calRate * time.get(time.size()-1) / 60;   //returns total burned
         return caloriesBurned;
+    }
+    private int calculateMaxHR() {
+        return Collections.max(listHR).intValue();
+    }
+    private int calculateMinHR() {
+        return Collections.min(listHR).intValue();
     }
     /*
     Prints all the data of a workout in a log
