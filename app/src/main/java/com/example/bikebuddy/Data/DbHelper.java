@@ -45,6 +45,8 @@ public class DbHelper extends SQLiteOpenHelper {
         This is the string to create the workout table. It uses the DB contract (which holds the
         format for tables to be created)
      */
+
+    /*
     private static final String CREATE_TABLE_WORKOUTS = "CREATE TABLE " + DbContract.WorkoutEntry.TABLE_NAME + "(" +
             DbContract.WorkoutEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             DbContract.WorkoutEntry.COLUMN_DATE + " STRING NOT NULL," +
@@ -58,6 +60,25 @@ public class DbHelper extends SQLiteOpenHelper {
             DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_TOT + " INTEGER NOT NULL" + ")";
+
+     */
+
+    private static final String CREATE_TABLE_WORKOUTS = "CREATE TABLE " + DbContract.WorkoutEntry.TABLE_NAME + "(" +
+            DbContract.WorkoutEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            DbContract.WorkoutEntry.COLUMN_DATE + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_DURATION + " REAL NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_DISTANCE + " REAL NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_TIME_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_SPEED_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_AVG + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_SPEED_AVG + " REAL NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_CALORIES_TOT + " INTEGER NOT NULL" + ")";
+
 
     /*
     This is the string to create the bike table. It uses the DB contract (which holds the
@@ -122,12 +143,16 @@ public class DbHelper extends SQLiteOpenHelper {
         String serializeTime = gson.toJson(workout.getTime());
         String serializeHR = gson.toJson(workout.getListHR());
         String serializeSpeed = gson.toJson(workout.getListSpeed());
+        String serializeLatCoord = gson.toJson(workout.getListLatCoords());
+        String serializeLngCoord = gson.toJson(workout.getListLngCoords());
         //Log.d(TAG,"JSONtime = " + serializeTime);
         //Log.d(TAG,"JSONhr = " + serializeHR);
         //Log.d(TAG,"JSONspeed = " + serializeSpeed);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_TIME_LIST,serializeTime);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_HR_LIST,serializeHR);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_SPEED_LIST,serializeSpeed);
+        contentValues.put(DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST,serializeSpeed);
+        contentValues.put(DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST,serializeSpeed);
 
         //random bike value assigned to all workouts (tentative)
         //TODO: handle packaging bike objects
