@@ -39,8 +39,6 @@ public class LogFragment extends Fragment {
     RecyclerView.Adapter workoutAdapter;
     RecyclerView.LayoutManager linearLayoutManager;
 
-    //MapView
-    private MapView gMapView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +73,8 @@ public class LogFragment extends Fragment {
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
         FAB_filterByDate = view.findViewById(R.id.FAB_filter_workouts);
-        gMapView = view.findViewById(R.id.mapViewLogs);
+
+
         setupFAB();
 
         refreshList();

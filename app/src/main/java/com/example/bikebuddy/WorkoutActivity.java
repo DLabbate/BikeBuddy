@@ -28,6 +28,9 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -37,7 +40,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class WorkoutActivity extends AppCompatActivity {
+public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     /*
     This activity is to display detailed information of a single workout
@@ -77,6 +80,11 @@ public class WorkoutActivity extends AppCompatActivity {
     //----------------------------------------Toolbar------------------------------------------------//
     ImageView imageViewBack;
 
+    //----------------------------------------MapView------------------------------------------------//
+    MapView gMapView;
+    GoogleMap gMap = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +95,7 @@ public class WorkoutActivity extends AppCompatActivity {
         dbHelper = new DbHelper(context);
 
         setupUI();
+        setupMapView(savedInstanceState);
 
         __ID = getIntent().getIntExtra("__ID",-1);
 
@@ -143,6 +152,20 @@ public class WorkoutActivity extends AppCompatActivity {
 
         heartRateZoneHelper = new HeartRateZoneHelper(this);
         pieChartZones = findViewById(R.id.pie_chart_zones);
+
+
+    }
+    /*
+    This method is used for setting up the UI elements regarding the Google Map
+    (associating the references with the appropriate views in the xml layout files)
+     */
+    private void setupMapView(Bundle savedInstanceState){
+        gMapView = findViewById(R.id.mapViewLogs);
+
+        gMapView.onCreate(savedInstanceState);
+        gMapView.onResume();
+
+        gMapView.getMapAsync(this);
     }
 
     /*
@@ -373,5 +396,10 @@ public class WorkoutActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        gMap = googleMap;
     }
 }
