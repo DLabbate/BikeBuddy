@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.example.bikebuddy.Utils.WorkoutAdapter;
+import com.google.android.gms.maps.MapView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
@@ -37,6 +38,9 @@ public class LogFragment extends Fragment {
     RecyclerView workoutRecyclerView;
     RecyclerView.Adapter workoutAdapter;
     RecyclerView.LayoutManager linearLayoutManager;
+
+    //MapView
+    private MapView gMapView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,9 +75,12 @@ public class LogFragment extends Fragment {
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
         FAB_filterByDate = view.findViewById(R.id.FAB_filter_workouts);
+        gMapView = view.findViewById(R.id.mapViewLogs);
         setupFAB();
 
         refreshList();
+
+
         return view;
     }
 
