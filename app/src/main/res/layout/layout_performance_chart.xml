@@ -34,9 +34,9 @@
                 android:background="@drawable/shape_profile_textview"/>
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/spinnerParameter"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="30dp"/>
 
             <TextView
                 android:id="@+id/textView2"
@@ -44,16 +44,15 @@
                 android:layout_height="wrap_content"
                 android:text="Number of Workouts"
                 android:background="@drawable/shape_profile_textview"/>
-
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/spinnerNumberWorkouts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="30dp"/>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChartPerformance"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="300dp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

@@ -1,14 +1,21 @@
 package com.example.bikebuddy;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -39,6 +46,13 @@ public class PerformanceActivity extends AppCompatActivity {
     private LineChart lineChartPerformance;
     //***************************************************************************************************
 
+    //Spinners
+    //***************************************************************************************************
+    private Spinner spinnerParameter;
+    private Spinner spinnerNumberWorkouts;
+    //***************************************************************************************************
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +61,8 @@ public class PerformanceActivity extends AppCompatActivity {
         setupUI();
 
         loadDataTest();
+        setupSpinnerParameter();
+        setupSpinnerNumberWorkouts();
     }
 
     /*
@@ -56,6 +72,8 @@ public class PerformanceActivity extends AppCompatActivity {
     {
         imageViewPerformance = findViewById(R.id.image_performance_back);
         lineChartPerformance = findViewById(R.id.lineChartPerformance);
+        spinnerParameter = findViewById(R.id.spinnerParameter);
+        spinnerNumberWorkouts = findViewById(R.id.spinnerNumberWorkouts);
 
         //Setup navigation to main activity (BACK BUTTON)
         if (imageViewPerformance != null)
@@ -116,5 +134,53 @@ public class PerformanceActivity extends AppCompatActivity {
 
         lineChartPerformance.invalidate();
     }
+
+
+    private void setupSpinnerParameter(){
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(PerformanceActivity.this,
+                android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.performanceParameters));
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerParameter.setAdapter(arrayAdapter);
+
+        spinnerParameter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setupSpinnerNumberWorkouts(){
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(PerformanceActivity.this,
+                android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.performanceNumberWorkouts));
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerNumberWorkouts.setAdapter(arrayAdapter);
+
+        spinnerNumberWorkouts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
 
 }
