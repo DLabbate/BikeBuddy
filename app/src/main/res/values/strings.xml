@@ -43,6 +43,7 @@
     <!--Performance Chart Parameters-->
     <string-array name="performanceParameters">
         <item>Heart Rate (bpm)</item>
+        <item>Calories</item>
         <item>Distance (m)</item>
         <item>Duration (hours)</item>
     </string-array>
