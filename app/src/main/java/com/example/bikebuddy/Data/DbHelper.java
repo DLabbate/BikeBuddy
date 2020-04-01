@@ -338,12 +338,16 @@ public class DbHelper extends SQLiteOpenHelper {
                     String JSONtime = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_TIME_LIST));
                     String JSONhr = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_LIST));
                     String JSONspeed = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_LIST));
+                    String JSONlatcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST));
+                    String JSONlngcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST));
 
                     Type listType_long = new TypeToken<Collection<Long>>(){}.getType();
                     Type listType_double = new TypeToken<Collection<Double>>(){}.getType();
                     List<Long> time = gson.fromJson(JSONtime,listType_long);
                     List<Double> heartRate = gson.fromJson(JSONhr,listType_double);
                     List<Double> speed = gson.fromJson(JSONspeed,listType_double);
+                    List<Double> latcoords = gson.fromJson(JSONlatcoord, listType_double);
+                    List<Double> lngcoords = gson.fromJson(JSONlngcoord, listType_double);
 
                     //Retrieving data from DB
                     int id = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry._ID));
@@ -369,6 +373,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     workout.setAverageSpeed(avgSpeed);
                     workout.setCaloriesRate(calRate);
                     workout.setCaloriesBurned(calTotal);
+                    workout.setListLatCoords(latcoords);
+                    workout.setListLngCoords(lngcoords);
                     workoutList.add(workout);
 
                     //Print workout data for debugging
