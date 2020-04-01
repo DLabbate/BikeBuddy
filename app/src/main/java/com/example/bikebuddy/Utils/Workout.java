@@ -13,6 +13,8 @@ public class Workout {
     private List <Long> time;
     private List <Double> listHR;
     private List <Double> listSpeed;
+    private List <Double> listLatCoords;
+    private List <Double> listLngCoords;
     private double totalDistance;
     private long totalDuration;
     private double caloriesBurned;
@@ -43,6 +45,21 @@ public class Workout {
         this.time = time;
         this.listHR = listHR;
         this.listSpeed = listSpeed;
+        this.totalDistance = totalDistance;
+        this.totalDuration = totalDuration;
+        this.caloriesBurned = caloriesBurned;
+        this.averageHR = averageHR;
+        this.averageSpeed = averageSpeed;
+    }
+
+    // Constructor without date and INCLUDES lists of Lat and Lng coordinates
+    public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, List<Double> listLatCoords, List<Double> listLngCoords, double totalDistance, long totalDuration, double caloriesBurned, double averageHR, double averageSpeed) {
+        this.date=  Calendar.getInstance().getTime();
+        this.time = time;
+        this.listHR = listHR;
+        this.listSpeed = listSpeed;
+        this.listLatCoords = listLatCoords;
+        this.listLngCoords = listLngCoords;
         this.totalDistance = totalDistance;
         this.totalDuration = totalDuration;
         this.caloriesBurned = caloriesBurned;
@@ -94,6 +111,9 @@ public class Workout {
     public double getTotalDistance() {
         return totalDistance;
     }
+
+
+
     public void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;
     }

@@ -38,6 +38,8 @@ public class RecordingService extends Service {
     private ArrayList <Double> listHR;
     private ArrayList <Double> listSpeed;
     private ArrayList <LatLng> listGeoPoints;
+    private ArrayList <Double> listLatPoints;
+    private ArrayList <Double> listLngPoints;
     private double totalDistance;
     private long totalDuration;
     private double caloriesRate;
@@ -99,7 +101,8 @@ public class RecordingService extends Service {
         this.time = new ArrayList<>();
         this.listHR = new ArrayList<>();
         this.listSpeed = new ArrayList<>();
-        this.listGeoPoints = new ArrayList<>();
+        this.listLatPoints = new ArrayList<>();
+        this.listLngPoints = new ArrayList<>();
         this.totalDistance = 0;
         this.totalDuration = 0;
         this.caloriesRate = 0;
@@ -183,6 +186,9 @@ public class RecordingService extends Service {
         listHR.add(MainActivity.HR_RT);                                                                 //Heart Rate list
         listSpeed.add(LocationService.SPEED_RT);                                                        //Speed list
         totalDistance = LocationService.WORKOUT_DISTANCE;                                               //Total Distance
+        listLatPoints.add(LocationService.lastKnownLat);
+        listLngPoints.add(LocationService.lastKnownLng);
+
         //*****************************************************************************************************************************
     }
 
