@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".BikeActivity"></activity>
+        <activity android:name=".PerformanceActivity"></activity>
+        <activity android:name=".BikeActivity" />
 
         <service
             android:name=".Services.RecordingService"
@@ -40,7 +41,7 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".WorkoutActivity"
             android:screenOrientation="portrait" />
