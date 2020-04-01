@@ -78,7 +78,7 @@ public class PerformanceActivity extends AppCompatActivity {
         setupUI();
         setupDB();
 
-        loadDataTest();
+        //loadDataTest();
         setupSpinnerParameter();
         setupSpinnerNumberWorkouts();
     }
@@ -317,7 +317,7 @@ public class PerformanceActivity extends AppCompatActivity {
         {
             for (int i = 0; i < totalWorkouts; i++)
             {
-                Workout currentWorkout = filteredWorkoutList.get(i);
+                Workout currentWorkout = filteredWorkoutList.get(totalWorkouts - i - 1);
 
                 /*
                 NOTE the entry x-axis is "totalWorkouts - i" so that index 0 is the oldest in the list
@@ -360,7 +360,7 @@ public class PerformanceActivity extends AppCompatActivity {
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
         lineChartPerformance.setData(lineData);
-        lineChartPerformance.getXAxis().setDrawLabels(false); //X-axis not visible for now
+        //lineChartPerformance.getXAxis().setDrawLabels(false); //X-axis not visible for now
         lineChartPerformance.getDescription().setEnabled(false); //Description not visible for now
 
         lineDataSet1.setDrawCircles(true);
