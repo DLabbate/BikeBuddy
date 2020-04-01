@@ -110,6 +110,23 @@ public class Workout {
     public void setListSpeed(List<Double> listSpeed) {
         this.listSpeed = listSpeed;
     }
+
+    public List<Double> getListLatCoords() {
+        return listLatCoords;
+    }
+
+    public void setListLatCoords(List<Double> listLatCoords) {
+        this.listLatCoords = listLatCoords;
+    }
+
+    public List<Double> getListLngCoords() {
+        return listLngCoords;
+    }
+
+    public void setListLngCoords(List<Double> listLngCoords) {
+        this.listLngCoords = listLngCoords;
+    }
+
     public double getTotalDistance() {
         return totalDistance;
     }
