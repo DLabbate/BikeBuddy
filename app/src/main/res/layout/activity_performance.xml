@@ -103,7 +103,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_performance_distance"
+                        android:src="@drawable/ic_performance_map"
                         />
 
                     <TextView
@@ -136,7 +136,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_performance_heart"
+                        android:src="@drawable/ic_performance_timer"
                         />
 
                     <TextView
@@ -174,7 +174,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_performance_heart"
+                        android:src="@drawable/ic_performance_cyclist"
                         />
 
                     <TextView
@@ -207,7 +207,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_performance_heart"
+                        android:src="@drawable/ic_performance_distance"
                         />
 
                     <TextView
