@@ -42,8 +42,8 @@ public class SummaryHelper {
         duration += workout.getTotalDuration();
 
 
-        if(Collections.max(workout.getListHR()) > maxHR) maxHR = Collections.max(workout.getListHR()).intValue();
-        if(Collections.max(workout.getListHR()) > minHR) minHR = Collections.min(workout.getListHR()).intValue();
+        if(workout.getMaxHR() > maxHR) maxHR = workout.getMaxHR();
+        if(workout.getMinHR() > minHR) minHR = workout.getMinHR();
 
         calBurned += workout.getCaloriesBurned();
         numWorkouts = dbHelper.getWorkouts().size();
