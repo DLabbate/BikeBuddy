@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Models.PolylineData;
 import com.example.bikebuddy.Utils.HeartRateZoneHelper;
 import com.example.bikebuddy.Utils.PercentFormatter;
 import com.example.bikebuddy.Utils.Workout;
@@ -28,9 +29,15 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -83,6 +90,8 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
     //----------------------------------------MapView------------------------------------------------//
     MapView gMapView;
     GoogleMap gMap = null;
+    List<Double> latcoords;
+    List<Double> lngcoords;
 
 
     @Override
@@ -125,6 +134,10 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         List<Long> time = workout.getTime();
         List<Double> heartRate = workout.getListHR();
         List<Double> speed = workout.getListSpeed();
+        latcoords = workout.getListLatCoords();
+        lngcoords = workout.getListLngCoords();
+
+        System.out.println("WORKOUT ACTIVITY ON CREATE  " + latcoords.get(0));
 
         loadDataHR(heartRate);
         loadDataSpeed(speed);
@@ -132,6 +145,7 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
 
         //Setup toolbar back button for navigation to main activity
         setupBackButton();
+
     }
 
     /*
@@ -401,5 +415,84 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
+
+        addPolylineToMap(latcoords,lngcoords);
+
     }
+
+    private void addPolylineToMap(List<Double> latcoords, List<Double> lngcoords){
+
+
+        List<LatLng> path = new ArrayList<>();
+
+        for(int i=0; i<latcoords.size(); i++){
+
+            path.add(new LatLng(
+                    latcoords.get(i),
+                    lngcoords.get(i)));
+
+            System.out.println("ADD POLYLINE TO MAP" + path.get(i));
+
+        }
+
+
+
+        Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(path));
+
+        polyline.setColor(ContextCompat.getColor(context, R.color.colorAccent));
+
+        focusCamera(polyline.getPoints());
+
+        /*
+        System.out.println("DECODED PATH+++++++++++++++++" + decodedPath.get(10));
+
+         This loops through all the LatLng coordinates of ONE polyline.
+        for(com.google.maps.model.LatLng latLng: decodedPath){
+
+//                        Log.d(TAG, "run: latlng: " + latLng.toString());
+
+            newDecodedPath.add(new LatLng(
+                    latLng.lat,
+                    latLng.lng
+
+            ));
+            double test = latLng.lng;
+        }
+
+        System.out.println("NEWDECODED PATH(latlng type)+++++++++++++++++" + newDecodedPath.get(10));
+
+        Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
+        polyline.setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
+        polyline.setClickable(true);
+        mPolylines.add(new PolylineData(polyline,route.legs[0]));
+
+        double tmp = route.legs[0].duration.inSeconds;
+
+        Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
+        polyline.setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
+
+         */
+    }
+
+    /**
+     *Zooms the camera on a route
+     */
+    public void focusCamera(List<LatLng> LatLngRoute) {
+
+        if (gMap == null || LatLngRoute == null || LatLngRoute.isEmpty()) return;
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : LatLngRoute)
+            boundsBuilder.include(latLngPoint);
+
+        int routePadding = 400;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+
+        gMap.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
+                600,
+                null
+        );
+    }
+
 }

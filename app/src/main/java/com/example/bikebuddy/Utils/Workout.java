@@ -76,6 +76,8 @@ public class Workout {
         this.time = time;
         this.listHR = listHR;
         this.listSpeed = listSpeed;
+        this.listLatCoords = listLatCoords;
+        this.listLngCoords = listLngCoords;
         this.totalDistance = totalDistance;
         this.totalDuration = totalDuration;
         this.caloriesBurned = calculateCaloriesBurned(caloriesRate);
