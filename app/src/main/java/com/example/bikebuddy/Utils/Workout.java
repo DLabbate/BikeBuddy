@@ -35,6 +35,7 @@ public class Workout {
         this.totalDuration = totalDuration;
         this.caloriesBurned = caloriesBurned;
         this.averageHR = averageHR;
+        this.maxHR = calculateMaxHR();
         this.averageSpeed = averageSpeed;
     }
 
@@ -48,6 +49,7 @@ public class Workout {
         this.totalDuration = totalDuration;
         this.caloriesBurned = caloriesBurned;
         this.averageHR = averageHR;
+        this.maxHR = calculateMaxHR();
         this.averageSpeed = averageSpeed;
     }
 
@@ -63,6 +65,7 @@ public class Workout {
         this.caloriesBurned = calculateCaloriesBurned(caloriesRate);
         this.caloriesRate = caloriesRate;
         this.averageHR = calculateAverageHR();
+        this.maxHR = calculateMaxHR();
         this.averageSpeed = calculateAverageSpeed();
         this.maxHR = calculateMaxHR();
     }
@@ -172,7 +175,7 @@ public class Workout {
         caloriesBurned = calRate * time.get(time.size()-1) / 60;   //returns total burned
         return caloriesBurned;
     }
-    private int calculateMaxHR() {
+    public int calculateMaxHR() {
         return Collections.max(listHR).intValue();
     }
     /*

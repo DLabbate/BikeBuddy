@@ -195,18 +195,22 @@ public class FitnessFragment extends Fragment {
                         workout.setListHR(listHR);
                         workout.setAverageSpeed(workout.calculateAverageSpeed());
                         workout.setAverageHR(workout.calculateAverageHR());
+                        workout.setMaxHR(workout.calculateMaxHR());
                         workout.setCaloriesRate(calRateEstimate);
                         workout.setCaloriesBurned(workout.calculateCaloriesBurned(calRateEstimate));
                         workout.setTotalDuration(listTime.get(listTime.size()-1)-listTime.get(0));
                         workout.setTotalDistance(workout.calculateAverageSpeed()*workout.getTotalDuration()/3.6);
                         workout.setDate(date);
-                        //workout.print(TAG);
+                        workout.print(TAG);
 
                         //add workout to database
                         dbHelper.insertWorkout(workout);
+
+                        /*
                         Log.d(TAG,"Workout created with random date: " + date);
                         Log.d(TAG,"Workout calRate = " + calRateEstimate);
                         Log.d(TAG,"Workout calBurned = " + workout.getCaloriesBurned());
+                         */
 
                         /* THIS SECTION IS USED TO VERIFY PARSING OF JSON DATA IN LOG
                         Log.d(TAG, "JSON RETRIEVED data: " + bikeData);
