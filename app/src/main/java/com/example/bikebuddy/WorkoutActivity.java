@@ -442,36 +442,7 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         polyline.setColor(ContextCompat.getColor(context, R.color.colorAccent));
 
         focusCamera(polyline.getPoints());
-
-        /*
-        System.out.println("DECODED PATH+++++++++++++++++" + decodedPath.get(10));
-
-         This loops through all the LatLng coordinates of ONE polyline.
-        for(com.google.maps.model.LatLng latLng: decodedPath){
-
-//                        Log.d(TAG, "run: latlng: " + latLng.toString());
-
-            newDecodedPath.add(new LatLng(
-                    latLng.lat,
-                    latLng.lng
-
-            ));
-            double test = latLng.lng;
-        }
-
-        System.out.println("NEWDECODED PATH(latlng type)+++++++++++++++++" + newDecodedPath.get(10));
-
-        Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-        polyline.setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
-        polyline.setClickable(true);
-        mPolylines.add(new PolylineData(polyline,route.legs[0]));
-
-        double tmp = route.legs[0].duration.inSeconds;
-
-        Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-        polyline.setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
-
-         */
+        
     }
 
     /**
