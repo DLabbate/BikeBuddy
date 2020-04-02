@@ -2,11 +2,8 @@ package com.example.bikebuddy;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,14 +21,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 
 public class PerformanceActivity extends AppCompatActivity {
@@ -58,6 +53,8 @@ public class PerformanceActivity extends AppCompatActivity {
 
     private int currentParameter;
     private int currentNumberWorkouts;
+
+    private int spinnerCount; //The amount of times the spinner was selected. This is a counter to not display toast in onCreate
     //***************************************************************************************************
 
     //Database
@@ -81,7 +78,9 @@ public class PerformanceActivity extends AppCompatActivity {
         //loadDataTest();
         setupSpinnerParameter();
         setupSpinnerNumberWorkouts();
+        spinnerCount = 0;
     }
+
 
     /*
         Connect views to xml
@@ -187,7 +186,16 @@ public class PerformanceActivity extends AppCompatActivity {
                     currentParameter = position;
                     Log.d(TAG,"Position: " +position);
                     Log.d(TAG,"Selected HR");
-                    Toast.makeText(PerformanceActivity.this,"HR",Toast.LENGTH_SHORT).show();
+
+                    /*
+                    if (spinnerCount > 1)
+                    {
+                        Toast.makeText(PerformanceActivity.this,"Performance Chart: Heart Rate",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                     */
+
                     loadChartData();
                 }
 
@@ -195,7 +203,15 @@ public class PerformanceActivity extends AppCompatActivity {
                     currentParameter = position;
                     Log.d(TAG,"Position: " +position);
                     Log.d(TAG,"Selected Calories");
-                    Toast.makeText(PerformanceActivity.this,"Calories",Toast.LENGTH_SHORT).show();
+
+                    /*
+                    if (spinnerCount > 1)
+                    {
+                        Toast.makeText(PerformanceActivity.this,"Performance Chart: Calories",Toast.LENGTH_SHORT).show();
+                    }
+
+                     */
+
                     loadChartData();
                 }
 
@@ -203,7 +219,15 @@ public class PerformanceActivity extends AppCompatActivity {
                     currentParameter = position;
                     Log.d(TAG,"Position: " +position);
                     Log.d(TAG,"Selected Distance");
-                    Toast.makeText(PerformanceActivity.this,"Distance",Toast.LENGTH_SHORT).show();
+
+                    /*
+                    if (spinnerCount > 1)
+                    {
+                        Toast.makeText(PerformanceActivity.this,"Performance Chart: Distance",Toast.LENGTH_SHORT).show();
+                    }
+
+                     */
+
                     loadChartData();
                 }
 
@@ -211,10 +235,19 @@ public class PerformanceActivity extends AppCompatActivity {
                     currentParameter = position;
                     Log.d(TAG,"Position: " +position);
                     Log.d(TAG,"Selected Duration");
-                    Toast.makeText(PerformanceActivity.this,"Duration",Toast.LENGTH_SHORT).show();
+
+                    /*
+                    if (spinnerCount > 1)
+                    {
+                        Toast.makeText(PerformanceActivity.this,"Performance Chart: Duration",Toast.LENGTH_SHORT).show();
+                    }
+
+                     */
+
                     loadChartData();
                 }
 
+                spinnerCount++;
             }
 
             @Override
@@ -244,7 +277,15 @@ public class PerformanceActivity extends AppCompatActivity {
                     currentNumberWorkouts = position;
                     Log.d(TAG,"Position: " +position);
                     Log.d(TAG,"Selected Last 10 Workouts");
-                    Toast.makeText(PerformanceActivity.this,"Last 10 Workouts",Toast.LENGTH_SHORT).show();
+
+                    /*
+                    if(spinnerCount > 1)
+                    {
+                        Toast.makeText(PerformanceActivity.this,"Last 10 Workouts",Toast.LENGTH_SHORT).show();
+                    }
+
+                     */
+
                     loadChartData();
                 }
 
@@ -252,7 +293,15 @@ public class PerformanceActivity extends AppCompatActivity {
                     currentNumberWorkouts = position;
                     Log.d(TAG,"Position: " +position);
                     Log.d(TAG,"Selected Last 50 Workouts");
-                    Toast.makeText(PerformanceActivity.this,"Last 50 Workouts",Toast.LENGTH_SHORT).show();
+
+                    /*
+                    if (spinnerCount > 1)
+                    {
+                        Toast.makeText(PerformanceActivity.this,"Last 50 Workouts",Toast.LENGTH_SHORT).show();
+                    }
+
+                     */
+
                     loadChartData();
                 }
 
@@ -260,9 +309,19 @@ public class PerformanceActivity extends AppCompatActivity {
                     currentNumberWorkouts = position;
                     Log.d(TAG,"Position: " +position);
                     Log.d(TAG,"Selected All Workouts");
-                    Toast.makeText(PerformanceActivity.this,"All Workouts",Toast.LENGTH_SHORT).show();
+
+                    /*
+                    if (spinnerCount > 1)
+                    {
+                        Toast.makeText(PerformanceActivity.this,"All Workouts",Toast.LENGTH_SHORT).show();
+                    }
+                    
+                     */
+
                     loadChartData();
                 }
+
+                spinnerCount++;
             }
 
             @Override
