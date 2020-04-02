@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.bikebuddy.Utils.Bike;
+import com.example.bikebuddy.Utils.SummaryHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,6 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "BikeBuddyDB";
     public Context context;
     SQLiteDatabase db;
+    SummaryHelper summaryHelper;
 
     public DbHelper(@Nullable Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -137,6 +139,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
         try{
             id = db.insertOrThrow(DbContract.WorkoutEntry.TABLE_NAME, null, contentValues);
+            //Updating user Profile
+            summaryHelper.updateInsertWorkout(workout);
         }
         catch (Exception error){
             Toast.makeText(context, "insert failed: " + error.getMessage(), Toast.LENGTH_SHORT);
@@ -496,15 +500,16 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     //Delete Methods
-    public void deleteWorkout(int WorkoutID)
-    {
+    public void deleteWorkout(int WorkoutID) throws ParseException {
         SQLiteDatabase db = this.getWritableDatabase();
         long id = -1;
-
+        Workout workout = retrieveWorkout(WorkoutID);
         try
         {
             //Drop class
             db.delete(DbContract.WorkoutEntry.TABLE_NAME,DbContract.WorkoutEntry._ID + "=?",new String[]{Integer.toString(WorkoutID)});
+            //Updating user Profile
+            summaryHelper.updateDeleteWorkout(workout);
         }
         catch (SQLException e)
         {
