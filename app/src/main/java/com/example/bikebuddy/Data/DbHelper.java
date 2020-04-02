@@ -54,6 +54,7 @@ public class DbHelper extends SQLiteOpenHelper {
             DbContract.WorkoutEntry.COLUMN_HR_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_SPEED_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_HR_AVG + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_MAX + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_SPEED_AVG + " REAL NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
@@ -110,6 +111,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE,workout.getCaloriesRate());
         contentValues.put(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT,workout.getCaloriesBurned());
         contentValues.put(DbContract.WorkoutEntry.COLUMN_HR_AVG,workout.getAverageHR());
+        contentValues.put(DbContract.WorkoutEntry.COLUMN_HR_MAX,workout.getMaxHR());
         contentValues.put(DbContract.WorkoutEntry.COLUMN_SPEED_AVG,workout.getAverageSpeed());
         /*
         Serializing:
@@ -193,6 +195,7 @@ public class DbHelper extends SQLiteOpenHelper {
             int calTotal = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT));
             int calRate = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE));
             double avgHR = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_AVG));
+            int maxHR = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_MAX));
             double avgSpeed = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_AVG));
             int bikeUsed = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_BIKE_USED));
 
@@ -205,6 +208,7 @@ public class DbHelper extends SQLiteOpenHelper {
             workout.setTotalDuration(duration);
             workout.setTotalDistance(distance);
             workout.setAverageHR(avgHR);
+            workout.setMaxHR(maxHR);
             workout.setAverageSpeed(avgSpeed);
             workout.setCaloriesRate(calRate);
             workout.setCaloriesBurned(calTotal);
@@ -267,9 +271,6 @@ public class DbHelper extends SQLiteOpenHelper {
             db.close();
         }
         return Collections.emptyList(); //This return is only if the cursor doesn't find the table start, or exception thrown
-
-
-
     }
 
 
@@ -320,6 +321,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     int calTotal = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT));
                     int calRate = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE));
                     double avgHR = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_AVG));
+                    int maxHR = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_MAX));
                     double avgSpeed = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_AVG));
                     int bikeUsed = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_BIKE_USED));
 
@@ -333,6 +335,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     workout.setTotalDuration(duration);
                     workout.setTotalDistance(distance);
                     workout.setAverageHR(avgHR);
+                    workout.setMaxHR(maxHR);
                     workout.setAverageSpeed(avgSpeed);
                     workout.setCaloriesRate(calRate);
                     workout.setCaloriesBurned(calTotal);
@@ -491,6 +494,8 @@ public class DbHelper extends SQLiteOpenHelper {
     }
     //*****************************************************************************************************************************
 
+
+    //Delete Methods
     public void deleteWorkout(int WorkoutID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -511,7 +516,6 @@ public class DbHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
-
     public void deleteBike(int BikeId)
     {
         SQLiteDatabase db = this.getWritableDatabase();

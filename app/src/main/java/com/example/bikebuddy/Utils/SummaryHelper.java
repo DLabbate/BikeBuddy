@@ -62,7 +62,4 @@ public class SummaryHelper {
 
         sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts);
     }
-
-
-
 }
