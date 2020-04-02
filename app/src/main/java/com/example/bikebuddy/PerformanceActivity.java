@@ -365,6 +365,9 @@ public class PerformanceActivity extends AppCompatActivity {
 
         lineDataSet1.setDrawCircles(true);
 
+        lineDataSet1.setLineWidth(3f);
+        lineDataSet1.setCircleRadius(7f);
+        lineChartPerformance.animateX(2000);
         //Add gradient fill
         //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
         lineData.setDrawValues(false);
