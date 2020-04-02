@@ -351,6 +351,14 @@
                     android:orientation="vertical"
                     android:padding="15dp">
 
+                    <TextView
+                        android:id="@+id/MapViewTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Route Taken"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="bold"/>
+
                     <com.google.android.gms.maps.MapView
                         android:id="@+id/mapViewLogs"
                         android:layout_width="match_parent"
