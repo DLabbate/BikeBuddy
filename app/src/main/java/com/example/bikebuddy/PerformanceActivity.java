@@ -315,7 +315,7 @@ public class PerformanceActivity extends AppCompatActivity {
                     {
                         Toast.makeText(PerformanceActivity.this,"All Workouts",Toast.LENGTH_SHORT).show();
                     }
-                    
+
                      */
 
                     loadChartData();
@@ -415,6 +415,25 @@ public class PerformanceActivity extends AppCompatActivity {
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
         LineDataSet lineDataSet1 = new LineDataSet(data,"Performance Data");
+
+        switch (currentParameter) {
+            case 0:
+                lineDataSet1.setLabel("Heart Rate (bpm) by Workout");
+                break;
+            case 1:
+                lineDataSet1.setLabel("Calories by Workout");
+                break;
+            case 2:
+                lineDataSet1.setLabel("Distance Travelled (metres) by Workout");
+                break;
+            case 3:
+                lineDataSet1.setLabel("Duration Biking (hours) by Workout");
+                break;
+            default:
+                lineDataSet1.setLabel("Performance Data");
+                break;
+        }
+
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
