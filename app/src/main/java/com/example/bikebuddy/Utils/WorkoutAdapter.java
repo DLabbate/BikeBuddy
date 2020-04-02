@@ -29,6 +29,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     private Context context;
     private List<Workout> workoutList;
     DbHelper dbHelper;
+    SummaryHelper summaryHelper;
     public WorkoutAdapter(Context context, List<Workout> workoutList)
     {
         this.context = context;
@@ -42,6 +43,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_view_holder,parent,false);
         dbHelper=new DbHelper(context);
+        summaryHelper = new SummaryHelper(context);
         return new ViewHolder(view);
     }
 
@@ -86,6 +88,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                         //If user selects Yes, then delete the workout
                         //******************************************************************************
                         dbHelper.deleteWorkout(workoutList.get(position).getID());
+                        summaryHelper.updateDeleteWorkout(workoutList.get(position));
 
                         // refresh the page (update the log fragment)
                         Intent intent = new Intent(context,context.getClass());

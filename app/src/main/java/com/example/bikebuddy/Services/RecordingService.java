@@ -19,6 +19,7 @@ import com.example.bikebuddy.LoginActivity;
 import com.example.bikebuddy.MainActivity;
 import com.example.bikebuddy.R;
 import com.example.bikebuddy.SharedPreferenceHelper;
+import com.example.bikebuddy.Utils.SummaryHelper;
 import com.example.bikebuddy.Utils.Workout;
 
 import java.text.DecimalFormat;
@@ -73,8 +74,8 @@ public class RecordingService extends Service {
     //Shared Preferences
     //******************************************************************************************************
     SharedPreferenceHelper sharedPreferenceHelper;
+    SummaryHelper summaryHelper;
     //******************************************************************************************************
-
 
     /*
     This handler creates a new thread every 10 seconds.
@@ -209,6 +210,9 @@ public class RecordingService extends Service {
         totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
         workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, calRateEstimate);
         workout.print(TAG);
+
+        //Updating user Profile
+        summaryHelper.updateInsertWorkout(workout);
 
         //Add the workout to the DB;
         dbHelper.insertWorkout(workout);
