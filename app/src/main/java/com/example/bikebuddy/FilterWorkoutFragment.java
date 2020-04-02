@@ -95,30 +95,15 @@ public class FilterWorkoutFragment extends DialogFragment {
 
         //Filter buttons
         filter1week.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(Calendar.getInstance().getTime());
-            calendar.add(Calendar.DATE,-7);
-            Date lowerDate = calendar.getTime();
-            Log.d(TAG,"LowerDate = " + lowerDate);
-            LogFragment.setLowerDate(lowerDate);
+            LogFragment.setLowerDate(findLowerDate(7));
             getDialog().dismiss();
         });
         filter2week.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(Calendar.getInstance().getTime());
-            calendar.add(Calendar.DATE,-14);
-            Date lowerDate = calendar.getTime();
-            Log.d(TAG,"LowerDate = " + lowerDate);
-            LogFragment.setLowerDate(lowerDate);
+            LogFragment.setLowerDate(findLowerDate(14));
             getDialog().dismiss();
         });
         filter1Month.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(Calendar.getInstance().getTime());
-            calendar.add(Calendar.DATE,-30);
-            Date lowerDate = calendar.getTime();
-            Log.d(TAG,"LowerDate = " + lowerDate);
-            LogFragment.setLowerDate(lowerDate);
+            LogFragment.setLowerDate(findLowerDate(30));
             getDialog().dismiss();
         });
         showAll.setOnClickListener(v -> {
@@ -141,5 +126,14 @@ public class FilterWorkoutFragment extends DialogFragment {
         if (onDismissListener != null) {
             onDismissListener.onDismiss(dialog);
         }
+    }
+
+    private Date findLowerDate(int lessDays){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(Calendar.getInstance().getTime());
+        calendar.add(Calendar.DATE,-lessDays);
+        Date lowerDate = calendar.getTime();
+        Log.d(TAG,"LowerDate = " + lowerDate);
+        return lowerDate;
     }
 }
