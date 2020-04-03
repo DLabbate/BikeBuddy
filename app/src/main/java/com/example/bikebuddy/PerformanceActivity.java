@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class PerformanceActivity extends AppCompatActivity {
@@ -484,7 +485,14 @@ public class PerformanceActivity extends AppCompatActivity {
         textMaxHR.setText(String.format("%d",summaryHelper.getMaxHR()));
         textTotalCaloriesBurned.setText(String.format("%d",summaryHelper.getCalBurned()));
         textTotalDistance.setText(String.format("%d",summaryHelper.getDistance()));
-        textTotalDuration.setText(String.format("%d",summaryHelper.getDuration()));
+
+        //Formatting the duration to dd:hh:mm
+        long days = TimeUnit.SECONDS.toDays(summaryHelper.getDuration());
+        long hours = TimeUnit.SECONDS.toHours(summaryHelper.getDuration()) - days*24;
+        long minute =TimeUnit.SECONDS.toMinutes(summaryHelper.getDuration())- days*24*60 - hours*60;
+        String displayDuration = days + "d " + hours + "h " + minute + "m ";
+        textTotalDuration.setText(displayDuration);
+
         textTotalWorkouts.setText(String.format("%d",summaryHelper.getNumWorkouts()));
         textAverageDistance.setText(String.format("%d",summaryHelper.getAverageDistance()));
     }
