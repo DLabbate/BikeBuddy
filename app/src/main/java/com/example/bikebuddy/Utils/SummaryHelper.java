@@ -1,6 +1,7 @@
 package com.example.bikebuddy.Utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.SharedPreferenceHelper;
@@ -8,6 +9,7 @@ import com.example.bikebuddy.SharedPreferenceHelper;
 import java.util.List;
 
 public class SummaryHelper {
+    private static final String TAG = "Summary Helper";
 
     SharedPreferenceHelper sharedPreferenceHelper;
     DbHelper dbHelper;
@@ -33,10 +35,19 @@ public class SummaryHelper {
         maxHR = retrievedData[2];
         calBurned = retrievedData[3];
         numWorkouts = retrievedData[4];
+        Log.d(TAG,"\nLoad Current Data: " +
+                "\ndistance = " + distance +
+                "\nduration = " + duration +
+                "\nmaxHR = " + maxHR +
+                "\ncalBurned = " + calBurned +
+                "\nnumWorkouts = " + numWorkouts);
     }
 
     public void updateInsertWorkout(Workout workout){
+        Log.d(TAG,"UpdateInsertWorkout");
+        Log.d(TAG,"Old Distance = " + distance);
         distance += workout.getTotalDistance();
+        Log.d(TAG,"New distance = " + distance);
         duration += workout.getTotalDuration();
 
 
@@ -49,6 +60,7 @@ public class SummaryHelper {
     }
 
     public void updateDeleteWorkout(Workout workout){
+        Log.d(TAG,"UpdateDeleteWorkout");
         distance -= workout.getTotalDistance();
         duration -= workout.getTotalDuration();
 

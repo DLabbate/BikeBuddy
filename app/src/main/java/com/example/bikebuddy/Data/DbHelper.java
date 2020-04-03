@@ -101,6 +101,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public long insertWorkout(Workout workout) {
         Log.d(TAG,"insertWorkout");
         SQLiteDatabase db = this.getWritableDatabase();
+        summaryHelper = new SummaryHelper(context);
         long id = -1;
 
         /*
@@ -136,7 +137,6 @@ public class DbHelper extends SQLiteOpenHelper {
         //random bike value assigned to all workouts (tentative)
         //TODO: handle packaging bike objects
         contentValues.put(DbContract.WorkoutEntry.COLUMN_BIKE_USED,17);
-
         try{
             id = db.insertOrThrow(DbContract.WorkoutEntry.TABLE_NAME, null, contentValues);
             //Updating user Profile
@@ -509,7 +509,7 @@ public class DbHelper extends SQLiteOpenHelper {
             //Drop class
             db.delete(DbContract.WorkoutEntry.TABLE_NAME,DbContract.WorkoutEntry._ID + "=?",new String[]{Integer.toString(WorkoutID)});
             //Updating user Profile
-            summaryHelper.updateDeleteWorkout(workout);
+            //summaryHelper.updateDeleteWorkout(workout);
         }
         catch (SQLException e)
         {

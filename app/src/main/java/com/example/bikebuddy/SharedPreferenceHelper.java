@@ -44,6 +44,7 @@ public class SharedPreferenceHelper {
         Log.d(TAG,"Saving Profile Gender: " + gender);
         editor.commit();
     }
+
     //Setters for summary view
     public void saveSummary(Integer distance, Integer duration, Integer HR_max, Integer burnedCal, Integer numWorkouts){
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -67,6 +68,13 @@ public class SharedPreferenceHelper {
     public void saveProfile()
     {
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(!sharedPreferences.getBoolean("ProfileExists",false)){
+            editor.putInt("TotalDistance", 0);
+            editor.putInt("TotalDuration", 0);
+            editor.putInt("maxHR", 0);
+            editor.putInt("burnedCalories", 0);
+            editor.putInt("number_of_Workouts", 0);
+        }
         editor.putBoolean("ProfileExists", true);
         editor.commit();
     }
@@ -97,6 +105,7 @@ public class SharedPreferenceHelper {
         Log.d(TAG,"Getting Profile Weight: " + weight);
         return weight;
     }
+
     //Getter for summary Activity
     public int[] getSummaryData(){
         int[] summaryData = new int[5];

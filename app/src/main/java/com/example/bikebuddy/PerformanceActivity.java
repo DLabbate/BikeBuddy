@@ -86,7 +86,8 @@ public class PerformanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_performance);
         setupUI();
         setupDB();
-        populateSummary();
+        summaryHelper = new SummaryHelper(this);
+        //populateSummary();
 
         //loadDataTest();
         setupSpinnerParameter();
@@ -100,6 +101,7 @@ public class PerformanceActivity extends AppCompatActivity {
          */
     private void setupUI()
     {
+        Log.d(TAG,"setupUI");
         imageViewPerformance = findViewById(R.id.image_performance_back);
         lineChartPerformance = findViewById(R.id.lineChartPerformance);
         initializeSpinners();
@@ -475,6 +477,7 @@ public class PerformanceActivity extends AppCompatActivity {
 
     //function used to populate the six performance fields
     private void populateSummary(){
+        Log.d(TAG,"populateSummary");
         summaryHelper = new SummaryHelper(this);
 
         textMaxHR.setText(summaryHelper.getMaxHR());
@@ -483,6 +486,7 @@ public class PerformanceActivity extends AppCompatActivity {
         textTotalDuration.setText(summaryHelper.getDuration());
         textTotalWorkouts.setText(summaryHelper.getNumWorkouts());
         textAverageDistance.setText(summaryHelper.getDistance());
+        Log.d(TAG,"finished setText");
     }
 
 }
