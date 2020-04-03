@@ -212,6 +212,7 @@ public class RecordingService extends Service {
 
         //Add the workout to the DB;
         dbHelper.insertWorkout(workout);
+        dbHelper.UpdateBike( sharedPreferenceHelper.getSelectedBike() ,workout.getTotalDistance(),workout.getTotalDuration());
     }
 
     /*

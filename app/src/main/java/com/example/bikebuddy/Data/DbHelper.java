@@ -388,7 +388,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //Accepts workout id and returns workout object with that ID from DB
-    public Bike retrieveBike(long bikeID) throws ParseException {
+    public Bike retrieveBike(long bikeID)  {
         Log.d(TAG,"retrieve bike");
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -432,7 +432,7 @@ public class DbHelper extends SQLiteOpenHelper {
             if (cursor != null) cursor.close();
             db.close();
         }
-        return bike; //Returns NULL WORKOUT if the cursor doesn't find the workout, or exception thrown
+        return bike; //Returns NULL Bike if the cursor doesn't find the bike, or exception thrown
     }
 
     /*
@@ -532,6 +532,31 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public  void UpdateBike(int ID, double distance, long duration){
+        Bike bike = retrieveBike(ID);
+        Log.d(TAG,"updating Bike");
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        /*
+        Set content values to be sent to DB. Takes from bike class passed to insert.
+         */
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE,bike.getCumulativeDistance() + distance);
+        contentValues.put(DbContract.BikeEntry.COLUMN_TOTALDURATION,bike.getTotalDuration() + duration);
+
+
+        try{
+            db.update(DbContract.BikeEntry.TABLE_NAME, contentValues, "_id="+ID, null);
+        }
+        catch (Exception error){
+            Toast.makeText(context, "update failed: " + error.getMessage(), Toast.LENGTH_SHORT);
+        } finally{
+            db.close();
+        }
+
+
+    }
 
 
     /*
