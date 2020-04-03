@@ -13,12 +13,11 @@ public class SummaryHelper {
     DbHelper dbHelper;
     Context context;
 
-    int distance;
-    int duration;
-    int maxHR;
-    int minHR;
-    int calBurned;
-    int numWorkouts;
+    private int distance;
+    private int duration;
+    private int maxHR;
+    private int calBurned;
+    private int numWorkouts;
 
     public SummaryHelper(Context context){
         this.context = context;
@@ -63,5 +62,25 @@ public class SummaryHelper {
         numWorkouts = workoutList.size();
 
         sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts);
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public int getMaxHR() {
+        return maxHR;
+    }
+
+    public int getCalBurned() {
+        return calBurned;
+    }
+
+    public int getNumWorkouts() {
+        return numWorkouts;
     }
 }

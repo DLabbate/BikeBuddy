@@ -1,8 +1,5 @@
 package com.example.bikebuddy;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,9 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Utils.SummaryHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -62,6 +63,17 @@ public class PerformanceActivity extends AppCompatActivity {
     DbHelper dbHelper;
     //***************************************************************************************************
 
+    //Profile Data
+    //***************************************************************************************************
+    SummaryHelper summaryHelper;
+    private TextView textMaxHR;
+    private TextView textTotalCaloriesBurned;
+    private TextView textTotalDistance;
+    private TextView textTotalDuration;
+    private TextView textTotalWorkouts;
+    private TextView textAverageDistance;
+    //***************************************************************************************************
+
     //Workouts
     //***************************************************************************************************
     List<Workout> filteredWorkoutList;
@@ -74,6 +86,7 @@ public class PerformanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_performance);
         setupUI();
         setupDB();
+        populateSummary();
 
         //loadDataTest();
         setupSpinnerParameter();
@@ -90,6 +103,13 @@ public class PerformanceActivity extends AppCompatActivity {
         imageViewPerformance = findViewById(R.id.image_performance_back);
         lineChartPerformance = findViewById(R.id.lineChartPerformance);
         initializeSpinners();
+
+        textMaxHR = findViewById(R.id.textMaxHR);
+        textTotalCaloriesBurned = findViewById(R.id.textTotalCaloriesBurned);
+        textTotalDistance = findViewById(R.id.textTotalDistance);
+        textTotalDuration = findViewById(R.id.textTotalDuration);
+        textTotalWorkouts = findViewById(R.id.textTotalWorkouts);
+        textAverageDistance = findViewById(R.id.textAverageDistance);
 
         //Setup navigation to main activity (BACK BUTTON)
         if (imageViewPerformance != null)
@@ -453,5 +473,11 @@ public class PerformanceActivity extends AppCompatActivity {
         lineChartPerformance.invalidate();
     }
 
+    //function used to populate the six performance fields
+    private void populateSummary(){
+        summaryHelper = new SummaryHelper(this);
+
+
+    }
 
 }
