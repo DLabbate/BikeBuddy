@@ -55,7 +55,6 @@ public class LogFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         /*
         Dialog linked to dismiss listener. This method runs when the LogFragment detects the
         dialog "d" has been closed. Used to refresh list with new filtered list
@@ -97,6 +96,16 @@ public class LogFragment extends Fragment {
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
         FAB_filterByDate = view.findViewById(R.id.FAB_filter_workouts);
         orderSpinner = view.findViewById(R.id.spinner_sort_workout);
+
+        //This override hides the FAB when scrolling down, and reappears when scrolling up
+        workoutRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if ( dy > 0 && FAB_filterByDate.getVisibility() == View.VISIBLE) FAB_filterByDate.hide();
+                else if ( dy < 0 && FAB_filterByDate.getVisibility() != View.VISIBLE) FAB_filterByDate.show();
+            }
+        });
 
         setupFAB();
         setupSpinner();

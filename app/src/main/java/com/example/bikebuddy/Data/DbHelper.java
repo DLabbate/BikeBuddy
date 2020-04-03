@@ -281,7 +281,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         Log.d(TAG,"getWorkouts");
-        Log.d(TAG,"-------------------RETRIEVING ALL WORKOUT DATA FROM DB--------------------");
+        Log.d(TAG,"-------------------RETRIEVING ALL WORKOUT (non-list) DATA FROM DB--------------------");
         try {
             cursor = db.query(DbContract.WorkoutEntry.TABLE_NAME, null, null, null, null, null, null);
 
