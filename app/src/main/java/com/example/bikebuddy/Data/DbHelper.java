@@ -500,16 +500,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     //Delete Methods
-    public void deleteWorkout(int WorkoutID) throws ParseException {
+    public void deleteWorkout(int WorkoutID){
         SQLiteDatabase db = this.getWritableDatabase();
         long id = -1;
-        Workout workout = retrieveWorkout(WorkoutID);
         try
         {
             //Drop class
             db.delete(DbContract.WorkoutEntry.TABLE_NAME,DbContract.WorkoutEntry._ID + "=?",new String[]{Integer.toString(WorkoutID)});
-            //Updating user Profile
-            //summaryHelper.updateDeleteWorkout(workout);
         }
         catch (SQLException e)
         {
