@@ -86,8 +86,8 @@ public class PerformanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_performance);
         setupUI();
         setupDB();
-        summaryHelper = new SummaryHelper(this);
-        //populateSummary();
+
+        populateSummary();
 
         //loadDataTest();
         setupSpinnerParameter();
@@ -480,13 +480,13 @@ public class PerformanceActivity extends AppCompatActivity {
         Log.d(TAG,"populateSummary");
         summaryHelper = new SummaryHelper(this);
 
-        textMaxHR.setText(summaryHelper.getMaxHR());
-        textTotalCaloriesBurned.setText(summaryHelper.getCalBurned());
-        textTotalDistance.setText(summaryHelper.getDistance());
-        textTotalDuration.setText(summaryHelper.getDuration());
-        textTotalWorkouts.setText(summaryHelper.getNumWorkouts());
-        textAverageDistance.setText(summaryHelper.getDistance());
-        Log.d(TAG,"finished setText");
+
+        textMaxHR.setText(String.format("%d",summaryHelper.getMaxHR()));
+        textTotalCaloriesBurned.setText(String.format("%d",summaryHelper.getCalBurned()));
+        textTotalDistance.setText(String.format("%d",summaryHelper.getDistance()));
+        textTotalDuration.setText(String.format("%d",summaryHelper.getDuration()));
+        textTotalWorkouts.setText(String.format("%d",summaryHelper.getNumWorkouts()));
+        textAverageDistance.setText(String.format("%d",summaryHelper.getDistance()));
     }
 
 }

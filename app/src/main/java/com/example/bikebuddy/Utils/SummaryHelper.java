@@ -21,6 +21,8 @@ public class SummaryHelper {
     private int calBurned;
     private int numWorkouts;
 
+    private int[] retrievedData;
+
     public SummaryHelper(Context context){
         this.context = context;
         sharedPreferenceHelper = new SharedPreferenceHelper(context);
@@ -29,18 +31,21 @@ public class SummaryHelper {
     }
 
     private void loadCurrentProfile(){
-        int[] retrievedData = sharedPreferenceHelper.getSummaryData();
+        retrievedData = sharedPreferenceHelper.getSummaryData();
         distance = retrievedData[0];
         duration = retrievedData[1];
         maxHR = retrievedData[2];
         calBurned = retrievedData[3];
         numWorkouts = retrievedData[4];
+
+        /*
         Log.d(TAG,"\nLoad Current Data: " +
                 "\ndistance = " + distance +
                 "\nduration = " + duration +
                 "\nmaxHR = " + maxHR +
                 "\ncalBurned = " + calBurned +
                 "\nnumWorkouts = " + numWorkouts);
+         */
     }
 
     public void updateInsertWorkout(Workout workout){
@@ -94,5 +99,9 @@ public class SummaryHelper {
 
     public int getNumWorkouts() {
         return numWorkouts;
+    }
+
+    public int[] getRetrievedData() {
+        return retrievedData;
     }
 }
