@@ -1,7 +1,6 @@
 package com.example.bikebuddy.Utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.SharedPreferenceHelper;
@@ -29,6 +28,7 @@ public class SummaryHelper {
         sharedPreferenceHelper = new SharedPreferenceHelper(context);
         dbHelper = new DbHelper(context);
         loadCurrentProfile();
+        updateSummary();
     }
 
     private void loadCurrentProfile(){
@@ -50,48 +50,25 @@ public class SummaryHelper {
          */
     }
 
-    public void updateInsertWorkout(Workout workout){
-        Log.d(TAG,"UpdateInsertWorkout");
-        Log.d(TAG,"Old Distance = " + distance);
-        distance += workout.getTotalDistance();
-        Log.d(TAG,"New distance = " + distance);
-        duration += workout.getTotalDuration();
-
-
-        if(workout.getMaxHR() > maxHR) maxHR = workout.getMaxHR();
-        averageDistance = calculateAverageDistance();
-        calBurned += workout.getCaloriesBurned();
-        numWorkouts = dbHelper.getWorkouts().size();
-
-        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts, averageDistance);
-    }
-
-    public void updateDeleteWorkout(Workout workout){
-        Log.d(TAG,"UpdateDeleteWorkout");
-        distance -= workout.getTotalDistance();
-        duration -= workout.getTotalDuration();
-
+    public void updateSummary(){
         List<Workout> workoutList = dbHelper.getWorkouts();
+        distance = 0;
+        duration = 0;
         maxHR = 0;
-        for(Workout item:workoutList){
-            if( item.getMaxHR() > maxHR ) maxHR = item.getMaxHR();
-        }
-
-        averageDistance = calculateAverageDistance();
-        calBurned -= workout.getCaloriesBurned();
+        calBurned = 0;
         numWorkouts = workoutList.size();
+        averageDistance = 0;
 
+        for(Workout item:workoutList){
+            distance        += item.getTotalDistance();                 //find total distance
+            duration        += item.getTotalDuration();                 //find total duration
+            if( item.getMaxHR() > maxHR ) maxHR = item.getMaxHR();      //find maxHR
+            calBurned       += item.getCaloriesBurned();                //find total calburned
+            averageDistance += item.getTotalDistance();                 //find average Distance
+        }
         sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts,averageDistance);
     }
 
-    private int calculateAverageDistance(){
-        List<Workout> workoutList = dbHelper.getWorkouts();
-        int average = 0;
-        for(Workout item:workoutList){
-            average += item.getTotalDistance();
-        }
-        return average/workoutList.size();
-    }
 
     //Getters
     public int getDistance() {

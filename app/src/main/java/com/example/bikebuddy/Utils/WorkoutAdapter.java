@@ -87,7 +87,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                         dialog.cancel();
                         //If user selects Yes, then delete the workout
                         //******************************************************************************
-                        summaryHelper.updateDeleteWorkout(workoutList.get(position));
+                        //summaryHelper.updateDeleteWorkout(workoutList.get(position));
                         dbHelper.deleteWorkout(workoutList.get(position).getID());
 
                         // refresh the page (update the log fragment)
