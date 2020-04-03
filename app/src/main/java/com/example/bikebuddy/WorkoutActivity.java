@@ -442,7 +442,7 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         polyline.setColor(ContextCompat.getColor(context, R.color.colorAccent));
 
         focusCamera(polyline.getPoints());
-        
+
     }
 
     /**
@@ -459,8 +459,14 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         int routePadding = 400;
         LatLngBounds latLngBounds = boundsBuilder.build();
 
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+
         gMap.animateCamera(
-                CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
+                //CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
+                //600,
+                //null
+                CameraUpdateFactory.newLatLngBounds(latLngBounds,width, height, routePadding),
                 600,
                 null
         );
