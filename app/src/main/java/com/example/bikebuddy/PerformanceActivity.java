@@ -486,7 +486,7 @@ public class PerformanceActivity extends AppCompatActivity {
         textTotalDistance.setText(String.format("%d",summaryHelper.getDistance()));
         textTotalDuration.setText(String.format("%d",summaryHelper.getDuration()));
         textTotalWorkouts.setText(String.format("%d",summaryHelper.getNumWorkouts()));
-        textAverageDistance.setText(String.format("%d",summaryHelper.getDistance()));
+        textAverageDistance.setText(String.format("%d",summaryHelper.getAverageDistance()));
     }
 
 }

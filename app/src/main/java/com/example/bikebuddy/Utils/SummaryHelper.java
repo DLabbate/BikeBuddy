@@ -20,6 +20,7 @@ public class SummaryHelper {
     private int maxHR;
     private int calBurned;
     private int numWorkouts;
+    private int averageDistance;
 
     private int[] retrievedData;
 
@@ -37,6 +38,7 @@ public class SummaryHelper {
         maxHR = retrievedData[2];
         calBurned = retrievedData[3];
         numWorkouts = retrievedData[4];
+        averageDistance = retrievedData[5];
 
         /*
         Log.d(TAG,"\nLoad Current Data: " +
@@ -57,11 +59,11 @@ public class SummaryHelper {
 
 
         if(workout.getMaxHR() > maxHR) maxHR = workout.getMaxHR();
-
+        averageDistance = calculateAverageDistance();
         calBurned += workout.getCaloriesBurned();
         numWorkouts = dbHelper.getWorkouts().size();
 
-        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts);
+        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts, averageDistance);
     }
 
     public void updateDeleteWorkout(Workout workout){
@@ -75,12 +77,23 @@ public class SummaryHelper {
             if( item.getMaxHR() > maxHR ) maxHR = item.getMaxHR();
         }
 
+        averageDistance = calculateAverageDistance();
         calBurned -= workout.getCaloriesBurned();
         numWorkouts = workoutList.size();
 
-        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts);
+        sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts,averageDistance);
     }
 
+    private int calculateAverageDistance(){
+        List<Workout> workoutList = dbHelper.getWorkouts();
+        int average = 0;
+        for(Workout item:workoutList){
+            average += item.getTotalDistance();
+        }
+        return average/workoutList.size();
+    }
+
+    //Getters
     public int getDistance() {
         return distance;
     }
@@ -99,6 +112,10 @@ public class SummaryHelper {
 
     public int getNumWorkouts() {
         return numWorkouts;
+    }
+
+    public int getAverageDistance() {
+        return averageDistance;
     }
 
     public int[] getRetrievedData() {
