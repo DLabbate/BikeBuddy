@@ -57,15 +57,15 @@ public class SummaryHelper {
         maxHR = 0;
         calBurned = 0;
         numWorkouts = workoutList.size();
-        averageDistance = 0;
 
         for(Workout item:workoutList){
             distance        += item.getTotalDistance();                 //find total distance
             duration        += item.getTotalDuration();                 //find total duration
             if( item.getMaxHR() > maxHR ) maxHR = item.getMaxHR();      //find maxHR
             calBurned       += item.getCaloriesBurned();                //find total calburned
-            averageDistance += item.getTotalDistance();                 //find average Distance
         }
+        averageDistance = distance/workoutList.size();
+
         sharedPreferenceHelper.saveSummary(distance, duration, maxHR, calBurned, numWorkouts,averageDistance);
     }
 
