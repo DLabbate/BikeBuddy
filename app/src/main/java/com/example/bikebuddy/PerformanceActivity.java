@@ -73,6 +73,8 @@ public class PerformanceActivity extends AppCompatActivity {
     private TextView textTotalDuration;
     private TextView textTotalWorkouts;
     private TextView textAverageDistance;
+    private TextView textTotalDistanceTitle;
+    private TextView textAverageDistanceTitle;
     //***************************************************************************************************
 
     //Workouts
@@ -113,6 +115,8 @@ public class PerformanceActivity extends AppCompatActivity {
         textTotalDuration = findViewById(R.id.textTotalDuration);
         textTotalWorkouts = findViewById(R.id.textTotalWorkouts);
         textAverageDistance = findViewById(R.id.textAverageDistance);
+        textTotalDistanceTitle = findViewById(R.id.textTotalDistanceTitle);
+        textAverageDistanceTitle = findViewById(R.id.textAverageDistanceTitle);
 
         //Setup navigation to main activity (BACK BUTTON)
         if (imageViewPerformance != null)
@@ -484,7 +488,14 @@ public class PerformanceActivity extends AppCompatActivity {
 
         textMaxHR.setText(String.format("%d",summaryHelper.getMaxHR()));
         textTotalCaloriesBurned.setText(String.format("%d",summaryHelper.getCalBurned()));
-        textTotalDistance.setText(String.format("%d",summaryHelper.getDistance()));
+        if ( summaryHelper.getDistance() > 10000 ){
+            textTotalDistance.setText(String.format("%.2f",(float)summaryHelper.getDistance()/1000));
+            textTotalDistanceTitle.setText("Total Distance (km)");
+        }
+        else{
+            textTotalDistance.setText(String.format("%d",summaryHelper.getDistance()));
+            textTotalDistanceTitle.setText("Total Distance (m)");
+        }
 
         //Formatting the duration to dd:hh:mm
         long days = TimeUnit.SECONDS.toDays(summaryHelper.getDuration());
@@ -494,7 +505,13 @@ public class PerformanceActivity extends AppCompatActivity {
         textTotalDuration.setText(displayDuration);
 
         textTotalWorkouts.setText(String.format("%d",summaryHelper.getNumWorkouts()));
-        textAverageDistance.setText(String.format("%d",summaryHelper.getAverageDistance()));
+        if( summaryHelper.getAverageDistance() > 10 ){
+            textAverageDistanceTitle.setText("Average Distance (km)");
+            textAverageDistance.setText(String.format("%.2f",(float)summaryHelper.getAverageDistance()/1000));
+        } else {
+            textAverageDistanceTitle.setText("Average Distance (m)");
+            textAverageDistance.setText(String.format("%d", summaryHelper.getAverageDistance()));
+        }
     }
 
 }
