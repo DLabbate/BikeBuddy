@@ -20,6 +20,7 @@ import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.R;
 import com.example.bikebuddy.WorkoutActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -87,7 +88,11 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                         dialog.cancel();
                         //If user selects Yes, then delete the workout
                         //******************************************************************************
-                        dbHelper.deleteWorkout(workoutList.get(position).getID());
+                        try {
+                            dbHelper.deleteWorkout(workoutList.get(position).getID());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         summaryHelper.updateDeleteWorkout(workoutList.get(position));
 
                         // refresh the page (update the log fragment)

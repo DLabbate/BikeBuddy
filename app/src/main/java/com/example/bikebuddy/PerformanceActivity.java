@@ -477,7 +477,12 @@ public class PerformanceActivity extends AppCompatActivity {
     private void populateSummary(){
         summaryHelper = new SummaryHelper(this);
 
-
+        textMaxHR.setText(summaryHelper.getMaxHR());
+        textTotalCaloriesBurned.setText(summaryHelper.getCalBurned());
+        textTotalDistance.setText(summaryHelper.getDistance());
+        textTotalDuration.setText(summaryHelper.getDuration());
+        textTotalWorkouts.setText(summaryHelper.getNumWorkouts());
+        textAverageDistance.setText(summaryHelper.getDistance());
     }
 
 }
