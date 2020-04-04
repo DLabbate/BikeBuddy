@@ -105,9 +105,15 @@ public class WorkoutActivity extends AppCompatActivity {
         String displayDuration = hours + "h, " + minute + "m, "+ seconds + "s";
         DurationText.setText(displayDuration);
 
-        // converting the distance from double to int to get rid of the decimals (we are measuring the distance in meter)
-        String displayDistance = Integer.toString((int)workout.getTotalDistance()) + " m";
-        DistanceText.setText(displayDistance);
+        // distance
+        if ( workout.getTotalDistance() > 10000 ){
+            DistanceText.setText( String.format("%.2f",(float)workout.getTotalDistance()/1000)  + " km");
+        }
+        else{
+            DistanceText.setText(Integer.toString((int)workout.getTotalDistance()) +" m");
+        }
+
+
 
         // Importing remaining data from workout object
         CaloriesText.setText(Integer.toString((int)workout.getCaloriesBurned()));

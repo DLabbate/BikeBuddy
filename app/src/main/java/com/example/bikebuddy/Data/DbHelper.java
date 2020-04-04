@@ -388,7 +388,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //Accepts workout id and returns workout object with that ID from DB
-    public Bike retrieveBike(long bikeID)  {
+    public Bike retrieveBike(long bikeID) throws ParseException  {
         Log.d(TAG,"retrieve bike");
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -533,7 +533,12 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public  void UpdateBike(int ID, double distance, long duration){
-        Bike bike = retrieveBike(ID);
+        Bike bike = null;
+        try {
+            bike = retrieveBike(ID);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Log.d(TAG,"updating Bike");
         SQLiteDatabase db = this.getWritableDatabase();
         long id = -1;

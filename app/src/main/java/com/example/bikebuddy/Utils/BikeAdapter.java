@@ -54,7 +54,15 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.ViewHolder> {
         holder.textViewBikeModel.setText(currentBike.getModel());
         holder.textViewBikeBrand.setText(currentBike.getBrand());
         holder.textViewBikeWheelDiameter.setText(Double.toString(currentBike.getWheelDiameter()));
-        holder.textViewDistance.setText(Integer.toString((int)(currentBike.getCumulativeDistance())));
+
+        if ( currentBike.getCumulativeDistance()> 10000 ){
+            holder.textViewDistance.setText(String.format("%.2f",(float)currentBike.getCumulativeDistance()/1000) + " km"  );
+        }
+        else{
+            holder.textViewDistance.setText( Integer.toString((int)currentBike.getCumulativeDistance()) + " m" );
+        }
+
+
 
 
         //holder.textViewDuration.setText(Long.toString(currentBike.getTotalDuration()));
