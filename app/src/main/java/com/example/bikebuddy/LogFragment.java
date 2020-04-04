@@ -1,15 +1,21 @@
 package com.example.bikebuddy;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +27,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,11 +36,16 @@ public class LogFragment extends Fragment {
 
     private static final String TAG = "LogFragment";
     private DbHelper dbHelper;
+    List<Workout> filteredWorkoutList;
 
     //Filter functionality
     FloatingActionButton FAB_filterByDate;
     static Date lowerDate = new Date();
     FilterWorkoutFragment d = new FilterWorkoutFragment();
+
+    //Ordering Functionality
+    Spinner orderSpinner;
+    int currentFilter;
 
     //RecyclerView
     RecyclerView workoutRecyclerView;
@@ -53,6 +66,13 @@ public class LogFragment extends Fragment {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 Log.d(TAG,"onDismiss");
+                //Filters the workout list based on the button clicked in the dialog fragment
+                try {
+                    filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 refreshList();
             }
         });
@@ -63,6 +83,11 @@ public class LogFragment extends Fragment {
         lowerDate.setMonth(5);
         lowerDate.setDate(28);
         dbHelper = new DbHelper(this.getActivity());
+        try {
+            filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Nullable
@@ -73,16 +98,22 @@ public class LogFragment extends Fragment {
 
         workoutRecyclerView = view.findViewById(R.id.recycler_view_workout);
         FAB_filterByDate = view.findViewById(R.id.FAB_filter_workouts);
-
+        orderSpinner = view.findViewById(R.id.spinner_sort_workout);
 
         setupFAB();
+        setupSpinner();
+
+        try {
+            filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         refreshList();
 
 
         return view;
     }
-
 
     //Method that can be called from child fragment to pass date value.
     static void setLowerDate(Date date){
@@ -110,22 +141,109 @@ public class LogFragment extends Fragment {
         });
     }
 
-    //this replaces the original code in "onCreate", this function can be called throughout fragment
-    private void refreshList(){
-        Log.d(TAG,"Refresh List");
-        List<Workout> filteredWorkoutList;
-        try {
-            filteredWorkoutList = dbHelper.filterWorkoutByDate(lowerDate);
-            Log.d(TAG,"filter List size: " + filteredWorkoutList.size());
-            workoutAdapter = new WorkoutAdapter(this.getContext(),filteredWorkoutList);
-            linearLayoutManager = new LinearLayoutManager(getActivity());
-            workoutRecyclerView.setAdapter(workoutAdapter);
-            workoutRecyclerView.setLayoutManager(linearLayoutManager);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    private void setupSpinner(){
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.sorting_options));
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        orderSpinner.setAdapter(arrayAdapter);
+
+        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //sort by date
+                if(position == 1){
+                    currentFilter = position;
+                    Log.d(TAG,"Selected sort by date ascending");
+                    orderByDate();
+                    Toast.makeText(getContext(),"Sorted by Date",Toast.LENGTH_SHORT).show();
+                    refreshList();
+                }
+                //sort by distance
+                if(position == 2){
+                    currentFilter = position;
+                    Log.d(TAG,"Selected sort by distance ascending");
+                    orderByDistance();
+                    Toast.makeText(getContext(),"Sorted by Distance",Toast.LENGTH_SHORT).show();
+                    refreshList();
+                }
+                //sort by duration
+                if(position == 3){
+                    currentFilter = position;
+                    Log.d(TAG,"Selected sort by duration ascending");
+                    orderByDuration();
+                    Toast.makeText(getContext(),"Sorted by Duration",Toast.LENGTH_SHORT).show();
+                    refreshList();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
+    //this replaces the original code in "onCreate", this function can be called throughout fragment
+    private void refreshList() {
+        Log.d(TAG, "Refresh List");
+        Log.d(TAG, "filter List size: " + filteredWorkoutList.size());
+
+        //Recall the last filter used to implement on the newly filtered list
+        if      (currentFilter == 1) orderByDate();
+        else if (currentFilter == 2) orderByDistance();
+        else                         orderByDuration();
+
+        //Populate the recycler view
+        workoutAdapter = new WorkoutAdapter(this.getContext(), filteredWorkoutList);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        workoutRecyclerView.setAdapter(workoutAdapter);
+        workoutRecyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    //these functions are used to sort the current list of workouts
+    private void orderByDate() {
+        Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+            @Override
+            public int compare(Workout o1, Workout o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return false;
+            }
+        });
+    }
+    private void orderByDistance(){
+        Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+            @Override
+            public int compare(Workout o1, Workout o2) {
+                return (int) (o2.getTotalDistance() - o1.getTotalDistance());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return false;
+            }
+        });
+    }
+    private void orderByDuration(){
+        Collections.sort(filteredWorkoutList, new Comparator<Workout>() {
+            @Override
+            public int compare(Workout o1, Workout o2) {
+                return (int) (o2.getTotalDuration() - o1.getTotalDuration());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return false;
+            }
+        });
+    }
 }
 
 

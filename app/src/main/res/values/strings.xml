@@ -31,4 +31,28 @@
     <string name="HR_zone3">Moderate Intensity</string>
     <string name="HR_zone4">High Intensity</string>
     <string name="HR_zone5">Maximal Intensity</string>
+
+    <!--Log Sorting Options-->
+    <string-array name="sorting_options">
+        <item>Sort By...</item>
+        <item>Date</item>
+        <item>Distance</item>
+        <item>Duration</item>
+    </string-array>
+
+    <!--Performance Chart Parameters-->
+    <string-array name="performanceParameters">
+        <item>Heart Rate (bpm)</item>
+        <item>Calories</item>
+        <item>Distance (m)</item>
+        <item>Duration (hours)</item>
+    </string-array>
+
+    <!--Performance Chart Number of Workouts-->
+    <string-array name="performanceNumberWorkouts">
+        <item>Last 10 Workouts</item>
+        <item>Last 50 Workouts</item>
+        <item>All Workouts</item>
+    </string-array>
+
 </resources>
