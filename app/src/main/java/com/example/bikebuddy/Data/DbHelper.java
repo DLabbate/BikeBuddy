@@ -45,6 +45,8 @@ public class DbHelper extends SQLiteOpenHelper {
         This is the string to create the workout table. It uses the DB contract (which holds the
         format for tables to be created)
      */
+
+    /*
     private static final String CREATE_TABLE_WORKOUTS = "CREATE TABLE " + DbContract.WorkoutEntry.TABLE_NAME + "(" +
             DbContract.WorkoutEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             DbContract.WorkoutEntry.COLUMN_DATE + " STRING NOT NULL," +
@@ -58,6 +60,25 @@ public class DbHelper extends SQLiteOpenHelper {
             DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_TOT + " INTEGER NOT NULL" + ")";
+
+     */
+
+    private static final String CREATE_TABLE_WORKOUTS = "CREATE TABLE " + DbContract.WorkoutEntry.TABLE_NAME + "(" +
+            DbContract.WorkoutEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            DbContract.WorkoutEntry.COLUMN_DATE + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_DURATION + " REAL NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_DISTANCE + " REAL NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_TIME_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_SPEED_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST + " STRING NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_AVG + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_SPEED_AVG + " REAL NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_CALORIES_TOT + " INTEGER NOT NULL" + ")";
+
 
     /*
     This is the string to create the bike table. It uses the DB contract (which holds the
@@ -122,12 +143,16 @@ public class DbHelper extends SQLiteOpenHelper {
         String serializeTime = gson.toJson(workout.getTime());
         String serializeHR = gson.toJson(workout.getListHR());
         String serializeSpeed = gson.toJson(workout.getListSpeed());
+        String serializeLatCoord = gson.toJson(workout.getListLatCoords());
+        String serializeLngCoord = gson.toJson(workout.getListLngCoords());
         //Log.d(TAG,"JSONtime = " + serializeTime);
         //Log.d(TAG,"JSONhr = " + serializeHR);
         //Log.d(TAG,"JSONspeed = " + serializeSpeed);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_TIME_LIST,serializeTime);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_HR_LIST,serializeHR);
         contentValues.put(DbContract.WorkoutEntry.COLUMN_SPEED_LIST,serializeSpeed);
+        contentValues.put(DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST,serializeLatCoord);
+        contentValues.put(DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST,serializeLngCoord);
 
         //random bike value assigned to all workouts (tentative)
         //TODO: handle packaging bike objects
@@ -176,14 +201,20 @@ public class DbHelper extends SQLiteOpenHelper {
             String JSONtime = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_TIME_LIST));
             String JSONhr = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_LIST));
             String JSONspeed = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_LIST));
+            String JSONlatcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST));
+            String JSONlngcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST));
+
 
             Type listType_long = new TypeToken<Collection<Long>>() {
             }.getType();
             Type listType_double = new TypeToken<Collection<Double>>() {
             }.getType();
+
             List<Long> time = gson.fromJson(JSONtime, listType_long);
             List<Double> heartRate = gson.fromJson(JSONhr, listType_double);
             List<Double> speed = gson.fromJson(JSONspeed, listType_double);
+            List<Double> latcoords = gson.fromJson(JSONlatcoord, listType_double);
+            List<Double> lngcoords = gson.fromJson(JSONlngcoord, listType_double);
 
             //Retrieving data from DB
             int id = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry._ID));
@@ -208,6 +239,8 @@ public class DbHelper extends SQLiteOpenHelper {
             workout.setAverageSpeed(avgSpeed);
             workout.setCaloriesRate(calRate);
             workout.setCaloriesBurned(calTotal);
+            workout.setListLatCoords(latcoords);
+            workout.setListLngCoords(lngcoords);
 
             return workout; //returns completed workout
         } catch (Exception error) {
@@ -305,12 +338,16 @@ public class DbHelper extends SQLiteOpenHelper {
                     String JSONtime = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_TIME_LIST));
                     String JSONhr = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_LIST));
                     String JSONspeed = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_LIST));
+                    String JSONlatcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST));
+                    String JSONlngcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST));
 
                     Type listType_long = new TypeToken<Collection<Long>>(){}.getType();
                     Type listType_double = new TypeToken<Collection<Double>>(){}.getType();
                     List<Long> time = gson.fromJson(JSONtime,listType_long);
                     List<Double> heartRate = gson.fromJson(JSONhr,listType_double);
                     List<Double> speed = gson.fromJson(JSONspeed,listType_double);
+                    List<Double> latcoords = gson.fromJson(JSONlatcoord, listType_double);
+                    List<Double> lngcoords = gson.fromJson(JSONlngcoord, listType_double);
 
                     //Retrieving data from DB
                     int id = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry._ID));
@@ -336,6 +373,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     workout.setAverageSpeed(avgSpeed);
                     workout.setCaloriesRate(calRate);
                     workout.setCaloriesBurned(calTotal);
+                    workout.setListLatCoords(latcoords);
+                    workout.setListLngCoords(lngcoords);
                     workoutList.add(workout);
 
                     //Print workout data for debugging

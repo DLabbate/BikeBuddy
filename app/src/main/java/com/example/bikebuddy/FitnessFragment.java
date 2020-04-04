@@ -141,6 +141,8 @@ public class FitnessFragment extends Fragment {
                     List<Long> listTime = new ArrayList<>();
                     List<Double> listHR = new ArrayList<>();
                     List<Double> listSpeed = new ArrayList<>();
+                    List<Double> listLongitude = new ArrayList<>();
+                    List<Double> listLattitude = new ArrayList<>();
                     Date date;
 
                     //Data for kalman filter
@@ -170,11 +172,15 @@ public class FitnessFragment extends Fragment {
                         JSONArray heartRate = data.getJSONArray("heart_rate");
                         JSONArray speed = data.getJSONArray("speed");
                         JSONArray time = data.getJSONArray("timestamp");
+                        JSONArray longitude = data.getJSONArray("longitude");
+                        JSONArray lattitude = data.getJSONArray("latitude");
                         Long initialTime = time.getLong(0);
                         for (int i = 0; i < time.length(); i++) {
                             listTime.add(time.getLong(i)-initialTime);
                             listHR.add(heartRate.getDouble(i));
                             listSpeed.add(speed.getDouble(i));
+                            listLongitude.add(longitude.getDouble(i));
+                            listLattitude.add(lattitude.getDouble(i));
                         }
                         for(int i = 0; i<listTime.size(); i++){
                             if(i>0) {
@@ -200,6 +206,8 @@ public class FitnessFragment extends Fragment {
                         workout.setTotalDuration(listTime.get(listTime.size()-1)-listTime.get(0));
                         workout.setTotalDistance(workout.calculateAverageSpeed()*workout.getTotalDuration()/3.6);
                         workout.setDate(date);
+                        workout.setListLatCoords(listLattitude);
+                        workout.setListLngCoords(listLongitude);
                         //workout.print(TAG);
 
                         //add workout to database

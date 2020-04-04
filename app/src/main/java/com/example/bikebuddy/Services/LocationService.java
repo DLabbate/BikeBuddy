@@ -53,6 +53,8 @@ public class LocationService extends Service implements
     long lastTimeMillis = System.currentTimeMillis();
 
     public static LatLng lastKnownLatLng;
+    public static double lastKnownLat;
+    public static double lastKnownLng;
     //*****************************************************************************
 
     Context context;
@@ -147,6 +149,9 @@ public class LocationService extends Service implements
         //Update speed and distance
         //**********************************************************************************************
         lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        lastKnownLat = location.getLatitude();
+        lastKnownLng = location.getLongitude();
+
         updateValues(location);
         //incrementWorkoutDistance(location);
         Log.d(TAG,"Latitude: " + lastKnownLatLng.latitude + " Longitude" + lastKnownLatLng.longitude);
