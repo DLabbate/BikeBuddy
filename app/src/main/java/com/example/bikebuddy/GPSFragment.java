@@ -29,9 +29,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.bikebuddy.Models.PolylineData;
 import com.example.bikebuddy.Services.LocationService;
+import com.example.bikebuddy.Services.RecordingService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -114,6 +116,9 @@ public class GPSFragment extends Fragment implements
     //Array list of polyline data for every polyline shown on google map (is reset every time a new marker is added)
     private ArrayList<PolylineData> mPolylines = new ArrayList<>();
 
+    //Currently selected polyline
+    private Polyline preferredPolyline;
+
 
     @Nullable
     @Override
@@ -181,10 +186,29 @@ public class GPSFragment extends Fragment implements
     }
 
     /**
+     *Called when user changes fragment
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        Log.d(TAG,"visiblefrag");
+        if(FitnessFragment.running) {
+            clearAltRoutes();
+        }
+    }
+
+    /**
      *Callback interface for when map is ready to be used
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        if(FitnessFragment.running) {
+            clearAltRoutes();
+        }
+
+
+
         gMap = googleMap;
         gMap.setOnPolylineClickListener(this);
 
@@ -214,6 +238,7 @@ public class GPSFragment extends Fragment implements
 
                 marker = gMap.addMarker(new MarkerOptions()
                 .position(latLng));
+
             }
         });
     }
@@ -291,6 +316,7 @@ public class GPSFragment extends Fragment implements
         }
         if (cameraUpdates) {
             startLocationUpdates();
+
         }
     }
 
@@ -471,6 +497,7 @@ public class GPSFragment extends Fragment implements
                 //Ensures that the current polylines array list contains only those shown on the map
                 if (mPolylines.size() > 0){
                     for (PolylineData polylineData: mPolylines){
+                        //Clears polylines on map
                         polylineData.getPolyine().remove();
                     }
                     mPolylines.clear();
@@ -533,6 +560,8 @@ public class GPSFragment extends Fragment implements
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                 polylineData.getPolyine().setZIndex(1);
 
+                preferredPolyline = polylineData.getPolyine();
+
                 LatLng endlocation = new LatLng(
                         polylineData.getLeg().endLocation.lat,
                         polylineData.getLeg().endLocation.lng
@@ -543,6 +572,7 @@ public class GPSFragment extends Fragment implements
                 marker.setSnippet("Duration: " + polylineData.getLeg().duration +
                         ",  Distance: " + polylineData.getLeg().distance);
                 marker.showInfoWindow();
+
             }
             else{
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
@@ -571,4 +601,25 @@ public class GPSFragment extends Fragment implements
                 null
         );
     }
+
+    /**
+     *Clears routes that are not selected by the user (called when workout is in progress)
+     */
+    public void clearAltRoutes(){
+
+        Log.d(TAG, ": clearAltRoutes");
+
+        for (PolylineData polylineData: mPolylines){
+            if(preferredPolyline.getId().equals(polylineData.getPolyine().getId())){
+                polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+
+            }
+            else{
+                polylineData.getPolyine().remove();
+
+            }
+        }
+
+    }
+
 }

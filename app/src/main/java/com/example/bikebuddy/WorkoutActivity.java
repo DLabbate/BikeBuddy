@@ -463,9 +463,7 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         int height = getResources().getDisplayMetrics().heightPixels;
 
         gMap.animateCamera(
-                //CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
-                //600,
-                //null
+
                 CameraUpdateFactory.newLatLngBounds(latLngBounds,width, height, routePadding),
                 600,
                 null
