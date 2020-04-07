@@ -20,6 +20,7 @@ import com.example.bikebuddy.MainActivity;
 import com.example.bikebuddy.R;
 import com.example.bikebuddy.SharedPreferenceHelper;
 import com.example.bikebuddy.Utils.Workout;
+import com.google.maps.model.LatLng;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class RecordingService extends Service {
     private ArrayList<Long> time;
     private ArrayList <Double> listHR;
     private ArrayList <Double> listSpeed;
+    private ArrayList <LatLng> listGeoPoints;
+    private ArrayList <Double> listLatPoints;
+    private ArrayList <Double> listLngPoints;
     private double totalDistance;
     private long totalDuration;
     private double caloriesRate;
@@ -96,11 +100,14 @@ public class RecordingService extends Service {
         this.time = new ArrayList<>();
         this.listHR = new ArrayList<>();
         this.listSpeed = new ArrayList<>();
+        this.listLatPoints = new ArrayList<>();
+        this.listLngPoints = new ArrayList<>();
         this.totalDistance = 0;
         this.totalDuration = 0;
         this.caloriesRate = 0;
         this.averageHR = 0;
         this.averageSpeed = 0;
+
 
         //Initialize DbHelper
         dbHelper = new DbHelper(this);
@@ -178,6 +185,9 @@ public class RecordingService extends Service {
         listHR.add(MainActivity.HR_RT);                                                                 //Heart Rate list
         listSpeed.add(LocationService.SPEED_RT);                                                        //Speed list
         totalDistance = LocationService.WORKOUT_DISTANCE;                                               //Total Distance
+        listLatPoints.add(LocationService.lastKnownLat);
+        listLngPoints.add(LocationService.lastKnownLng);
+
         //*****************************************************************************************************************************
     }
 
@@ -206,7 +216,9 @@ public class RecordingService extends Service {
          */
 
         totalDuration = (SystemClock.elapsedRealtime() - FitnessFragment.chronometer.getBase())/1000;   //Total Duration (seconds)
-        workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, calRateEstimate);
+        //workout = new Workout(time,listHR,listSpeed,totalDistance,totalDuration, calRateEstimate);
+        workout = new Workout(time,listHR,listSpeed, listLatPoints, listLngPoints, totalDistance,totalDuration, calRateEstimate);
+
         workout.print(TAG);
 
         //Add the workout to the DB;

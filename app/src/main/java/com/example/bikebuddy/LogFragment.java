@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.example.bikebuddy.Utils.WorkoutAdapter;
+import com.google.android.gms.maps.MapView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
@@ -50,6 +51,7 @@ public class LogFragment extends Fragment {
     RecyclerView workoutRecyclerView;
     RecyclerView.Adapter workoutAdapter;
     RecyclerView.LayoutManager linearLayoutManager;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +119,8 @@ public class LogFragment extends Fragment {
         }
 
         refreshList();
+
+
         return view;
     }
 
