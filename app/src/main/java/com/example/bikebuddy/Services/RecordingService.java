@@ -79,7 +79,6 @@ public class RecordingService extends Service {
     SharedPreferenceHelper sharedPreferenceHelper;
     //******************************************************************************************************
 
-
     /*
     This handler creates a new thread every 10 seconds.
     Each thread fills the workout values
