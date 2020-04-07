@@ -494,7 +494,9 @@ public class GPSFragment extends Fragment implements
                         newDecodedPath.add(new LatLng(
                                 latLng.lat,
                                 latLng.lng
+
                         ));
+                        double test = latLng.lng;
                     }
                     Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Models.PolylineData;
 import com.example.bikebuddy.Utils.HeartRateZoneHelper;
 import com.example.bikebuddy.Utils.PercentFormatter;
 import com.example.bikebuddy.Utils.Workout;
@@ -28,6 +29,15 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -37,7 +47,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class WorkoutActivity extends AppCompatActivity {
+public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     /*
     This activity is to display detailed information of a single workout
@@ -77,6 +87,13 @@ public class WorkoutActivity extends AppCompatActivity {
     //----------------------------------------Toolbar------------------------------------------------//
     ImageView imageViewBack;
 
+    //----------------------------------------MapView------------------------------------------------//
+    MapView gMapView;
+    GoogleMap gMap = null;
+    List<Double> latcoords;
+    List<Double> lngcoords;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +104,7 @@ public class WorkoutActivity extends AppCompatActivity {
         dbHelper = new DbHelper(context);
 
         setupUI();
+        setupMapView(savedInstanceState);
 
         __ID = getIntent().getIntExtra("__ID",-1);
 
@@ -122,6 +140,10 @@ public class WorkoutActivity extends AppCompatActivity {
         List<Long> time = workout.getTime();
         List<Double> heartRate = workout.getListHR();
         List<Double> speed = workout.getListSpeed();
+        latcoords = workout.getListLatCoords();
+        lngcoords = workout.getListLngCoords();
+
+        System.out.println("WORKOUT ACTIVITY ON CREATE  " + latcoords.get(0));
 
         loadDataHR(heartRate);
         loadDataSpeed(speed);
@@ -129,6 +151,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         //Setup toolbar back button for navigation to main activity
         setupBackButton();
+
     }
 
     /*
@@ -149,6 +172,20 @@ public class WorkoutActivity extends AppCompatActivity {
 
         heartRateZoneHelper = new HeartRateZoneHelper(this);
         pieChartZones = findViewById(R.id.pie_chart_zones);
+
+
+    }
+    /*
+    This method is used for setting up the UI elements regarding the Google Map
+    (associating the references with the appropriate views in the xml layout files)
+     */
+    private void setupMapView(Bundle savedInstanceState){
+        gMapView = findViewById(R.id.mapViewLogs);
+
+        gMapView.onCreate(savedInstanceState);
+        gMapView.onResume();
+
+        gMapView.getMapAsync(this);
     }
 
     /*
@@ -380,4 +417,65 @@ public class WorkoutActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        gMap = googleMap;
+
+        addPolylineToMap(latcoords,lngcoords);
+
+    }
+
+    private void addPolylineToMap(List<Double> latcoords, List<Double> lngcoords){
+
+
+        List<LatLng> path = new ArrayList<>();
+
+        for(int i=0; i<latcoords.size(); i++){
+
+            path.add(new LatLng(
+                    latcoords.get(i),
+                    lngcoords.get(i)));
+
+            System.out.println("ADD POLYLINE TO MAP" + path.get(i));
+
+        }
+
+
+
+        Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(path));
+
+        polyline.setColor(ContextCompat.getColor(context, R.color.colorAccent));
+
+        focusCamera(polyline.getPoints());
+
+    }
+
+    /**
+     *Zooms the camera on a route
+     */
+    public void focusCamera(List<LatLng> LatLngRoute) {
+
+        if (gMap == null || LatLngRoute == null || LatLngRoute.isEmpty()) return;
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : LatLngRoute)
+            boundsBuilder.include(latLngPoint);
+
+        int routePadding = 400;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+
+        gMap.animateCamera(
+                //CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
+                //600,
+                //null
+                CameraUpdateFactory.newLatLngBounds(latLngBounds,width, height, routePadding),
+                600,
+                null
+        );
+    }
+
 }

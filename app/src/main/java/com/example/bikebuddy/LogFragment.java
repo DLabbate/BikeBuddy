@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.example.bikebuddy.Utils.WorkoutAdapter;
+import com.google.android.gms.maps.MapView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
@@ -51,10 +52,10 @@ public class LogFragment extends Fragment {
     RecyclerView.Adapter workoutAdapter;
     RecyclerView.LayoutManager linearLayoutManager;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         /*
         Dialog linked to dismiss listener. This method runs when the LogFragment detects the
@@ -98,6 +99,16 @@ public class LogFragment extends Fragment {
         FAB_filterByDate = view.findViewById(R.id.FAB_filter_workouts);
         orderSpinner = view.findViewById(R.id.spinner_sort_workout);
 
+        //This override hides the FAB when scrolling down, and reappears when scrolling up
+        workoutRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if ( dy > 0 && FAB_filterByDate.getVisibility() == View.VISIBLE) FAB_filterByDate.hide();
+                else if ( dy < 0 && FAB_filterByDate.getVisibility() != View.VISIBLE) FAB_filterByDate.show();
+            }
+        });
+
         setupFAB();
         setupSpinner();
 
@@ -108,6 +119,8 @@ public class LogFragment extends Fragment {
         }
 
         refreshList();
+
+
         return view;
     }
 

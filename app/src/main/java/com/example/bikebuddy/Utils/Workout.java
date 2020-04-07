@@ -2,6 +2,7 @@ package com.example.bikebuddy.Utils;
 
 import android.util.Log;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -13,13 +14,15 @@ public class Workout {
     private List <Long> time;
     private List <Double> listHR;
     private List <Double> listSpeed;
+    private List <Double> listLatCoords;
+    private List <Double> listLngCoords;
     private double totalDistance;
     private long totalDuration;
     private double caloriesBurned;
     private double caloriesRate;
     private double averageHR;
     private double averageSpeed;
-
+    private int maxHR;
 
     // Empty Constructor
     public Workout(){}
@@ -34,6 +37,7 @@ public class Workout {
         this.totalDuration = totalDuration;
         this.caloriesBurned = caloriesBurned;
         this.averageHR = averageHR;
+        this.maxHR = calculateMaxHR();
         this.averageSpeed = averageSpeed;
     }
 
@@ -47,8 +51,10 @@ public class Workout {
         this.totalDuration = totalDuration;
         this.caloriesBurned = caloriesBurned;
         this.averageHR = averageHR;
+        this.maxHR = calculateMaxHR();
         this.averageSpeed = averageSpeed;
     }
+
 
     // Constructor without average values
     // Date is not included either
@@ -62,8 +68,30 @@ public class Workout {
         this.caloriesBurned = calculateCaloriesBurned(caloriesRate);
         this.caloriesRate = caloriesRate;
         this.averageHR = calculateAverageHR();
+        this.maxHR = calculateMaxHR();
+        this.averageSpeed = calculateAverageSpeed();
+        this.maxHR = calculateMaxHR();
+    }
+
+    // Constructor without average values
+    // Date is not included either
+    //Includes LatLng lists
+    public Workout(List<Long> time, List<Double> listHR, List<Double> listSpeed, List<Double> listLatCoords, List<Double> listLngCoords, double totalDistance, long totalDuration, double caloriesRate) {
+        this.date=  Calendar.getInstance().getTime();
+        this.time = time;
+        this.listHR = listHR;
+        this.listSpeed = listSpeed;
+        this.listLatCoords = listLatCoords;
+        this.listLngCoords = listLngCoords;
+        this.totalDistance = totalDistance;
+        this.totalDuration = totalDuration;
+        this.caloriesBurned = calculateCaloriesBurned(caloriesRate);
+        this.caloriesRate = caloriesRate;
+        this.averageHR = calculateAverageHR();
         this.averageSpeed = calculateAverageSpeed();
     }
+
+
 
 
     //Setters and Getters
@@ -91,9 +119,29 @@ public class Workout {
     public void setListSpeed(List<Double> listSpeed) {
         this.listSpeed = listSpeed;
     }
+
+    public List<Double> getListLatCoords() {
+        return listLatCoords;
+    }
+
+    public void setListLatCoords(List<Double> listLatCoords) {
+        this.listLatCoords = listLatCoords;
+    }
+
+    public List<Double> getListLngCoords() {
+        return listLngCoords;
+    }
+
+    public void setListLngCoords(List<Double> listLngCoords) {
+        this.listLngCoords = listLngCoords;
+    }
+
     public double getTotalDistance() {
         return totalDistance;
     }
+
+
+
     public void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;
     }
@@ -127,11 +175,15 @@ public class Workout {
     public void setID(int ID) {
         this.ID = ID;
     }
-
+    public int getMaxHR() {
+        return maxHR;
+    }
+    public void setMaxHR(int maxHR) {
+        this.maxHR = maxHR;
+    }
     public double getCaloriesRate() {
         return caloriesRate;
     }
-
     public void setCaloriesRate(double caloriesRate) {
         this.caloriesRate = caloriesRate;
     }
@@ -164,6 +216,9 @@ public class Workout {
         caloriesBurned = calRate * time.get(time.size()-1) / 60;   //returns total burned
         return caloriesBurned;
     }
+    public int calculateMaxHR() {
+        return Collections.max(listHR).intValue();
+    }
     /*
     Prints all the data of a workout in a log
     Used for debugging
@@ -175,6 +230,7 @@ public class Workout {
 
         workoutData += " Date: " + date;
 
+        /*
         workoutData += " \n Times (seconds): ";
         for (int i = 0; i < time.size(); i++)
             workoutData += time.get(i).toString() + " ";
@@ -189,12 +245,14 @@ public class Workout {
         for (int i = 0; i < listSpeed.size(); i++)
             workoutData += listSpeed.get(i).toString() + " ";
         workoutData += "\n";
+         */
 
         workoutData += " Total Distance: " + totalDistance + "\n";
         workoutData += " Total Duration: " + totalDuration + "\n";
         workoutData += " Calories Rate(cal/min): " + caloriesRate + "\n";
         workoutData += " Calories Burned: " + caloriesBurned + "\n";
         workoutData += " Average HR: " + averageHR + "\n";
+        workoutData += " Maximum HR: " + maxHR + "\n";
         workoutData += " Average Speed: " + averageSpeed + "\n";
 
         workoutData += "********************************************************************\n";

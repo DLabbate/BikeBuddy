@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbarMain;
     ImageView profileImageView;
     ImageView bikeImageView;
+    ImageView performanceImageView;
     //***********************************************************************************************
 
 
@@ -190,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         toolbarMain = findViewById(R.id.toolbar_main);
         profileImageView = findViewById(R.id.image_profile_toolbar);
         bikeImageView = findViewById(R.id.image_bike_toolbar);
+        performanceImageView = findViewById(R.id.image_stats_toolbar);
         setToolbarOnClickListener();
     }
 
@@ -419,6 +421,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,BikeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        performanceImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,PerformanceActivity.class);
                 startActivity(intent);
             }
         });
