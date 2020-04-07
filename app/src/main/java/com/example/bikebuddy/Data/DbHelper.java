@@ -30,7 +30,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
     private static final String TAG = "__dbHelper";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "BikeBuddyDB";
     public Context context;
     SQLiteDatabase db;
@@ -75,6 +75,7 @@ public class DbHelper extends SQLiteOpenHelper {
             DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_HR_AVG + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_MAX + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_SPEED_AVG + " REAL NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
@@ -355,8 +356,6 @@ public class DbHelper extends SQLiteOpenHelper {
                     workout.setAverageSpeed(avgSpeed);
                     workout.setCaloriesRate(calRate);
                     workout.setCaloriesBurned(calTotal);
-                    workout.setListLatCoords(latcoords);
-                    workout.setListLngCoords(lngcoords);
                     workoutList.add(workout);
 
                     //Print workout data for debugging
