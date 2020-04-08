@@ -1,8 +1,11 @@
 package com.example.bikebuddy;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -189,13 +192,24 @@ public class AddBikeFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
+        /*
         Window window = getDialog().getWindow();
         assert window != null;
 
         WindowManager.LayoutParams layoutParams = window.getAttributes();
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         window.setAttributes(layoutParams);
+
+         */
+
+        //Editing dialog size
+        //https://stackoverflow.com/questions/12478520/how-to-set-dialogfragments-width-and-height
+        Window window = getDialog().getWindow();
+        Point size = new Point();
+        Display display = window.getWindowManager().getDefaultDisplay();
+        display.getSize(size);
+        window.setLayout( (int)(size.x * 0.8), WindowManager.LayoutParams.WRAP_CONTENT );
+        window.setGravity( Gravity.CENTER );
     }
 }
 
