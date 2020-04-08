@@ -286,6 +286,10 @@ public class FitnessFragment extends Fragment {
     private void startRecording()
     {
         //First we create a dialog to be displayed to the user
+
+        /*
+
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getWorkoutDialog());
         builder.setCancelable(true);
@@ -319,6 +323,11 @@ public class FitnessFragment extends Fragment {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
         //**************************************************************************************
+
+         */
+
+        getWorkoutDialog();
+
     }
 
     /*
@@ -438,24 +447,26 @@ public class FitnessFragment extends Fragment {
         return start + (int)Math.round(Math.random() * (end - start));
     }
 
-    private String getWorkoutDialog()
+    private void getWorkoutDialog()
     {
         RecordWorkoutDialog recordWorkoutDialog = new RecordWorkoutDialog();
-        recordWorkoutDialog.show(getActivity().getSupportFragmentManager(),"Record Workout Dialog");
+        recordWorkoutDialog.show(getChildFragmentManager(),"Record Workout Dialog");
         StringBuilder message = new StringBuilder();
+    }
 
-        message.append("Bluetooth Sensor: ");
-        if (MainActivity.isDeviceConnected)
-        {
-            message.append("\tConnected\n");
-        }
-        else
-        {
-            message.append("Not Connected\n");
-        }
-        message.append("\t\t\t\t\t\t\t\tLocation: Enabled");
-
-        return message.toString();
+    //To be called when we select "Continue" from the dialog
+    public void continueWorkoutAction()
+    {
+        resetWorkoutDistance(); //Reset the workout distance before we display it
+        chronometer.setVisibility(View.VISIBLE);
+        distanceTextView.setVisibility(View.VISIBLE);
+        distanceTitleTextView.setVisibility(View.VISIBLE);
+        distanceFrameLayout.setVisibility(View.VISIBLE);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+        RecordWorkout.setText("Stop Recording");
+        running=true;
+        createRecordingService();
     }
 
 
