@@ -321,6 +321,7 @@ public class RecordingService extends Service {
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(stats)) //Show stats in background
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(2,notification);
     }

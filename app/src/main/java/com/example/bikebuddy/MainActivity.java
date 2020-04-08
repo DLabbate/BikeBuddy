@@ -2,6 +2,8 @@ package com.example.bikebuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.NotificationChannel;
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String CHANNEL_ID_RECORDING = "recording_notifications";
     public static final int NOTIFICATION_ID_RECORDING = 2;
+
+    public static final String CHANNEL_ID_DISCONNECT = "disconnected_notifications";
+    public static final int NOTIFICATION_ID_BT_DISCONNECT = 3;
     //************************************************************************************************
 
 
@@ -116,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
 
         sharedpreferencehelper = new SharedPreferenceHelper(this);
 
+        //Create notification channels
         createNotificationChannelLocation();
         createNotificationChannelRecording();
+        createNotificationChannelDisconnect();
 
         currentHRValue = 0;
         lastHRValue = 0;
@@ -221,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDeviceDisconnected(BluetoothDevice device, String message) {
             isDeviceConnected = false;
+            createBTSensorDisconnectNotification();
              /*
             Update the Bluetooth Status (ImageView)
             This needs to run in main thread!
@@ -400,11 +408,48 @@ public class MainActivity extends AppCompatActivity {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID_RECORDING, name, importance);
             channel.setDescription(description);
+            channel.enableVibration(false);
+            channel.setVibrationPattern(new long[]{ 0 });
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void createNotificationChannelDisconnect() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_name_disconnect);
+            String description = (getString(R.string.notification_description_disconnect));
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_DISCONNECT, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    /*
+    This function will create a notification to inform the user that
+    the HR sensor has been disconnected
+     */
+    private void createBTSensorDisconnectNotification()
+    {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_DISCONNECT)
+                .setSmallIcon(R.drawable.ic_bike)
+                .setContentTitle("HR Sensor Disconnected!")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(getString(R.string.text_sensor_disconnect)))
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(NOTIFICATION_ID_BT_DISCONNECT, builder.build());
     }
 
     private void setToolbarOnClickListener()
