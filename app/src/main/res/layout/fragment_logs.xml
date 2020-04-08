@@ -23,7 +23,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_filter" />
+        android:src="@drawable/ic_filter"
+        android:tint="@color/white"/>
 
     <Spinner
         android:id="@+id/spinner_sort_workout"
