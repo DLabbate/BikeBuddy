@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:orientation="vertical">
@@ -16,27 +16,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="This Week" />
+            android:text="This Week"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_profile_textview"/>
 
         <Button
             android:id="@+id/button_filter2weeks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Last 2 Weeks" />
+            android:text="Last 2 Weeks"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_profile_textview"/>
 
         <Button
             android:id="@+id/button_filter1month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Last 30 Days" />
+            android:text="Last 30 Days"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_profile_textview"/>
 
         <Button
             android:id="@+id/button_showAll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Show All" />
+            android:text="Show All"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_profile_textview"/>
 
     </LinearLayout>
 
