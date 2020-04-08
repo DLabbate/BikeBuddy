@@ -189,6 +189,7 @@ public class AddBikeFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         Window window = getDialog().getWindow();
         assert window != null;
 
