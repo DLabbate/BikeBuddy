@@ -287,7 +287,7 @@ public class FitnessFragment extends Fragment {
     {
         //First we create a dialog to be displayed to the user
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(getString(R.string.text_record_workout));
+        builder.setMessage(getWorkoutDialog());
         builder.setCancelable(true);
         builder.setNegativeButton("Continue", new DialogInterface.OnClickListener() {
             @Override
@@ -437,5 +437,28 @@ public class FitnessFragment extends Fragment {
     public static int randBetween(int start, int end) {
         return start + (int)Math.round(Math.random() * (end - start));
     }
+
+    private String getWorkoutDialog()
+    {
+        RecordWorkoutDialog recordWorkoutDialog = new RecordWorkoutDialog();
+        recordWorkoutDialog.show(getActivity().getSupportFragmentManager(),"Record Workout Dialog");
+        StringBuilder message = new StringBuilder();
+
+        message.append("Bluetooth Sensor: ");
+        if (MainActivity.isDeviceConnected)
+        {
+            message.append("\tConnected\n");
+        }
+        else
+        {
+            message.append("Not Connected\n");
+        }
+        message.append("\t\t\t\t\t\t\t\tLocation: Enabled");
+
+        return message.toString();
+    }
+
+
+
     //**************************************************************************************
 }
