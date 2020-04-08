@@ -420,7 +420,7 @@ public class PerformanceActivity extends AppCompatActivity {
                         break;
                     case 2:
                         Log.d(TAG,"Adding a chart value: " + (float) currentWorkout.getAverageHR());
-                        data.add(new Entry(i,((float) currentWorkout.getTotalDistance())));
+                        data.add(new Entry(i, ( (float) (currentWorkout.getTotalDistance()/1000.0)  )) );
                         break;
                     case 3:
                         Log.d(TAG,"Adding a chart value: " + (float) currentWorkout.getAverageHR());
