@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Models.PolylineData;
+import com.example.bikebuddy.Utils.CustomMarkerView;
 import com.example.bikebuddy.Utils.HeartRateZoneHelper;
 import com.example.bikebuddy.Utils.PercentFormatter;
 import com.example.bikebuddy.Utils.Workout;
@@ -145,7 +146,10 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
 
         //Setup toolbar back button for navigation to main activity
         setupBackButton();
+        CustomMarkerView mv = new CustomMarkerView(context, R.layout.marker);
 
+        // set the marker to the chart
+        chart_Speed.setMarker(mv);
     }
 
     /*
@@ -210,7 +214,6 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         //Add gradient fill
         //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
         lineData.setDrawValues(false);
-
         lineDataSet1.setDrawFilled(true);
         if (Utils.getSDKInt() >= 18) {
             // fill drawable only supported on api level 18 and above
@@ -444,7 +447,6 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         focusCamera(polyline.getPoints());
 
     }
-
     /**
      *Zooms the camera on a route
      */
