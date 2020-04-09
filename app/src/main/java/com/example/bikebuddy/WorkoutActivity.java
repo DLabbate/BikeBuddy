@@ -150,6 +150,7 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
 
         // set the marker to the chart
         chart_Speed.setMarker(mv);
+        chart_HR.setMarker(mv);
     }
 
     /*
