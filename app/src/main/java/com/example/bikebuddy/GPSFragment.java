@@ -122,7 +122,6 @@ public class GPSFragment extends Fragment implements
     //Currently selected polyline
     private Polyline preferredPolyline;
 
-    //Tracks if zoom of camera occurred
 
 
     @Nullable
@@ -208,11 +207,6 @@ public class GPSFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        //if(FitnessFragment.running) {
-        //    clearAltRoutes();
-        //}
-
-
 
         gMap = googleMap;
         gMap.setOnPolylineClickListener(this);
@@ -237,7 +231,6 @@ public class GPSFragment extends Fragment implements
 
         getDeviceLocation();
 
-
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -245,8 +238,6 @@ public class GPSFragment extends Fragment implements
 
                 marker = gMap.addMarker(new MarkerOptions()
                 .position(latLng));
-
-
 
 
             }
@@ -387,12 +378,12 @@ public class GPSFragment extends Fragment implements
             gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
             gMap.moveCamera(CameraUpdateFactory.zoomTo(cameraUpdateZoomLevel));
 
-            //Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         }
 
-        if(marker != null) {
+        if(marker != null && FitnessFragment.running && cameraUpdates) {
             calculateDirections(marker);
         }
+
         mLastKnownLocation = location;
         //**********************************************************************************************
 
@@ -557,7 +548,11 @@ public class GPSFragment extends Fragment implements
                     if(tmp < duration){
 
                         duration = tmp;
+
+                        //preferredPolyline = polyline;
+
                         onPolylineClick(polyline);
+
 
                         if(!FitnessFragment.running && !cameraRouteZoom) {
                             focusCamera(polyline.getPoints());
@@ -579,6 +574,8 @@ public class GPSFragment extends Fragment implements
         for (PolylineData polylineData: mPolylines){
             Log.d(TAG, "onPolylineClick: " + mPolylines.toString());
             if(polyline.getId().equals(polylineData.getPolyine().getId())){
+
+
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                 polylineData.getPolyine().setZIndex(1);
 
