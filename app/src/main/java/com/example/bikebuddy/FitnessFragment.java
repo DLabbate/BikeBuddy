@@ -213,8 +213,11 @@ public class FitnessFragment extends Fragment {
 
                         //add workout to database
                         dbHelper.insertWorkout(workout);
+                        dbHelper.UpdateBike( sharedPreferenceHelper.getSelectedBike() ,workout.getTotalDistance(),workout.getTotalDuration());
+
 
                         /*
+
                         Log.d(TAG,"Workout created with random date: " + date);
                         Log.d(TAG,"Workout calRate = " + calRateEstimate);
                         Log.d(TAG,"Workout calBurned = " + workout.getCaloriesBurned());
