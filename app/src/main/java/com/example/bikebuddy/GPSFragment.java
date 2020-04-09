@@ -203,9 +203,9 @@ public class GPSFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        if(FitnessFragment.running) {
-            clearAltRoutes();
-        }
+        //if(FitnessFragment.running) {
+        //    clearAltRoutes();
+        //}
 
 
 
@@ -374,10 +374,12 @@ public class GPSFragment extends Fragment implements
         if (cameraUpdates) {
             lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
-            mLastKnownLocation = location;
+
 
             //Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         }
+
+        mLastKnownLocation = location;
         //**********************************************************************************************
 
         //Update speed and distance UI
@@ -465,6 +467,8 @@ public class GPSFragment extends Fragment implements
 
                 )
         );
+        System.out.println("LAST LONGITUDE: +++++++++++++++++" + mLastKnownLocation.getLongitude());
+
         Log.d(TAG, "calculateDirections: destination: " + destination.toString());
         directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
