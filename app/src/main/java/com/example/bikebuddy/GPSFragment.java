@@ -119,6 +119,8 @@ public class GPSFragment extends Fragment implements
     //Currently selected polyline
     private Polyline preferredPolyline;
 
+    //Tracks if zoom of camera occurred
+    private boolean cameraRouteZoom;
 
     @Nullable
     @Override
@@ -220,6 +222,8 @@ public class GPSFragment extends Fragment implements
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+
+                cameraRouteZoom = false;
                 calculateDirections(marker);
                 System.out.println("*****************ON MARKER CLICK");
                 return false;
@@ -238,6 +242,9 @@ public class GPSFragment extends Fragment implements
 
                 marker = gMap.addMarker(new MarkerOptions()
                 .position(latLng));
+
+
+
 
             }
         });
@@ -548,7 +555,7 @@ public class GPSFragment extends Fragment implements
                         duration = tmp;
                         onPolylineClick(polyline);
 
-                        if(!FitnessFragment.running) {
+                        if(!FitnessFragment.running && !cameraRouteZoom) {
                             focusCamera(polyline.getPoints());
                         }
                     }
@@ -611,6 +618,9 @@ public class GPSFragment extends Fragment implements
                 600,
                 null
         );
+
+        //Ensures camera only zooms on route once
+        cameraRouteZoom = true;
     }
 
     /**
