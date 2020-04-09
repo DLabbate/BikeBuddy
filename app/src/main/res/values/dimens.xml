@@ -10,7 +10,7 @@
 
     <dimen name="HRZoneCircleRadius">40dp</dimen>
 
-    <dimen name="performanceTitles">14.5sp</dimen>
+    <dimen name="performanceTitles">13.5sp</dimen>
     <dimen name="performanceValues">22sp</dimen>
     <dimen name="performanceValuesTopMargin">30dp</dimen>
     <dimen name="performanceCardCornerRadius">10dp</dimen>

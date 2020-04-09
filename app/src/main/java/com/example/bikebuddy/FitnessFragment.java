@@ -286,39 +286,7 @@ public class FitnessFragment extends Fragment {
     private void startRecording()
     {
         //First we create a dialog to be displayed to the user
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(getString(R.string.text_record_workout));
-        builder.setCancelable(true);
-        builder.setNegativeButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                //If user selects continue, then we begin a workout
-                //******************************************************************************
-                resetWorkoutDistance(); //Reset the workout distance before we display it
-                chronometer.setVisibility(View.VISIBLE);
-                distanceTextView.setVisibility(View.VISIBLE);
-                distanceTitleTextView.setVisibility(View.VISIBLE);
-                distanceFrameLayout.setVisibility(View.VISIBLE);
-                chronometer.setBase(SystemClock.elapsedRealtime());
-                chronometer.start();
-                RecordWorkout.setText("Stop Recording");
-                running=true;
-                createRecordingService();
-                //******************************************************************************
-            }
-        });
-        //If the user selects close, then we disregard
-        //**************************************************************************************
-        builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-        //**************************************************************************************
+        getWorkoutDialog();
     }
 
     /*
@@ -436,6 +404,29 @@ public class FitnessFragment extends Fragment {
     }
     public static int randBetween(int start, int end) {
         return start + (int)Math.round(Math.random() * (end - start));
+    }
+
+    //Opens a dialog fragment
+    private void getWorkoutDialog()
+    {
+        RecordWorkoutDialog recordWorkoutDialog = new RecordWorkoutDialog();
+        recordWorkoutDialog.show(getChildFragmentManager(),"Record Workout Dialog");
+        StringBuilder message = new StringBuilder();
+    }
+
+    //To be called when we select "Continue" from the dialog
+    public void continueWorkoutAction()
+    {
+        resetWorkoutDistance(); //Reset the workout distance before we display it
+        chronometer.setVisibility(View.VISIBLE);
+        distanceTextView.setVisibility(View.VISIBLE);
+        distanceTitleTextView.setVisibility(View.VISIBLE);
+        distanceFrameLayout.setVisibility(View.VISIBLE);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+        RecordWorkout.setText("Stop Recording");
+        running=true;
+        createRecordingService();
     }
     //**************************************************************************************
 }

@@ -13,6 +13,15 @@
     <string name="notification_text_location">BikeBuddy is running in the background. Location updates will now be recorded less frequently.</string>
     <string name="notification_title_location">Services Running</string>
 
+    <string name="notification_description_disconnect">Inform the user that a sensor has disconnected</string>
+    <string name="notification_name_disconnect">Disconnect Notification</string>
+    <string name="notification_text_disconnect">Heart Rate Sensor Disconnected!</string>
+    <string name="notification_title_disconnect">Services Running</string>
+    <string name="text_sensor_disconnect">Please re-connect the Zephyr sensor for accurate
+    heart rate readings. In order to ensure a good connection, it might be necessary to sprinkle a small amount of water on
+    the fabric sensors before wearing.</string>
+
+
     <string name="notification_description_recording">Inform the user that a workout is being recorded</string>
     <string name="notification_name_recording">Recording Notification</string>
     <string name="notification_text_recording">Workout is being recorded</string>
@@ -42,9 +51,9 @@
 
     <!--Performance Chart Parameters-->
     <string-array name="performanceParameters">
-        <item>Heart Rate (bpm)</item>
+        <item>Average Heart Rate (bpm)</item>
         <item>Calories</item>
-        <item>Distance (m)</item>
+        <item>Distance (km)</item>
         <item>Duration (hours)</item>
     </string-array>
 
