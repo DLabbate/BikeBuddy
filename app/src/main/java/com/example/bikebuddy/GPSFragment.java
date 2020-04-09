@@ -193,7 +193,7 @@ public class GPSFragment extends Fragment implements
 
         Log.d(TAG,"visiblefrag");
         if(FitnessFragment.running) {
-            clearAltRoutes();
+            //clearAltRoutes();
         }
     }
 
@@ -371,14 +371,17 @@ public class GPSFragment extends Fragment implements
 
         //Update Map
         //**********************************************************************************************
+
         if (cameraUpdates) {
             lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
 
-
             //Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         }
 
+        if(marker != null) {
+            calculateDirections(marker);
+        }
         mLastKnownLocation = location;
         //**********************************************************************************************
 
@@ -510,12 +513,16 @@ public class GPSFragment extends Fragment implements
 
                 double duration = 99999999;
 
+
+
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg1: " + route.legs[0].toString());
                     
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
+
+
 
                     // This loops through all the LatLng coordinates of ONE polyline.
                     for(com.google.maps.model.LatLng latLng: decodedPath){
@@ -540,11 +547,11 @@ public class GPSFragment extends Fragment implements
 
                         duration = tmp;
                         onPolylineClick(polyline);
-                        focusCamera(polyline.getPoints());
 
+                        if(!FitnessFragment.running) {
+                            focusCamera(polyline.getPoints());
+                        }
                     }
-
-
                 }
             }
         });
