@@ -42,6 +42,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -112,6 +113,8 @@ public class GPSFragment extends Fragment implements
 
     //Flag for camera updates after Start button is clicked
     private boolean cameraUpdates = false;
+    private boolean cameraRouteZoom;
+    private float cameraUpdateZoomLevel = 17.0f;
 
     //Array list of polyline data for every polyline shown on google map (is reset every time a new marker is added)
     private ArrayList<PolylineData> mPolylines = new ArrayList<>();
@@ -120,7 +123,7 @@ public class GPSFragment extends Fragment implements
     private Polyline preferredPolyline;
 
     //Tracks if zoom of camera occurred
-    private boolean cameraRouteZoom;
+
 
     @Nullable
     @Override
@@ -382,6 +385,7 @@ public class GPSFragment extends Fragment implements
         if (cameraUpdates) {
             lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
+            gMap.moveCamera(CameraUpdateFactory.zoomTo(cameraUpdateZoomLevel));
 
             //Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         }
