@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class FitnessFragment extends Fragment {
@@ -384,16 +386,17 @@ public class FitnessFragment extends Fragment {
     public Date generateRandomDate(){
         //New Way
         Date end = new Date(120,3,10);
-        Date start = new Date(120,1,1);
+        Date start = new Date(120,2,1);
 
-        int deltaDays = ( end.getDay() - start.getDay() );
+        long deltaTime = ( end.getTime() - start.getTime() );
+        int deltaDays = (int) TimeUnit.DAYS.convert(deltaTime, TimeUnit.MILLISECONDS);
         Log.d(TAG,"Start Date = " + start);
         Log.d(TAG,"End Date = " + end);
         Log.d(TAG,"deltaDays = " + deltaDays);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(start);
-        //cal.add(Calendar.DATE, new Random().nextInt(deltaDays));  // diff calculated in 1)
+        cal.add(Calendar.DATE, new Random().nextInt(deltaDays));  // diff calculated in 1)
         Date randomDate = cal.getTime();
 
         //LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
