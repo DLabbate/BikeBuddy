@@ -1,7 +1,6 @@
 package com.example.bikebuddy;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.bikebuddy.Data.DbHelper;
@@ -51,7 +49,6 @@ public class FitnessFragment extends Fragment {
     //***************************************************************************************
 
     private Button RecordWorkout;
-    private Button generateMock;                       //THIS IS JUST TO READ MOCK DATA
     private static Boolean mockDatagenerated = false;  //used to remove mock data button after use
 
     private TextView speedTextView;
@@ -70,8 +67,6 @@ public class FitnessFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fitness,container,false);
         RecordWorkout=view.findViewById(R.id.button_record_workout);
-        generateMock = view.findViewById(R.id.button_mockData);     //THIS IS JUST TO READ MOCK DATA
-        if(mockDatagenerated) generateMock.setVisibility(View.GONE);
         chronometer= view.findViewById(R.id._chronometer);
         speedTextView = view.findViewById(R.id.text_speed_rt);
         distanceTextView = view.findViewById(R.id.text_distance_rt);
@@ -130,20 +125,9 @@ public class FitnessFragment extends Fragment {
                         mockDatagenerated = true;
                     }
                 }
-
             }
         });
 
-        //**************************************************************************************
-        //THIS IS JUST FOR POPULATING MOCK DATA
-        generateMock.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                generateMockData();
-            }
-        });
-        //**************************************************************************************
         return view;
     }
 
@@ -420,7 +404,6 @@ public class FitnessFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            generateMock.setVisibility(View.GONE);
             mockDatagenerated = true;
     }
     //**************************************************************************************
