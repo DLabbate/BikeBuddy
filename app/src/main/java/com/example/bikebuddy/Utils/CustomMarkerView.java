@@ -24,7 +24,7 @@ public class CustomMarkerView extends MarkerView {
     // content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        tvContent.setText("( " + durationToTime(e.getX()*3)+" , "+ String.format("%.2f",e.getY())+ " )"); // set the entry-value as the display text
+        tvContent.setText("( " + durationToTime(e.getX())+" , "+ String.format("%.2f",e.getY())+ " )"); // set the entry-value as the display text
     }
 
     @Override

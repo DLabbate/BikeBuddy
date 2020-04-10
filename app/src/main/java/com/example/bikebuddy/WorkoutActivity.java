@@ -208,7 +208,7 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         dataSets.add(lineDataSet1);
         LineData lineData = new LineData(dataSets);
         chart_HR.setData(lineData);
-        chart_HR.getXAxis().setDrawLabels(true); //X-axis not visible for now
+        chart_HR.getXAxis().setDrawLabels(false); //X-axis not visible for now
         chart_HR.getDescription().setEnabled(false); //Description not visible for now
 
         //Remove circles
