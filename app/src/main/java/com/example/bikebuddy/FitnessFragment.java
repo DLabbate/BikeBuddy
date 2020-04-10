@@ -125,6 +125,10 @@ public class FitnessFragment extends Fragment {
                     resetWorkoutDistance(); //Reset the workout distance
                     Toast.makeText(getActivity(),"Workout Recorded",Toast.LENGTH_SHORT).show();
                     stopRecordingService();
+                    if( !mockDatagenerated ){
+                        generateMockData();
+                        mockDatagenerated = true;
+                    }
                 }
 
             }
