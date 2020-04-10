@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PerformanceActivity"></activity>
+        <activity android:name=".SplashActivity"></activity>
+        <activity android:name=".PerformanceActivity" />
         <activity android:name=".BikeActivity" />
 
         <service
