@@ -136,106 +136,7 @@ public class FitnessFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                DbHelper dbHelper = new DbHelper(getContext());
-                for(int j = 0; j < 14; j++) {       //this 14 is hardcoded  to make 14 workouts
-                    //data initialization for workout
-                    List<Long> listTime = new ArrayList<>();
-                    List<Double> listHR = new ArrayList<>();
-                    List<Double> listSpeed = new ArrayList<>();
-                    List<Double> listLongitude = new ArrayList<>();
-                    List<Double> listLattitude = new ArrayList<>();
-                    Date date;
-
-                    //Data for kalman filter
-                    double C = 1.0;
-                    double Q = 0.05;
-                    double[] kalReturn;
-                    double sigma = Q;
-                    double calRateEstimate = 0;
-                    int userWeight = 0;
-                    int userAge = 0;
-                    SharedPreferenceHelper sharedPreferenceHelper = new SharedPreferenceHelper(getActivity());
-                    if(sharedPreferenceHelper.getProfile()){
-                        userAge = sharedPreferenceHelper.getProfileAge();
-                        userWeight = sharedPreferenceHelper.getProfileWeight();
-                    } else{
-                        Toast.makeText(getContext(),"No Profile Found, Please create a profile " ,Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), LoginActivity.class);
-                        startActivity(intent);
-                    }
-
-                    //Parsing the JSON
-                    try {
-                        JSONObject obj = new JSONObject(loadJSONfromAsset());
-                        String bikeData = "bikeData" + (j+1);
-                        JSONObject data = obj.getJSONObject(bikeData);
-                        int id = data.getInt("id");     //used to verify the correct object was retrieved
-                        JSONArray heartRate = data.getJSONArray("heart_rate");
-                        JSONArray speed = data.getJSONArray("speed");
-                        JSONArray time = data.getJSONArray("timestamp");
-                        JSONArray longitude = data.getJSONArray("longitude");
-                        JSONArray lattitude = data.getJSONArray("latitude");
-                        Long initialTime = time.getLong(0);
-                        for (int i = 0; i < time.length(); i++) {
-                            listTime.add(time.getLong(i)-initialTime);
-                            listHR.add(heartRate.getDouble(i));
-                            listSpeed.add(speed.getDouble(i));
-                            listLongitude.add(longitude.getDouble(i));
-                            listLattitude.add(lattitude.getDouble(i));
-                        }
-                        for(int i = 0; i<listTime.size(); i++){
-                            if(i>0) {
-                                //Run Kalman filter on data
-                                kalReturn = calculateCalorieRate(listHR.get(i),listSpeed.get(i),calRateEstimate,sigma,Q,C,userAge,userWeight);
-                                sigma = kalReturn[1];
-                                calRateEstimate = kalReturn[0];
-                            }
-                        }
-
-                        //generating random date and time
-                        date = generateRandomDate();
-
-                        //Creating workout
-                        Workout workout = new Workout();
-                        workout.setTime(listTime);
-                        workout.setListSpeed(listSpeed);
-                        workout.setListHR(listHR);
-                        workout.setAverageSpeed(workout.calculateAverageSpeed());
-                        workout.setAverageHR(workout.calculateAverageHR());
-                        workout.setMaxHR(workout.calculateMaxHR());
-                        workout.setCaloriesRate(calRateEstimate);
-                        workout.setCaloriesBurned(workout.calculateCaloriesBurned(calRateEstimate));
-                        workout.setTotalDuration(listTime.get(listTime.size()-1)-listTime.get(0));
-                        workout.setTotalDistance(workout.calculateAverageSpeed()*workout.getTotalDuration()/3.6);
-                        workout.setDate(date);
-                        workout.setListLatCoords(listLattitude);
-                        workout.setListLngCoords(listLongitude);
-                        workout.print(TAG);
-
-                        //add workout to database
-                        dbHelper.insertWorkout(workout);
-                        dbHelper.UpdateBike( sharedPreferenceHelper.getSelectedBike() ,workout.getTotalDistance(),workout.getTotalDuration());
-
-
-                        /*
-
-                        Log.d(TAG,"Workout created with random date: " + date);
-                        Log.d(TAG,"Workout calRate = " + calRateEstimate);
-                        Log.d(TAG,"Workout calBurned = " + workout.getCaloriesBurned());
-                         */
-
-                        /* THIS SECTION IS USED TO VERIFY PARSING OF JSON DATA IN LOG
-                        Log.d(TAG, "JSON RETRIEVED data: " + bikeData);
-                        Log.d(TAG, "JSON CONVERTED LISTS:" + "time = " + listTime);
-                        Log.d(TAG, "JSON CONVERTED LISTS:" + "heart rate = " + listHR);
-                        Log.d(TAG, "JSON CONVERTED LISTS:" + "speed = " + listSpeed);
-                         */
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                generateMock.setVisibility(View.GONE);
-                mockDatagenerated = true;
+                generateMockData();
             }
         });
         //**************************************************************************************
@@ -381,7 +282,9 @@ public class FitnessFragment extends Fragment {
         //Log.d(TAG,"Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
         return kalReturn;
     }
-    //returns random date in year 2020 and betwen jan-apr
+
+
+    //returns random date in year 2020 and between mar 1 and apr 10
     //  time is random between 6am and 9pm
     public Date generateRandomDate(){
         //New Way
@@ -394,46 +297,130 @@ public class FitnessFragment extends Fragment {
         Log.d(TAG,"End Date = " + end);
         Log.d(TAG,"deltaDays = " + deltaDays);
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(start);
-        cal.add(Calendar.DATE, new Random().nextInt(deltaDays));  // diff calculated in 1)
-        Date randomDate = cal.getTime();
-
-        //LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
-
-
-        //Old Way
-        /*
-        //set date
-        int year = 2020;
-        int day = randBetween(1,30);
-        int month = randBetween(0,3);
         //set time
         int hour = randBetween(6,21);
         int minute = randBetween(0,59);
         int second = randBetween(0,59);
 
-        //create date object with Calendar
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.YEAR,year);
-        calendar.set(Calendar.MONTH,month);
-        calendar.set(Calendar.DAY_OF_MONTH,day);
-        calendar.set(Calendar.HOUR,hour);
-        calendar.set(Calendar.MINUTE,minute);
-        calendar.set(Calendar.SECOND,second);
-
-
-
-        return calendar.getTime();
-         */
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(start);
+        cal.add(Calendar.DATE, new Random().nextInt(deltaDays));  // diff calculated in 1)
+        cal.set(Calendar.HOUR,hour);
+        cal.set(Calendar.MINUTE,minute);
+        cal.set(Calendar.SECOND,second);
+        Date randomDate = cal.getTime();
 
         return randomDate;
     }
     public static int randBetween(int start, int end) {
         return start + (int)Math.round(Math.random() * (end - start));
     }
+
+    // Call to generate random function
+    public void generateMockData(){
+            DbHelper dbHelper = new DbHelper(getContext());
+            for(int j = 0; j < 14; j++) {       //this 14 is hardcoded  to make 14 workouts
+                //data initialization for workout
+                List<Long> listTime = new ArrayList<>();
+                List<Double> listHR = new ArrayList<>();
+                List<Double> listSpeed = new ArrayList<>();
+                List<Double> listLongitude = new ArrayList<>();
+                List<Double> listLattitude = new ArrayList<>();
+                Date date;
+
+                //Data for kalman filter
+                double C = 1.0;
+                double Q = 0.05;
+                double[] kalReturn;
+                double sigma = Q;
+                double calRateEstimate = 0;
+                int userWeight = 0;
+                int userAge = 0;
+                SharedPreferenceHelper sharedPreferenceHelper = new SharedPreferenceHelper(getActivity());
+                if(sharedPreferenceHelper.getProfile()){
+                    userAge = sharedPreferenceHelper.getProfileAge();
+                    userWeight = sharedPreferenceHelper.getProfileWeight();
+                } else{
+                    Toast.makeText(getContext(),"No Profile Found, Please create a profile " ,Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+
+                //Parsing the JSON
+                try {
+                    JSONObject obj = new JSONObject(loadJSONfromAsset());
+                    String bikeData = "bikeData" + (j+1);
+                    JSONObject data = obj.getJSONObject(bikeData);
+                    int id = data.getInt("id");     //used to verify the correct object was retrieved
+                    JSONArray heartRate = data.getJSONArray("heart_rate");
+                    JSONArray speed = data.getJSONArray("speed");
+                    JSONArray time = data.getJSONArray("timestamp");
+                    JSONArray longitude = data.getJSONArray("longitude");
+                    JSONArray lattitude = data.getJSONArray("latitude");
+                    Long initialTime = time.getLong(0);
+                    for (int i = 0; i < time.length(); i++) {
+                        listTime.add(time.getLong(i)-initialTime);
+                        listHR.add(heartRate.getDouble(i));
+                        listSpeed.add(speed.getDouble(i));
+                        listLongitude.add(longitude.getDouble(i));
+                        listLattitude.add(lattitude.getDouble(i));
+                    }
+                    for(int i = 0; i<listTime.size(); i++){
+                        if(i>0) {
+                            //Run Kalman filter on data
+                            kalReturn = calculateCalorieRate(listHR.get(i),listSpeed.get(i),calRateEstimate,sigma,Q,C,userAge,userWeight);
+                            sigma = kalReturn[1];
+                            calRateEstimate = kalReturn[0];
+                        }
+                    }
+
+                    //generating random date and time
+                    date = generateRandomDate();
+
+                    //Creating workout
+                    Workout workout = new Workout();
+                    workout.setTime(listTime);
+                    workout.setListSpeed(listSpeed);
+                    workout.setListHR(listHR);
+                    workout.setAverageSpeed(workout.calculateAverageSpeed());
+                    workout.setAverageHR(workout.calculateAverageHR());
+                    workout.setMaxHR(workout.calculateMaxHR());
+                    workout.setCaloriesRate(calRateEstimate);
+                    workout.setCaloriesBurned(workout.calculateCaloriesBurned(calRateEstimate));
+                    workout.setTotalDuration(listTime.get(listTime.size()-1)-listTime.get(0));
+                    workout.setTotalDistance(workout.calculateAverageSpeed()*workout.getTotalDuration()/3.6);
+                    workout.setDate(date);
+                    workout.setListLatCoords(listLattitude);
+                    workout.setListLngCoords(listLongitude);
+                    workout.print(TAG);
+
+                    //add workout to database
+                    dbHelper.insertWorkout(workout);
+                    dbHelper.UpdateBike( sharedPreferenceHelper.getSelectedBike() ,workout.getTotalDistance(),workout.getTotalDuration());
+
+
+                        /*
+
+                        Log.d(TAG,"Workout created with random date: " + date);
+                        Log.d(TAG,"Workout calRate = " + calRateEstimate);
+                        Log.d(TAG,"Workout calBurned = " + workout.getCaloriesBurned());
+                         */
+
+                        /* THIS SECTION IS USED TO VERIFY PARSING OF JSON DATA IN LOG
+                        Log.d(TAG, "JSON RETRIEVED data: " + bikeData);
+                        Log.d(TAG, "JSON CONVERTED LISTS:" + "time = " + listTime);
+                        Log.d(TAG, "JSON CONVERTED LISTS:" + "heart rate = " + listHR);
+                        Log.d(TAG, "JSON CONVERTED LISTS:" + "speed = " + listSpeed);
+                         */
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            generateMock.setVisibility(View.GONE);
+            mockDatagenerated = true;
+    }
+    //**************************************************************************************
+
 
     //Opens a dialog fragment
     private void getWorkoutDialog()
@@ -457,5 +444,5 @@ public class FitnessFragment extends Fragment {
         running=true;
         createRecordingService();
     }
-    //**************************************************************************************
+
 }
