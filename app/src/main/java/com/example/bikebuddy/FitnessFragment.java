@@ -1,7 +1,5 @@
 package com.example.bikebuddy;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +40,7 @@ import java.util.List;
 
 public class FitnessFragment extends Fragment {
 
+    private static final long MILLSECS_PER_DAY = (long) 8.64e+7;
     //Public static variables to be accessed in this fragment AND recording service
     //***************************************************************************************
     public static Chronometer chronometer;
@@ -377,12 +376,31 @@ public class FitnessFragment extends Fragment {
 
         //Returning estimate and deviation, both used at next method call
         kalReturn = new double[]{estimate, sigma};
-        Log.d(TAG,"Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
+        //Log.d(TAG,"Estimated Calorie Rate: " + kalReturn[0] + " cal/min");
         return kalReturn;
     }
     //returns random date in year 2020 and betwen jan-apr
     //  time is random between 6am and 9pm
     public Date generateRandomDate(){
+        //New Way
+        Date end = new Date(120,3,10);
+        Date start = new Date(120,1,1);
+
+        int deltaDays = ( end.getDay() - start.getDay() );
+        Log.d(TAG,"Start Date = " + start);
+        Log.d(TAG,"End Date = " + end);
+        Log.d(TAG,"deltaDays = " + deltaDays);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(start);
+        //cal.add(Calendar.DATE, new Random().nextInt(deltaDays));  // diff calculated in 1)
+        Date randomDate = cal.getTime();
+
+        //LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
+
+
+        //Old Way
+        /*
         //set date
         int year = 2020;
         int day = randBetween(1,30);
@@ -403,7 +421,12 @@ public class FitnessFragment extends Fragment {
         calendar.set(Calendar.MINUTE,minute);
         calendar.set(Calendar.SECOND,second);
 
+
+
         return calendar.getTime();
+         */
+
+        return randomDate;
     }
     public static int randBetween(int start, int end) {
         return start + (int)Math.round(Math.random() * (end - start));
