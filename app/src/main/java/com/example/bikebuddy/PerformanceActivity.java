@@ -1,8 +1,5 @@
 package com.example.bikebuddy;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,9 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bikebuddy.Data.DbHelper;
+import com.example.bikebuddy.Utils.SummaryHelper;
 import com.example.bikebuddy.Utils.Workout;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -27,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class PerformanceActivity extends AppCompatActivity {
@@ -62,6 +64,19 @@ public class PerformanceActivity extends AppCompatActivity {
     DbHelper dbHelper;
     //***************************************************************************************************
 
+    //Profile Data
+    //***************************************************************************************************
+    SummaryHelper summaryHelper;
+    private TextView textMaxHR;
+    private TextView textTotalCaloriesBurned;
+    private TextView textTotalDistance;
+    private TextView textTotalDuration;
+    private TextView textTotalWorkouts;
+    private TextView textAverageDistance;
+    private TextView textTotalDistanceTitle;
+    private TextView textAverageDistanceTitle;
+    //***************************************************************************************************
+
     //Workouts
     //***************************************************************************************************
     List<Workout> filteredWorkoutList;
@@ -75,6 +90,8 @@ public class PerformanceActivity extends AppCompatActivity {
         setupUI();
         setupDB();
 
+        populateSummary();
+
         //loadDataTest();
         setupSpinnerParameter();
         setupSpinnerNumberWorkouts();
@@ -87,9 +104,19 @@ public class PerformanceActivity extends AppCompatActivity {
          */
     private void setupUI()
     {
+        Log.d(TAG,"setupUI");
         imageViewPerformance = findViewById(R.id.image_performance_back);
         lineChartPerformance = findViewById(R.id.lineChartPerformance);
         initializeSpinners();
+
+        textMaxHR = findViewById(R.id.textMaxHR);
+        textTotalCaloriesBurned = findViewById(R.id.textTotalCaloriesBurned);
+        textTotalDistance = findViewById(R.id.textTotalDistance);
+        textTotalDuration = findViewById(R.id.textTotalDuration);
+        textTotalWorkouts = findViewById(R.id.textTotalWorkouts);
+        textAverageDistance = findViewById(R.id.textAverageDistance);
+        textTotalDistanceTitle = findViewById(R.id.textTotalDistanceTitle);
+        textAverageDistanceTitle = findViewById(R.id.textAverageDistanceTitle);
 
         //Setup navigation to main activity (BACK BUTTON)
         if (imageViewPerformance != null)
@@ -393,7 +420,7 @@ public class PerformanceActivity extends AppCompatActivity {
                         break;
                     case 2:
                         Log.d(TAG,"Adding a chart value: " + (float) currentWorkout.getAverageHR());
-                        data.add(new Entry(i,((float) currentWorkout.getTotalDistance())));
+                        data.add(new Entry(i, ( (float) (currentWorkout.getTotalDistance()/1000.0)  )) );
                         break;
                     case 3:
                         Log.d(TAG,"Adding a chart value: " + (float) currentWorkout.getAverageHR());
@@ -453,5 +480,38 @@ public class PerformanceActivity extends AppCompatActivity {
         lineChartPerformance.invalidate();
     }
 
+    //function used to populate the six performance fields
+    private void populateSummary(){
+        Log.d(TAG,"populateSummary");
+        summaryHelper = new SummaryHelper(this);
+
+
+        textMaxHR.setText(String.format("%d",summaryHelper.getMaxHR()));
+        textTotalCaloriesBurned.setText(String.format("%d",summaryHelper.getCalBurned()));
+        if ( summaryHelper.getDistance() > 10000 ){
+            textTotalDistance.setText(String.format("%.2f",(float)summaryHelper.getDistance()/1000));
+            textTotalDistanceTitle.setText("Total Distance (km)");
+        }
+        else{
+            textTotalDistance.setText(String.format("%d",summaryHelper.getDistance()));
+            textTotalDistanceTitle.setText("Total Distance (m)");
+        }
+
+        //Formatting the duration to dd:hh:mm
+        long days = TimeUnit.SECONDS.toDays(summaryHelper.getDuration());
+        long hours = TimeUnit.SECONDS.toHours(summaryHelper.getDuration()) - days*24;
+        long minute =TimeUnit.SECONDS.toMinutes(summaryHelper.getDuration())- days*24*60 - hours*60;
+        String displayDuration = days + "d " + hours + "h " + minute + "m ";
+        textTotalDuration.setText(displayDuration);
+
+        textTotalWorkouts.setText(String.format("%d",summaryHelper.getNumWorkouts()));
+        if( summaryHelper.getAverageDistance() > 10 ){
+            textAverageDistanceTitle.setText("Average Distance (km)");
+            textAverageDistance.setText(String.format("%.2f",(float)summaryHelper.getAverageDistance()/1000));
+        } else {
+            textAverageDistanceTitle.setText("Average Distance (m)");
+            textAverageDistance.setText(String.format("%d", summaryHelper.getAverageDistance()));
+        }
+    }
 
 }

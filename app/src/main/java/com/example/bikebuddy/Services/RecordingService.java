@@ -79,7 +79,6 @@ public class RecordingService extends Service {
     SharedPreferenceHelper sharedPreferenceHelper;
     //******************************************************************************************************
 
-
     /*
     This handler creates a new thread every 10 seconds.
     Each thread fills the workout values
@@ -224,6 +223,7 @@ public class RecordingService extends Service {
 
         //Add the workout to the DB;
         dbHelper.insertWorkout(workout);
+        dbHelper.UpdateBike( sharedPreferenceHelper.getSelectedBike() ,workout.getTotalDistance(),workout.getTotalDuration());
     }
 
     /*
@@ -322,6 +322,7 @@ public class RecordingService extends Service {
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(stats)) //Show stats in background
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(2,notification);
     }

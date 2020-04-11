@@ -29,6 +29,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     private Context context;
     private List<Workout> workoutList;
     DbHelper dbHelper;
+    SummaryHelper summaryHelper;
     public WorkoutAdapter(Context context, List<Workout> workoutList)
     {
         this.context = context;
@@ -42,6 +43,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_view_holder,parent,false);
         dbHelper=new DbHelper(context);
+        summaryHelper = new SummaryHelper(context);
         return new ViewHolder(view);
     }
 
@@ -50,8 +52,15 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         final int click_position = position; //We make a final int so it can be accessed by the onClickListener (inner class)
         Log.d(TAG,"onBindViewHolder: " + workoutList.get(position).getDate());
         holder.textViewDate.setText(new SimpleDateFormat(" EEE, d MMM yyyy hh:mm:ss aaa").format(workoutList.get(position).getDate()));// we would like to display the Date on the log fragment
-        holder.textViewDistance.setText("Distance: " + Integer.toString((int)workoutList.get(position).getTotalDistance()) + " m");
         holder.textViewDuration.setText("Duration: " + durationToTime(workoutList.get(position).getTotalDuration()));
+
+        if ( workoutList.get(position).getTotalDistance() > 10000 ){
+            holder.textViewDistance.setText("Distance: " + String.format("%.2f",(float)workoutList.get(position).getTotalDistance()/1000)  + " km");
+        }
+        else{
+            holder.textViewDistance.setText("Distance: " + Integer.toString((int)workoutList.get(position).getTotalDistance()) +" m");
+        }
+
         /*
         We need to setup an onClickListener to open a detailed view of the workout
          */
@@ -85,6 +94,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                         dialog.cancel();
                         //If user selects Yes, then delete the workout
                         //******************************************************************************
+                        //summaryHelper.updateDeleteWorkout(workoutList.get(position));
                         dbHelper.deleteWorkout(workoutList.get(position).getID());
 
                         // refresh the page (update the log fragment)

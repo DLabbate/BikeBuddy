@@ -30,7 +30,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
     private static final String TAG = "__dbHelper";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "BikeBuddyDB";
     public Context context;
     SQLiteDatabase db;
@@ -56,6 +56,7 @@ public class DbHelper extends SQLiteOpenHelper {
             DbContract.WorkoutEntry.COLUMN_HR_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_SPEED_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_HR_AVG + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_MAX + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_SPEED_AVG + " REAL NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
@@ -74,6 +75,7 @@ public class DbHelper extends SQLiteOpenHelper {
             DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST + " STRING NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_HR_AVG + " INTEGER NOT NULL," +
+            DbContract.WorkoutEntry.COLUMN_HR_MAX + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_SPEED_AVG + " REAL NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_BIKE_USED + " INTEGER NOT NULL," +
             DbContract.WorkoutEntry.COLUMN_CALORIES_RATE + " INTEGER NOT NULL," +
@@ -131,6 +133,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE,workout.getCaloriesRate());
         contentValues.put(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT,workout.getCaloriesBurned());
         contentValues.put(DbContract.WorkoutEntry.COLUMN_HR_AVG,workout.getAverageHR());
+        contentValues.put(DbContract.WorkoutEntry.COLUMN_HR_MAX,workout.getMaxHR());
         contentValues.put(DbContract.WorkoutEntry.COLUMN_SPEED_AVG,workout.getAverageSpeed());
         /*
         Serializing:
@@ -157,7 +160,6 @@ public class DbHelper extends SQLiteOpenHelper {
         //random bike value assigned to all workouts (tentative)
         //TODO: handle packaging bike objects
         contentValues.put(DbContract.WorkoutEntry.COLUMN_BIKE_USED,17);
-
         try{
             id = db.insertOrThrow(DbContract.WorkoutEntry.TABLE_NAME, null, contentValues);
         }
@@ -224,6 +226,7 @@ public class DbHelper extends SQLiteOpenHelper {
             int calTotal = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT));
             int calRate = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE));
             double avgHR = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_AVG));
+            int maxHR = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_MAX));
             double avgSpeed = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_AVG));
             int bikeUsed = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_BIKE_USED));
 
@@ -236,6 +239,7 @@ public class DbHelper extends SQLiteOpenHelper {
             workout.setTotalDuration(duration);
             workout.setTotalDistance(distance);
             workout.setAverageHR(avgHR);
+            workout.setMaxHR(maxHR);
             workout.setAverageSpeed(avgSpeed);
             workout.setCaloriesRate(calRate);
             workout.setCaloriesBurned(calTotal);
@@ -300,9 +304,6 @@ public class DbHelper extends SQLiteOpenHelper {
             db.close();
         }
         return Collections.emptyList(); //This return is only if the cursor doesn't find the table start, or exception thrown
-
-
-
     }
 
 
@@ -314,7 +315,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         Log.d(TAG,"getWorkouts");
-        Log.d(TAG,"-------------------RETRIEVING ALL WORKOUT DATA FROM DB--------------------");
+        Log.d(TAG,"-------------------RETRIEVING ALL WORKOUT (non-list) DATA FROM DB--------------------");
         try {
             cursor = db.query(DbContract.WorkoutEntry.TABLE_NAME, null, null, null, null, null, null);
 
@@ -325,30 +326,6 @@ public class DbHelper extends SQLiteOpenHelper {
                     //Stores all columns in the table as a new entry to the arraylist
                     Workout workout = new Workout();
 
-                    //retrieve data from db
-                    /*
-                    DESERIALIZING:
-                        - Strings stored in DB are taken and converted back to Lists using the Collections
-                        object TypeToken.
-                        - Converted lists are then stored in workout class as normal.
-                        - Uses GSON api.
-                    */
-                    Log.d(TAG,"Deserializing");
-                    Gson gson = new Gson();
-                    String JSONtime = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_TIME_LIST));
-                    String JSONhr = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_LIST));
-                    String JSONspeed = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_LIST));
-                    String JSONlatcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LATCOORD_LIST));
-                    String JSONlngcoord = cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_LNGCOORD_LIST));
-
-                    Type listType_long = new TypeToken<Collection<Long>>(){}.getType();
-                    Type listType_double = new TypeToken<Collection<Double>>(){}.getType();
-                    List<Long> time = gson.fromJson(JSONtime,listType_long);
-                    List<Double> heartRate = gson.fromJson(JSONhr,listType_double);
-                    List<Double> speed = gson.fromJson(JSONspeed,listType_double);
-                    List<Double> latcoords = gson.fromJson(JSONlatcoord, listType_double);
-                    List<Double> lngcoords = gson.fromJson(JSONlngcoord, listType_double);
-
                     //Retrieving data from DB
                     int id = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry._ID));
                     Date date = stringToDate(cursor.getString(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_DATE)));
@@ -357,6 +334,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     int calTotal = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_TOT));
                     int calRate = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_CALORIES_RATE));
                     double avgHR = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_AVG));
+                    int maxHR = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_HR_MAX));
                     double avgSpeed = cursor.getDouble(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_SPEED_AVG));
                     int bikeUsed = cursor.getInt(cursor.getColumnIndex(DbContract.WorkoutEntry.COLUMN_BIKE_USED));
 
@@ -364,17 +342,20 @@ public class DbHelper extends SQLiteOpenHelper {
                     //adding all workout parameters to workout object to be returned.
                     workout.setID(id);
                     workout.setDate(date);
+
+                    /*
                     workout.setTime(time);
                     workout.setListHR(heartRate);
                     workout.setListSpeed(speed);
+                     */
+
                     workout.setTotalDuration(duration);
                     workout.setTotalDistance(distance);
                     workout.setAverageHR(avgHR);
+                    workout.setMaxHR(maxHR);
                     workout.setAverageSpeed(avgSpeed);
                     workout.setCaloriesRate(calRate);
                     workout.setCaloriesBurned(calTotal);
-                    workout.setListLatCoords(latcoords);
-                    workout.setListLngCoords(lngcoords);
                     workoutList.add(workout);
 
                     //Print workout data for debugging
@@ -427,7 +408,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //Accepts workout id and returns workout object with that ID from DB
-    public Bike retrieveBike(long bikeID) throws ParseException {
+    public Bike retrieveBike(long bikeID) throws ParseException  {
         Log.d(TAG,"retrieve bike");
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -471,7 +452,7 @@ public class DbHelper extends SQLiteOpenHelper {
             if (cursor != null) cursor.close();
             db.close();
         }
-        return bike; //Returns NULL WORKOUT if the cursor doesn't find the workout, or exception thrown
+        return bike; //Returns NULL Bike if the cursor doesn't find the bike, or exception thrown
     }
 
     /*
@@ -530,14 +511,14 @@ public class DbHelper extends SQLiteOpenHelper {
     }
     //*****************************************************************************************************************************
 
-    public void deleteWorkout(int WorkoutID)
-    {
+
+    //Delete Methods
+    public void deleteWorkout(int WorkoutID){
         SQLiteDatabase db = this.getWritableDatabase();
         long id = -1;
-
         try
         {
-            //Drop class
+            //Drop workout
             db.delete(DbContract.WorkoutEntry.TABLE_NAME,DbContract.WorkoutEntry._ID + "=?",new String[]{Integer.toString(WorkoutID)});
         }
         catch (SQLException e)
@@ -550,7 +531,6 @@ public class DbHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
-
     public void deleteBike(int BikeId)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -571,6 +551,36 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public  void UpdateBike(int ID, double distance, long duration){
+        Bike bike = null;
+        try {
+            bike = retrieveBike(ID);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG,"updating Bike");
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        /*
+        Set content values to be sent to DB. Takes from bike class passed to insert.
+         */
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbContract.BikeEntry.COLUMN_CUMULATIVEDISTANCE,bike.getCumulativeDistance() + distance);
+        contentValues.put(DbContract.BikeEntry.COLUMN_TOTALDURATION,bike.getTotalDuration() + duration);
+
+
+        try{
+            db.update(DbContract.BikeEntry.TABLE_NAME, contentValues, "_id="+ID, null);
+        }
+        catch (Exception error){
+            Toast.makeText(context, "update failed: " + error.getMessage(), Toast.LENGTH_SHORT);
+        } finally{
+            db.close();
+        }
+
+
+    }
 
 
     /*

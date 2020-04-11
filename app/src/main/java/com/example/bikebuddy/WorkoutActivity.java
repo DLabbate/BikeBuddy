@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.bikebuddy.Data.DbHelper;
 import com.example.bikebuddy.Models.PolylineData;
+import com.example.bikebuddy.Utils.CustomMarkerView;
 import com.example.bikebuddy.Utils.HeartRateZoneHelper;
 import com.example.bikebuddy.Utils.PercentFormatter;
 import com.example.bikebuddy.Utils.Workout;
@@ -115,6 +116,9 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         DateText.setText(dateToString(workout.getDate()));
+        //for (int i=1;i<workout.getTime().size();i++)
+        //Log.d(TAG," last time is : " + durationToTime(workout.getTime().get(workout.getTime().size()-i)));
+        //Log.d(TAG," last time is : " + durationToTime(workout.getTime().get(workout.getTime().size()-1)));
 
         //converting the time from long into hours, minutes and seconds
         long hours = TimeUnit.SECONDS.toHours(workout.getTotalDuration());
@@ -123,9 +127,15 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         String displayDuration = hours + "h, " + minute + "m, "+ seconds + "s";
         DurationText.setText(displayDuration);
 
-        // converting the distance from double to int to get rid of the decimals (we are measuring the distance in meter)
-        String displayDistance = Integer.toString((int)workout.getTotalDistance()) + " m";
-        DistanceText.setText(displayDistance);
+        // distance
+        if ( workout.getTotalDistance() > 10000 ){
+            DistanceText.setText( String.format("%.2f",(float)workout.getTotalDistance()/1000)  + " km");
+        }
+        else{
+            DistanceText.setText(Integer.toString((int)workout.getTotalDistance()) +" m");
+        }
+
+
 
         // Importing remaining data from workout object
         CaloriesText.setText(Integer.toString((int)workout.getCaloriesBurned()));
@@ -139,13 +149,17 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
 
         System.out.println("WORKOUT ACTIVITY ON CREATE  " + latcoords.get(0));
 
-        loadDataHR(heartRate);
-        loadDataSpeed(speed);
+        loadDataHR(heartRate,workout.getTime());
+        loadDataSpeed(speed,workout.getTime());
         loadDateHRZones(heartRate);
 
         //Setup toolbar back button for navigation to main activity
         setupBackButton();
+        CustomMarkerView mv = new CustomMarkerView(context, R.layout.marker);
 
+        // set the marker to the chart
+        chart_Speed.setMarker(mv);
+        chart_HR.setMarker(mv);
     }
 
     /*
@@ -185,15 +199,14 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
     /*
     This method will be used for populating the data of the HR graph
      */
-    private void loadDataHR(List<Double> HR)
+    private void loadDataHR(List<Double> HR,List<Long> time)
     {
         data_HR = new ArrayList<Entry>();
 
         //These values are only for testing purposes.
         for (int i = 0; i < HR.size() ; i++) {
-            data_HR.add(new Entry(i, (HR.get(i).floatValue())));
+            data_HR.add(new Entry((time.get(i).floatValue()), (HR.get(i).floatValue())));
         }
-
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
         LineDataSet lineDataSet1 = new LineDataSet(data_HR,"HR Data Set");
         lineDataSet1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
@@ -210,7 +223,6 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         //Add gradient fill
         //See https://stackoverflow.com/questions/32907529/mpandroidchart-fill-color-gradient
         lineData.setDrawValues(false);
-
         lineDataSet1.setDrawFilled(true);
         if (Utils.getSDKInt() >= 18) {
             // fill drawable only supported on api level 18 and above
@@ -227,13 +239,13 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
     /*
     This method will be used for populating the data of the speed graph
      */
-    private void loadDataSpeed(List<Double> Speed)
+    private void loadDataSpeed(List<Double> Speed,List<Long> time)
     {
         data_speed = new ArrayList<Entry>();
 
         //These values are only for testing purposes.
         for (int i = 0; i < Speed.size(); i++) {
-            data_speed.add(new Entry(i, Speed.get(i).floatValue()));
+            data_speed.add(new Entry(time.get(i).floatValue(), Speed.get(i).floatValue()));
         }
 
         //https://www.youtube.com/watch?v=yrbgN2UvKGQ
@@ -451,7 +463,6 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         focusCamera(polyline.getPoints());
 
     }
-
     /**
      *Zooms the camera on a route
      */
@@ -476,5 +487,14 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
                 null
         );
     }
+    private String durationToTime(double seconds){
 
+        int P1 = (int) seconds % 60;
+        int P2 = (int) seconds / 60;
+        int P3 = (int) P2 % 60;
+        P2 = P2 / 60;
+
+        String time = P2 + ":" + P3 + ":" + P1;
+        return time;
+    }
 }
