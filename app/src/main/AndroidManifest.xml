@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.bikebuddy">
+    package="com.example.bikebuddymock">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SplashActivity"
+        <activity android:name="com.example.bikebuddymock.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,17 +28,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PerformanceActivity"
+        <activity android:name="com.example.bikebuddymock.PerformanceActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".BikeActivity"
+        <activity android:name="com.example.bikebuddymock.BikeActivity"
             android:screenOrientation="portrait"/>
 
         <service
-            android:name=".Services.RecordingService"
+            android:name="com.example.bikebuddymock.Services.RecordingService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".Services.LocationService"
+            android:name="com.example.bikebuddymock.Services.LocationService"
             android:enabled="true"
             android:exported="true"
             android:stopWithTask="true" />
@@ -48,15 +48,15 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".ProfileActivity"
+            android:name="com.example.bikebuddymock.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".WorkoutActivity"
+            android:name="com.example.bikebuddymock.WorkoutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.bikebuddymock.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.bikebuddymock.MainActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

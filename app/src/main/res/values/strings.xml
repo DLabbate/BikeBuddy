@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BikeBuddy</string>
+    <string name="app_name">BikeBuddy Mock Data</string>
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
