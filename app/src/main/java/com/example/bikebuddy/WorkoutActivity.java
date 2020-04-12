@@ -430,6 +430,14 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
 
         addPolylineToMap(latcoords,lngcoords);
 
+        Integer polylineSize = latcoords.size() - 1;
+        LatLng destination = new LatLng(latcoords.get(polylineSize),lngcoords.get(polylineSize));
+
+        gMap.addMarker(new MarkerOptions()
+                .position(destination));
+
+        gMap.getUiSettings().setAllGesturesEnabled(false);
+
     }
 
     private void addPolylineToMap(List<Double> latcoords, List<Double> lngcoords){
@@ -446,7 +454,6 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
             System.out.println("ADD POLYLINE TO MAP" + path.get(i));
 
         }
-
 
 
         Polyline polyline = gMap.addPolyline(new PolylineOptions().addAll(path));
@@ -474,9 +481,7 @@ public class WorkoutActivity extends AppCompatActivity implements OnMapReadyCall
         int height = getResources().getDisplayMetrics().heightPixels;
 
         gMap.animateCamera(
-                //CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
-                //600,
-                //null
+
                 CameraUpdateFactory.newLatLngBounds(latLngBounds,width, height, routePadding),
                 600,
                 null

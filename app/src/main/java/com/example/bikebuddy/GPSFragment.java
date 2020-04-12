@@ -29,9 +29,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.bikebuddy.Models.PolylineData;
 import com.example.bikebuddy.Services.LocationService;
+import com.example.bikebuddy.Services.RecordingService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -40,6 +42,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -110,9 +113,15 @@ public class GPSFragment extends Fragment implements
 
     //Flag for camera updates after Start button is clicked
     private boolean cameraUpdates = false;
+    private boolean cameraRouteZoom;
+    private float cameraUpdateZoomLevel = 17.0f;
 
     //Array list of polyline data for every polyline shown on google map (is reset every time a new marker is added)
     private ArrayList<PolylineData> mPolylines = new ArrayList<>();
+
+    //Currently selected polyline
+    private Polyline preferredPolyline;
+
 
 
     @Nullable
@@ -181,10 +190,24 @@ public class GPSFragment extends Fragment implements
     }
 
     /**
+     *Called when user changes fragment
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        Log.d(TAG,"visiblefrag");
+        if(FitnessFragment.running) {
+            //clearAltRoutes();
+        }
+    }
+
+    /**
      *Callback interface for when map is ready to be used
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+
         gMap = googleMap;
         gMap.setOnPolylineClickListener(this);
 
@@ -196,6 +219,8 @@ public class GPSFragment extends Fragment implements
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+
+                cameraRouteZoom = false;
                 calculateDirections(marker);
                 System.out.println("*****************ON MARKER CLICK");
                 return false;
@@ -206,7 +231,6 @@ public class GPSFragment extends Fragment implements
 
         getDeviceLocation();
 
-
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -214,6 +238,8 @@ public class GPSFragment extends Fragment implements
 
                 marker = gMap.addMarker(new MarkerOptions()
                 .position(latLng));
+
+
             }
         });
     }
@@ -291,6 +317,7 @@ public class GPSFragment extends Fragment implements
         }
         if (cameraUpdates) {
             startLocationUpdates();
+
         }
     }
 
@@ -345,13 +372,19 @@ public class GPSFragment extends Fragment implements
 
         //Update Map
         //**********************************************************************************************
+
         if (cameraUpdates) {
             lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             gMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
-            mLastKnownLocation = location;
+            gMap.moveCamera(CameraUpdateFactory.zoomTo(cameraUpdateZoomLevel));
 
-            //Toast.makeText(getActivity(), "Current location:\n" + lastKnownLatLng, Toast.LENGTH_LONG).show();
         }
+
+        if(marker != null && FitnessFragment.running && cameraUpdates) {
+            calculateDirections(marker);
+        }
+
+        mLastKnownLocation = location;
         //**********************************************************************************************
 
         //Update speed and distance UI
@@ -439,6 +472,8 @@ public class GPSFragment extends Fragment implements
 
                 )
         );
+        System.out.println("LAST LONGITUDE: +++++++++++++++++" + mLastKnownLocation.getLongitude());
+
         Log.d(TAG, "calculateDirections: destination: " + destination.toString());
         directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
@@ -471,6 +506,7 @@ public class GPSFragment extends Fragment implements
                 //Ensures that the current polylines array list contains only those shown on the map
                 if (mPolylines.size() > 0){
                     for (PolylineData polylineData: mPolylines){
+                        //Clears polylines on map
                         polylineData.getPolyine().remove();
                     }
                     mPolylines.clear();
@@ -479,12 +515,16 @@ public class GPSFragment extends Fragment implements
 
                 double duration = 99999999;
 
+
+
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg1: " + route.legs[0].toString());
                     
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
+
+
 
                     // This loops through all the LatLng coordinates of ONE polyline.
                     for(com.google.maps.model.LatLng latLng: decodedPath){
@@ -508,12 +548,16 @@ public class GPSFragment extends Fragment implements
                     if(tmp < duration){
 
                         duration = tmp;
+
+                        //preferredPolyline = polyline;
+
                         onPolylineClick(polyline);
-                        focusCamera(polyline.getPoints());
 
+
+                        if(!FitnessFragment.running && !cameraRouteZoom) {
+                            focusCamera(polyline.getPoints());
+                        }
                     }
-
-
                 }
             }
         });
@@ -530,8 +574,12 @@ public class GPSFragment extends Fragment implements
         for (PolylineData polylineData: mPolylines){
             Log.d(TAG, "onPolylineClick: " + mPolylines.toString());
             if(polyline.getId().equals(polylineData.getPolyine().getId())){
+
+
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                 polylineData.getPolyine().setZIndex(1);
+
+                preferredPolyline = polylineData.getPolyine();
 
                 LatLng endlocation = new LatLng(
                         polylineData.getLeg().endLocation.lat,
@@ -543,6 +591,7 @@ public class GPSFragment extends Fragment implements
                 marker.setSnippet("Duration: " + polylineData.getLeg().duration +
                         ",  Distance: " + polylineData.getLeg().distance);
                 marker.showInfoWindow();
+
             }
             else{
                 polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.gpsRoute_lightgrey));
@@ -570,5 +619,29 @@ public class GPSFragment extends Fragment implements
                 600,
                 null
         );
+
+        //Ensures camera only zooms on route once
+        cameraRouteZoom = true;
     }
+
+    /**
+     *Clears routes that are not selected by the user (called when workout is in progress)
+     */
+    public void clearAltRoutes(){
+
+        Log.d(TAG, ": clearAltRoutes");
+
+        for (PolylineData polylineData: mPolylines){
+            if(preferredPolyline.getId().equals(polylineData.getPolyine().getId())){
+                polylineData.getPolyine().setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+
+            }
+            else{
+                polylineData.getPolyine().remove();
+
+            }
+        }
+
+    }
+
 }

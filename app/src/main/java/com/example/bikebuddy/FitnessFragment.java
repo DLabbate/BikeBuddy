@@ -106,6 +106,9 @@ public class FitnessFragment extends Fragment {
                 if(!running){ // when it is not running
                     startRecording();
 
+
+
+
                 }
                 else{ // when running
                     Log.d(TAG,"workout stopped");
