@@ -250,7 +250,7 @@
                         android:id="@+id/HRSubTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(bpm vs. seconds)"
+                        android:text="bpm vs. Time (hh:mm:ss)"
                         android:textSize="9sp"
                         android:layout_gravity="center_horizontal"
                         android:textStyle="normal"/>
@@ -288,7 +288,7 @@
                         android:id="@+id/SpeedSubTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(km/h vs. seconds)"
+                        android:text="km/h vs. Time (hh:mm:ss)"
                         android:textSize="9sp"
                         android:layout_gravity="center_horizontal"
                         android:textStyle="normal"/>
@@ -326,7 +326,7 @@
                         android:id="@+id/HRZonesSubTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(% of Time in Each Zone)"
+                        android:text="% of Time in Each Zone"
                         android:textSize="9sp"
                         android:layout_gravity="center_horizontal"
                         android:textStyle="normal"/>

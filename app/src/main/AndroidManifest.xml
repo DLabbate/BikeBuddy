@@ -28,8 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PerformanceActivity" />
-        <activity android:name=".BikeActivity" />
+        <activity android:name=".PerformanceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".BikeActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".Services.RecordingService"
