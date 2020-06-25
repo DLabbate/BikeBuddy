@@ -48,7 +48,7 @@ ___
 <img src="https://user-images.githubusercontent.com/37638598/85797654-0df5f400-b70a-11ea-8422-8cbae156e832.jpg" height="500">
 <img src="https://user-images.githubusercontent.com/37638598/85797726-32ea6700-b70a-11ea-9bf0-4c8025faffb8.jpg" height="500">
 
-* From this list of workouts, the user can select a specific one for a more detailed description of the workout. This detailed view will list several parameters such as date, duration, distance, average heart rate, average speed, and calories.
+* From this list of workouts, the user can select a specific one for a more detailed description. This detailed view will list several parameters such as date, duration, distance, average heart rate, average speed, and calories.
 * The user will also be able to see the following:
   * HR graph 
   * Speed graph
@@ -61,7 +61,7 @@ ___
 ___
 
 ### Performance Summary
-* The performance summary gives an overview of the users workout history. It outlines important profile statistics such as: max HR, total calories burned, total distance travelled, Total duration, total workouts, and average distance PER workout. 
+* The performance summary gives an overview of the users workout history. It outlines important profile statistics such as: max HR, total calories burned, total distance travelled, total duration, total workouts, and average distance PER workout. 
 * In addition to this, the page includes a chart where the user can visualize how he/she has progressed in the most recent workouts. In the example below the user can see his average heart rate over the last 10 workouts. The user can also has the option to view his calories burned, distance, and duration of his most recent workouts if they want to analyze their progression with respect to these parameters.
 <img src="https://user-images.githubusercontent.com/37638598/79629041-1c290200-8114-11ea-84bc-2d8b4cfe920f.jpg" height="500">
 <img src="https://user-images.githubusercontent.com/37638598/79629042-1fbc8900-8114-11ea-87c2-61adf01b7532.jpg" height="500">
@@ -69,7 +69,7 @@ ___
 ___
 
 ### Bikes
-* The user has the option to add his/her bikes. Some cyclists have multiple bikes and desire to keep track of statistics on each bike.
-* This can be done to keep track of mileage and duration spent on each bike and facilitates maintenance.
+* The user has the option to add his/her bikes to record mileage and duration spent on each bike. Some cyclists have multiple bikes and desire to keep track of statistics on each bike.
+* This facilitates keeping track of bike maintenance.
 <img src="https://user-images.githubusercontent.com/37638598/79629054-3cf15780-8114-11ea-94f9-3e6a263c6e58.jpg" height="500">
 <img src="https://user-images.githubusercontent.com/37638598/79629055-3f53b180-8114-11ea-9413-65bfb152783b.jpg" height="500">
