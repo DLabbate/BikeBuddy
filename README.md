@@ -35,6 +35,14 @@ ___
 
 ___
 
+### GPS
+* GPS functionality implemented using Google’s Map API.
+* In this page the user has the ability to get biking path directions to desired destinations by tapping on a specific location.
+* The user also has the ability to toggle real time updates on/off, in the upper right corner. This will center the map on the user’s current location, and also update the directions to reach his desired destination. With the real time button selected, these updates will occur automatically. This feature can be toggled off mid workout if the user desires to switch destination.
+<img src="https://user-images.githubusercontent.com/37638598/85799636-8ad69d00-b70d-11ea-8203-f271192d07a7.jpg" height="500">
+
+___
+
 ### Workout Logs
 * The workout logs list all of the users recorded workouts. In order to facilitate searching for workouts, this page includes sorting and filtering functionality. In particular, the workouts can be sorted according to date/distance/duration. It can also be filtered by date to only display workouts in the desired timeframe.
 <img src="https://user-images.githubusercontent.com/37638598/85797654-0df5f400-b70a-11ea-8422-8cbae156e832.jpg" height="500">
