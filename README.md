@@ -16,6 +16,17 @@ BikeBuddy is an Android mobile application for cyclists seeking to track and imp
 
 ___
 
+### Hardware
+Zephyr HxM Sensor. For more information, see (https://www.zephyranywhere.com/system/hxm)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/37638598/85801863-c3787580-b711-11ea-87d7-5d08bcd85444.jpg" height="300">
+</p>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/37638598/85802088-3386fb80-b712-11ea-92b5-758a7835d361.PNG" height="400">
+</p>
+
+___
+
 ### Login
 <img src="https://user-images.githubusercontent.com/37638598/79628973-842b1880-8113-11ea-8f34-9994ebfb1eff.jpg" height="500">
 
