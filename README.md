@@ -23,6 +23,10 @@ BikeBuddy is an Android mobile application for cyclists seeking to track and imp
 
 
 ### Fitness Page
+* This page is where the user can record a workout and view important cycling parameters including heart rate, speed and distance.
+* Another important element on this page is the cardiac zone in the upper right corner. This icon indicates the intensity of the workout (whether at rest, light intensity, moderate, high, or maximal intensity). This is dependent on the user's age.
+* The cyclist has the option to see this information in real time (if they wish to mount the phone on their bike) or record the workout in the background to save battery.
+* Lastly, the upper left icon indicates the connection to the Zephyr sensor, whether connected or not.
 <img src="https://user-images.githubusercontent.com/37638598/79628846-d7e93200-8112-11ea-922c-a5344e933200.jpg" height="500">
 
 
