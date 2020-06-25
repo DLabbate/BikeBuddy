@@ -61,10 +61,10 @@ ___
 ___
 
 ### Performance Summary
-* The performance summary gives an overview of the users workout history. It outlines important profile statistics such as: max HR, total calories burned, total distance travelled, total duration, total workouts, and average distance PER workout. 
+* The performance summary gives an overview of the users workout history. It outlines important **Profile Statistics** such as: max HR, total calories burned, total distance travelled, total duration, total workouts, and average distance PER workout. 
 <img src="https://user-images.githubusercontent.com/37638598/79629041-1c290200-8114-11ea-84bc-2d8b4cfe920f.jpg" height="500">
 
-* In addition to this, this page includes a **Progression Chart** where the user can visualize how he/she has progressed in the most recent workouts. In the example below, the user can see his/her average heart rate over the last 10 workouts.
+* In addition, this page includes a **Progression Chart** where the user can visualize how he/she has progressed in the most recent workouts. In the example below, the user can see his/her average heart rate over the last 10 workouts.
 * The user also has the option to view his calories burned, distance, and duration of his most recent workouts if they want to analyze their progression with respect to these parameters.
 <img src="https://user-images.githubusercontent.com/37638598/79629042-1fbc8900-8114-11ea-87c2-61adf01b7532.jpg" height="500">
 
