@@ -10,7 +10,7 @@ BikeBuddy is an Android mobile application for cyclists seeking to track and imp
 * Viewing real-time fitness statistics such as Heart Rate, Speed, and Distance
 * Viewing real-time GPS directions and location updates
 * Recording and saving workouts
-* Saving routes
+* Saving bike routes
 * Performance summary of the user's profile (including total distance travelled, total duration travelled, and more)
 * Tracking distance travelled and time spent on different bikes (for users with multiple bikes)
 
